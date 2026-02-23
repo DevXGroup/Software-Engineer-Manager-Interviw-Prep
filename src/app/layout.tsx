@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { Navigation } from '@/components/Navigation'
 import { ThemeProvider } from '@/components/ThemeProvider'
@@ -76,6 +77,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <DonateToast />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
