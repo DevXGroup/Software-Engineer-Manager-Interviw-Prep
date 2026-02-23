@@ -7,6 +7,11 @@ import {
   Eye, EyeOff, Lightbulb, AlertTriangle, CheckCircle,
   Target, Brain, MessageSquare, Filter, BookOpen, Award, X
 } from 'lucide-react'
+import { QuizLauncher } from '@/components/QuizLauncher'
+import { PriorityBadge } from '@/components/PriorityBadge'
+import { PriorityFilter } from '@/components/PriorityFilter'
+import { behavioralQuestions as quizQuestions } from '@/data/quizzes/behavioral'
+import type { Priority } from '@/data/quizzes/types'
 
 type Principle = { name: string; description: string; example: string }
 type Company = {
@@ -542,6 +547,12 @@ const questions: Question[] = [
   },
 ]
 
+const questionPriorities: Record<string, Priority> = {
+  '1': 'must-know', '2': 'must-know', '3': 'must-know', '4': 'must-know',
+  '5': 'must-know', '6': 'must-know', '7': 'good-to-know', '8': 'must-know',
+  '9': 'must-know', '10': 'good-to-know', '11': 'good-to-know', '12': 'good-to-know',
+}
+
 const CATEGORIES = ['All', 'Leadership', 'Conflict Resolution', 'Technical Leadership', 'Team Development', 'Communication', 'Influence', 'Cross-team Collaboration', 'Prioritization', 'Change Management', 'AI/ML', 'Innovation', 'Hiring', 'Accountability', 'Process Improvement']
 const DIFFICULTIES = ['All', 'Starter', 'Intermediate', 'Advanced']
 const COMPANY_NAMES = ['All', 'Amazon', 'Meta', 'Google', 'Apple', 'Netflix', 'Microsoft']
@@ -564,6 +575,7 @@ export default function BehavioralPage() {
   const [difficultyFilter, setDifficultyFilter] = useState('All')
   const [companyFilter, setCompanyFilter] = useState('All')
   const [expandedPrinciple, setExpandedPrinciple] = useState<string | null>(null)
+  const [priorityFilter, setPriorityFilter] = useState<'all' | Priority>('all')
 
   const filteredQuestions = useMemo(() => {
     return questions.filter(q => {
@@ -571,9 +583,10 @@ export default function BehavioralPage() {
       const matchCategory = categoryFilter === 'All' || q.categories.includes(categoryFilter)
       const matchDifficulty = difficultyFilter === 'All' || q.difficulty === difficultyFilter
       const matchCompany = companyFilter === 'All' || q.companies.includes(companyFilter)
-      return matchSearch && matchCategory && matchDifficulty && matchCompany
+      const matchPriority = priorityFilter === 'all' || questionPriorities[q.id] === priorityFilter
+      return matchSearch && matchCategory && matchDifficulty && matchCompany && matchPriority
     })
-  }, [search, categoryFilter, difficultyFilter, companyFilter])
+  }, [search, categoryFilter, difficultyFilter, companyFilter, priorityFilter])
 
   const togglePracticeVisible = (id: string) => {
     setPracticeVisible(prev => ({ ...prev, [id]: !prev[id] }))
@@ -586,6 +599,8 @@ export default function BehavioralPage() {
           <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">Behavioral Interview Mastery</h1>
           <p className="text-xl text-gray-600 dark:text-gray-300">Company leadership frameworks, 12 full STAR answers, and practice mode</p>
         </motion.div>
+
+        <QuizLauncher sectionId="behavioral" title="Behavioral" questions={quizQuestions} />
 
         {/* Tabs */}
         <div className="mb-8 flex gap-2 rounded-xl bg-white p-1 shadow dark:bg-gray-800">
@@ -618,7 +633,8 @@ export default function BehavioralPage() {
 
               <AnimatePresence mode="wait">
                 <motion.div key={selectedCompany.name} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-                  className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+                  className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id={`${selectedCompany.name.toLowerCase()}-principles`}>
                   <div className={`mb-6 rounded-xl bg-gradient-to-r ${selectedCompany.color} p-4 text-white`}>
                     <h2 className="text-2xl font-bold">{selectedCompany.name} Leadership Principles</h2>
                     <p className="mt-1 opacity-90">{selectedCompany.principles.length} principles · {selectedCompany.topQuestions.length} top questions</p>
@@ -696,6 +712,7 @@ export default function BehavioralPage() {
                   />
                   {search && <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2"><X className="h-4 w-4 text-gray-400" /></button>}
                 </div>
+                <PriorityFilter value={priorityFilter} onChange={setPriorityFilter} />
                 <div className="flex flex-wrap gap-2">
                   <Filter className="h-4 w-4 mt-1.5 text-gray-400 shrink-0" />
                   {DIFFICULTIES.map(d => (
@@ -719,7 +736,8 @@ export default function BehavioralPage() {
               <div className="space-y-4">
                 {filteredQuestions.map((q, i) => (
                   <motion.div key={q.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                    className="rounded-2xl bg-white shadow-lg dark:bg-gray-800">
+                    className="rounded-2xl bg-white shadow-lg dark:bg-gray-800"
+                    id={`question-${q.id}`}>
                     <div className="cursor-pointer p-6" onClick={() => setExpandedQuestion(expandedQuestion === q.id ? null : q.id)}>
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex-1">
@@ -727,7 +745,10 @@ export default function BehavioralPage() {
                             <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${difficultyColor[q.difficulty]}`}>{q.difficulty}</span>
                             {q.companies.map(c => <span key={c} className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-400">{c}</span>)}
                           </div>
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-white">{q.title}</h3>
+                          <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                            {q.title}
+                            {questionPriorities[q.id] && <span className="ml-2 inline-block align-middle"><PriorityBadge priority={questionPriorities[q.id]} /></span>}
+                          </h3>
                           <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{q.question}</p>
                         </div>
                         {expandedQuestion === q.id ? <ChevronUp className="h-5 w-5 shrink-0 text-gray-400" /> : <ChevronDown className="h-5 w-5 shrink-0 text-gray-400" />}

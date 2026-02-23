@@ -205,9 +205,9 @@ export default function RoadmapPage() {
               <Calendar className="h-8 w-8 text-white" />
             </span>
           </div>
-          <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">8-Week FAANG Interview Roadmap</h1>
+          <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">8-Week MAANG Interview Roadmap</h1>
           <p className="mx-auto max-w-xl text-lg text-gray-600 dark:text-gray-300">
-            A structured week-by-week plan to go from zero to FAANG-ready for SDM/EM interviews
+            A structured week-by-week plan to go from zero to MAANG-ready for SDM/EM interviews
           </p>
 
           {/* Overall progress */}

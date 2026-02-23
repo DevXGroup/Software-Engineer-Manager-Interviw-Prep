@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, ChevronUp, Target, AlertTriangle, CheckCircle, GitBranch, Shield, TrendingUp, Clock, Wrench, LayoutList, GitMerge, Crosshair } from 'lucide-react'
+import { QuizLauncher } from '@/components/QuizLauncher'
+import { technicalLeadershipQuestions } from '@/data/quizzes/technical-leadership'
 
 type Section = { id: string; title: string; icon: React.ElementType; color: string; content: React.ReactNode }
 
@@ -197,6 +199,8 @@ export default function TechnicalLeadershipPage() {
           <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">Technical Leadership</h1>
           <p className="text-xl text-gray-600 dark:text-gray-300">Tech debt · Architecture decisions · Make vs Buy · Code review culture · On-call</p>
         </motion.div>
+
+        <QuizLauncher sectionId="leadership" title="Technical Leadership" questions={technicalLeadershipQuestions} />
 
         {/* Tab pills */}
         <div className="mb-8 flex flex-wrap gap-2">

@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Users, Star, TrendingUp, MessageSquare, Heart, Award, ChevronDown, ChevronUp, CheckCircle, BarChart2, Mic } from 'lucide-react'
+import { QuizLauncher } from '@/components/QuizLauncher'
+import { teamManagementQuestions } from '@/data/quizzes/team-management'
 
 type Tab = 'hiring' | 'performance' | 'oneones' | 'career' | 'feedback' | 'culture' | 'talent' | 'communication'
 
@@ -30,6 +32,8 @@ export default function TeamManagementPage() {
           <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">Team Management</h1>
           <p className="text-xl text-gray-600 dark:text-gray-300">Hiring · Performance · 1:1s · Career ladders · Feedback · Culture</p>
         </motion.div>
+
+        <QuizLauncher sectionId="team" title="Team Management" questions={teamManagementQuestions} />
 
         <div className="mb-8 flex flex-wrap gap-2">
           {tabs.map(({ id, label, icon: Icon }) => (
