@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Database, Server, Cloud, Shield, Zap, GitBranch, Globe, MessageSquare, Search, ChevronDown, ChevronUp } from 'lucide-react'
+import { QuizLauncher } from '@/components/QuizLauncher'
+import { systemDesignQuestions } from '@/data/quizzes/system-design'
 
 type Scenario = {
   id: string
@@ -157,6 +159,8 @@ export default function SystemDesignPage() {
           <p className="text-xl text-gray-600 dark:text-gray-300">4 deep-dive scenarios · Step-by-step breakdowns · Architecture patterns</p>
         </motion.div>
 
+        <QuizLauncher sectionId="system-design" title="System Design" questions={systemDesignQuestions} />
+
         {/* Tabs */}
         <div className="mb-8 flex gap-2 rounded-xl bg-white p-1 shadow dark:bg-gray-800">
           {([['scenarios', Server, 'Design Scenarios'], ['patterns', GitBranch, 'Architecture Patterns'], ['concepts', Database, 'Key Concepts']] as const).map(([t, Icon, label]) => (
@@ -188,7 +192,8 @@ export default function SystemDesignPage() {
               </div>
 
               <AnimatePresence mode="wait">
-                <motion.div key={selectedScenario.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+                <motion.div key={selectedScenario.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                  id={`${selectedScenario.id}-scenario`}>
                   {/* Scenario header */}
                   <div className={`mb-6 rounded-2xl bg-gradient-to-r ${selectedScenario.color} p-6 text-white`}>
                     <h2 className="text-2xl font-bold">{selectedScenario.title}</h2>
@@ -278,7 +283,8 @@ export default function SystemDesignPage() {
                     const Icon = p.icon
                     return (
                       <button key={p.name} onClick={() => setSelectedPattern(p)}
-                        className={`flex w-full items-center gap-3 rounded-xl p-4 text-left transition-all ${selectedPattern.name === p.name ? 'bg-gradient-to-r from-green-500 to-teal-600 text-white shadow-lg' : 'bg-white shadow hover:shadow-md dark:bg-gray-800 text-gray-700 dark:text-gray-300'}`}>
+                        className={`flex w-full items-center gap-3 rounded-xl p-4 text-left transition-all ${selectedPattern.name === p.name ? 'bg-gradient-to-r from-green-500 to-teal-600 text-white shadow-lg' : 'bg-white shadow hover:shadow-md dark:bg-gray-800 text-gray-700 dark:text-gray-300'}`}
+                        id={`${p.name.toLowerCase().replace(/\s+/g, '-')}-pattern`}>
                         <Icon className="h-5 w-5 shrink-0" />
                         <div>
                           <p className="font-bold text-sm">{p.name}</p>
@@ -316,23 +322,687 @@ export default function SystemDesignPage() {
           {/* ── Key Concepts ── */}
           {mainTab === 'concepts' && (
             <motion.div key="concepts" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {[
-                  { title: 'CAP Theorem', content: 'A distributed system can only guarantee 2 of 3: Consistency (all nodes see the same data), Availability (every request gets a response), Partition Tolerance (system works during network partitions). Since partitions are unavoidable, you choose CP or AP. CP: banks, financial systems (Zookeeper, HBase). AP: social media, shopping carts (Cassandra, DynamoDB). PACELC extends CAP to include latency trade-offs when no partition exists.', color: 'border-blue-400' },
-                  { title: 'SQL vs NoSQL', content: 'SQL (Postgres, MySQL): ACID, joins, complex queries. Use when data is relational, consistency is critical, team knows SQL. NoSQL — Document (MongoDB): flexible schema, good for semi-structured data. Key-value (Redis, DynamoDB): simple lookups, ultra-fast. Wide-column (Cassandra): time series, high write throughput, multi-region. Graph (Neo4j): relationship-heavy data. Default to SQL unless you have a clear reason to use NoSQL.', color: 'border-green-400' },
-                  { title: 'Caching Strategies', content: 'Cache-aside (Lazy loading): App reads from cache. Miss → read DB → populate cache. Simple, on-demand. Most common pattern. Write-through: Write to cache and DB simultaneously. Always consistent, higher write latency. Write-behind (Write-back): Write to cache, async flush to DB. Fast writes, risk of data loss. Read-through: Cache handles DB reads automatically. Eviction: LRU (most common), LFU, FIFO. Cache-aside is the answer for 90% of system design interviews.', color: 'border-yellow-400' },
-                  { title: 'Consistent Hashing', content: 'Problem: when you add/remove nodes to a hash ring, simple modulo hashing reassigns most keys. Consistent hashing minimizes rehashing: each node owns a range of the hash ring. Adding a node only steals keys from adjacent nodes. Removing a node only transfers its keys to the next node. Used in: Cassandra, Memcached, Redis Cluster, load balancers, CDNs. Virtual nodes (vnodes) improve even distribution across the ring.', color: 'border-purple-400' },
-                  { title: 'Database Sharding', content: 'Horizontal partitioning: split rows across multiple DB instances by a shard key. Shard key selection is critical: high cardinality (many values), even distribution, aligned with query patterns. Common strategies: Range sharding (easy rebalancing, hot spots possible), Hash sharding (even distribution, harder range queries), Directory sharding (flexible, lookup overhead). Challenges: cross-shard queries, rebalancing, transactions across shards. Avoid sharding until a single DB with read replicas cannot keep up.', color: 'border-red-400' },
-                  { title: 'Message Queues & Streaming', content: 'Message Queue (RabbitMQ, SQS): point-to-point or pub-sub, messages consumed once, good for task queues and decoupling. Event Streaming (Kafka): persistent log, multiple consumers can read the same events, replayable, ordered within partition. Use Kafka for: event sourcing, audit logs, fan-out to multiple consumers, stream processing. Use SQS for: task queues, worker pools, exactly-once delivery requirements. Kafka is the standard answer for high-throughput system design questions.', color: 'border-orange-400' },
-                  { title: 'Database Indexes', content: 'B-Tree index (default): good for range queries and equality. O(log n) lookup. Works for most cases. Hash index: O(1) lookup for equality only. No range queries. LSM Tree (Log-Structured Merge): used in Cassandra, RocksDB. Very fast writes (append only), slower reads. Covering index: includes all columns in the query — avoids main table lookup. Composite index: index on multiple columns; left-prefix rule — (a, b, c) index supports (a), (a,b), (a,b,c) but not (b) or (c) alone.', color: 'border-teal-400' },
-                  { title: 'Load Balancing Algorithms', content: 'Round Robin: requests distributed evenly in order. Good for stateless, homogeneous servers. Least Connections: sends to server with fewest active connections. Best when request duration varies widely. IP Hash: same IP always goes to same server. Good for session affinity. Weighted Round Robin: heavier servers get more requests proportionally. Random: simple, surprisingly effective for stateless services. Layer 4 (TCP): fast, no content inspection. Layer 7 (HTTP): content-aware routing, header inspection, path-based routing.', color: 'border-indigo-400' },
-                ].map((c, i) => (
-                  <motion.div key={c.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                    className={`rounded-2xl border-l-4 ${c.color} bg-white p-5 shadow dark:bg-gray-800`}>
-                    <h3 className="mb-2 font-bold text-gray-900 dark:text-white">{c.title}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{c.content}</p>
-                  </motion.div>
-                ))}
+              <div className="space-y-6">
+                {/* CAP Theorem */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="rounded-2xl border-l-4 border-blue-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id="cap-theorem"
+                >
+                  <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">CAP Theorem</h3>
+                  <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">Choose 2 of 3: Consistency, Availability, Partition Tolerance</p>
+                  
+                  {/* CAP Triangle Visualization */}
+                  <div className="mb-6 flex justify-center">
+                    <div className="relative">
+                      <svg viewBox="0 0 300 260" className="h-48 w-full max-w-sm">
+                        {/* Triangle */}
+                        <polygon points="150,20 20,220 280,220" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-300 dark:text-gray-600" />
+                        
+                        {/* Vertices */}
+                        <circle cx="150" cy="20" r="35" fill="#3B82F6" className="opacity-20" />
+                        <circle cx="150" cy="20" r="20" fill="#3B82F6" />
+                        <text x="150" y="25" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">C</text>
+                        <text x="150" y="55" textAnchor="middle" fontSize="10" className="fill-blue-600 dark:fill-blue-400">Consistency</text>
+                        
+                        <circle cx="20" cy="220" r="35" fill="#10B981" className="opacity-20" />
+                        <circle cx="20" cy="220" r="20" fill="#10B981" />
+                        <text x="20" y="225" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">A</text>
+                        <text x="20" y="255" textAnchor="middle" fontSize="10" className="fill-green-600 dark:fill-green-400">Availability</text>
+                        
+                        <circle cx="280" cy="220" r="35" fill="#8B5CF6" className="opacity-20" />
+                        <circle cx="280" cy="220" r="20" fill="#8B5CF6" />
+                        <text x="280" y="225" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">P</text>
+                        <text x="280" y="255" textAnchor="middle" fontSize="10" className="fill-purple-600 dark:fill-purple-400">Partition</text>
+                        
+                        {/* Center text */}
+                        <text x="150" y="140" textAnchor="middle" fontSize="11" fontWeight="bold" className="fill-gray-500">Choose 2</text>
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Trade-off Table */}
+                  <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
+                    <table className="w-full text-sm">
+                      <thead className="bg-gray-50 dark:bg-gray-900">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Choice</th>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Trade-off</th>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Use Cases</th>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Technologies</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                        <tr className="bg-blue-50/50 dark:bg-blue-900/10">
+                          <td className="px-4 py-3 font-semibold text-blue-700 dark:text-blue-400">CP</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Consistent + Partition-tolerant, may be unavailable</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Banks, Financial systems</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">ZooKeeper, HBase, Redis</td>
+                        </tr>
+                        <tr className="bg-green-50/50 dark:bg-green-900/10">
+                          <td className="px-4 py-3 font-semibold text-green-700 dark:text-green-400">AP</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Available + Partition-tolerant, eventually consistent</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Social media, Shopping carts</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Cassandra, DynamoDB</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </motion.div>
+
+                {/* SQL vs NoSQL */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="rounded-2xl border-l-4 border-green-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id="sql-vs-nosql"
+                >
+                  <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">SQL vs NoSQL</h3>
+                  
+                  <div className="mb-6 grid gap-4 md:grid-cols-2">
+                    {/* SQL */}
+                    <div className="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 p-5 dark:from-blue-900/30 dark:to-blue-800/30">
+                      <div className="mb-3 flex items-center gap-2">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white shadow">
+                          <span className="text-lg font-bold">SQL</span>
+                        </div>
+                        <h4 className="text-lg font-bold text-blue-900 dark:text-blue-300">Relational (SQL)</h4>
+                      </div>
+                      <ul className="mb-4 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                        <li className="flex items-start gap-2"><span className="mt-1 text-green-500">✓</span> ACID transactions</li>
+                        <li className="flex items-start gap-2"><span className="mt-1 text-green-500">✓</span> Complex joins & queries</li>
+                        <li className="flex items-start gap-2"><span className="mt-1 text-green-500">✓</span> Strong consistency</li>
+                        <li className="flex items-start gap-2"><span className="mt-1 text-red-500">✗</span> Hard to scale horizontally</li>
+                      </ul>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="rounded-full bg-blue-200 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-800 dark:text-blue-200">Postgres</span>
+                        <span className="rounded-full bg-blue-200 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-800 dark:text-blue-200">MySQL</span>
+                        <span className="rounded-full bg-blue-200 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-800 dark:text-blue-200">SQL Server</span>
+                      </div>
+                    </div>
+
+                    {/* NoSQL */}
+                    <div className="rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 p-5 dark:from-orange-900/30 dark:to-orange-800/30">
+                      <div className="mb-3 flex items-center gap-2">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-600 text-white shadow">
+                          <span className="text-lg font-bold">NoSQL</span>
+                        </div>
+                        <h4 className="text-lg font-bold text-orange-900 dark:text-orange-300">NoSQL</h4>
+                      </div>
+                      <ul className="mb-4 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                        <li className="flex items-start gap-2"><span className="mt-1 text-green-500">✓</span> Horizontal scaling</li>
+                        <li className="flex items-start gap-2"><span className="mt-1 text-green-500">✓</span> Flexible schema</li>
+                        <li className="flex items-start gap-2"><span className="mt-1 text-green-500">✓</span> High write throughput</li>
+                        <li className="flex items-start gap-2"><span className="mt-1 text-red-500">✗</span> Eventual consistency (usually)</li>
+                      </ul>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="rounded-full bg-orange-200 px-3 py-1 text-xs font-medium text-orange-800 dark:bg-orange-800 dark:text-orange-200">MongoDB</span>
+                        <span className="rounded-full bg-orange-200 px-3 py-1 text-xs font-medium text-orange-800 dark:bg-orange-800 dark:text-orange-200">Redis</span>
+                        <span className="rounded-full bg-orange-200 px-3 py-1 text-xs font-medium text-orange-800 dark:bg-orange-800 dark:text-orange-200">Cassandra</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* NoSQL Types Grid */}
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    {[
+                      { type: 'Document', icon: '📄', example: 'MongoDB', use: 'Semi-structured data' },
+                      { type: 'Key-Value', icon: '🔑', example: 'Redis, DynamoDB', use: 'Caching, sessions' },
+                      { type: 'Wide-Column', icon: '📊', example: 'Cassandra', use: 'Time series, analytics' },
+                      { type: 'Graph', icon: '🕸️', example: 'Neo4j', use: 'Social networks, recommendations' },
+                    ].map((db) => (
+                      <div key={db.type} className="rounded-lg bg-gray-50 p-4 text-center dark:bg-gray-900">
+                        <div className="mb-2 text-2xl">{db.icon}</div>
+                        <div className="font-semibold text-gray-900 dark:text-white">{db.type}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">{db.example}</div>
+                        <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">{db.use}</div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Caching Strategies */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="rounded-2xl border-l-4 border-yellow-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id="caching-strategies"
+                >
+                  <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Caching Strategies</h3>
+                  
+                  {/* Strategy Diagrams */}
+                  <div className="mb-6 grid gap-4 md:grid-cols-2">
+                    {/* Cache-Aside */}
+                    <div className="rounded-xl border-2 border-yellow-200 bg-yellow-50 p-4 dark:border-yellow-800 dark:bg-yellow-900/20">
+                      <h4 className="mb-3 font-bold text-yellow-800 dark:text-yellow-400">Cache-Aside (Lazy Loading)</h4>
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-bold text-white">App</div>
+                        <svg className="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                        <div className="rounded-lg bg-green-600 px-3 py-2 text-xs font-bold text-white">Cache</div>
+                        <svg className="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                        <div className="rounded-lg bg-purple-600 px-3 py-2 text-xs font-bold text-white">DB</div>
+                      </div>
+                      <p className="mt-3 text-xs text-yellow-700 dark:text-yellow-400">App → Cache (miss) → DB → Cache → App</p>
+                    </div>
+
+                    {/* Write-Through */}
+                    <div className="rounded-xl border-2 border-green-200 bg-green-50 p-4 dark:border-green-800 dark:bg-green-900/20">
+                      <h4 className="mb-3 font-bold text-green-800 dark:text-green-400">Write-Through</h4>
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-bold text-white">App</div>
+                        <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 7l-5 5m0 0l-5-5m5 5v12"/></svg>
+                        <div className="rounded-lg bg-green-600 px-3 py-2 text-xs font-bold text-white">Cache</div>
+                        <svg className="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 7l-5 5m0 0l-5-5m5 5v12"/></svg>
+                        <div className="rounded-lg bg-purple-600 px-3 py-2 text-xs font-bold text-white">DB</div>
+                      </div>
+                      <p className="mt-3 text-xs text-green-700 dark:text-green-400">App → Cache + DB (simultaneous)</p>
+                    </div>
+                  </div>
+
+                  {/* Comparison Table */}
+                  <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
+                    <table className="w-full text-sm">
+                      <thead className="bg-gray-50 dark:bg-gray-900">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Strategy</th>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Pros</th>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Cons</th>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Best For</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                        <tr>
+                          <td className="px-4 py-3 font-semibold text-gray-900 dark:text-white">Cache-Aside</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Simple, on-demand</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Cache miss penalty</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Read-heavy workloads</td>
+                        </tr>
+                        <tr className="bg-gray-50 dark:bg-gray-900/50">
+                          <td className="px-4 py-3 font-semibold text-gray-900 dark:text-white">Write-Through</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Always consistent</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Higher write latency</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Financial data</td>
+                        </tr>
+                        <tr>
+                          <td className="px-4 py-3 font-semibold text-gray-900 dark:text-white">Write-Behind</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Fast writes</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Risk of data loss</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Analytics, counters</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Eviction Policies */}
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <span className="rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium dark:bg-gray-700">
+                      <span className="font-bold text-yellow-600 dark:text-yellow-400">LRU</span> - Least Recently Used
+                    </span>
+                    <span className="rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium dark:bg-gray-700">
+                      <span className="font-bold text-yellow-600 dark:text-yellow-400">LFU</span> - Least Frequently Used
+                    </span>
+                    <span className="rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium dark:bg-gray-700">
+                      <span className="font-bold text-yellow-600 dark:text-yellow-400">FIFO</span> - First In First Out
+                    </span>
+                    <span className="rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium dark:bg-gray-700">
+                      <span className="font-bold text-yellow-600 dark:text-yellow-400">TTL</span> - Time To Live
+                    </span>
+                  </div>
+                </motion.div>
+
+                {/* ACID Transactions */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="rounded-2xl border-l-4 border-pink-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id="acid-transactions"
+                >
+                  <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">ACID Transactions</h3>
+                  
+                  {/* ACID Acronym Visualization */}
+                  <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    {[
+                      { letter: 'A', word: 'Atomicity', desc: 'All-or-nothing', icon: '⚛️', color: 'from-red-500 to-red-600' },
+                      { letter: 'C', word: 'Consistency', desc: 'Valid state → Valid state', icon: '✓', color: 'from-green-500 to-green-600' },
+                      { letter: 'I', word: 'Isolation', desc: 'Concurrent = Serial', icon: '🔒', color: 'from-blue-500 to-blue-600' },
+                      { letter: 'D', word: 'Durability', desc: 'Committed = Survives crash', icon: '💾', color: 'from-purple-500 to-purple-600' },
+                    ].map((item) => (
+                      <div key={item.letter} className={`rounded-xl bg-gradient-to-br ${item.color} p-4 text-white shadow-lg`}>
+                        <div className="mb-2 flex items-center justify-between">
+                          <span className="text-3xl">{item.icon}</span>
+                          <span className="text-4xl font-black opacity-30">{item.letter}</span>
+                        </div>
+                        <h4 className="text-lg font-bold">{item.word}</h4>
+                        <p className="mt-1 text-sm opacity-90">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Isolation Levels */}
+                  <div className="mb-4">
+                    <h4 className="mb-3 font-bold text-gray-900 dark:text-white">Isolation Levels & Anomalies</h4>
+                    <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700">
+                      <table className="w-full text-sm">
+                        <thead className="bg-gray-50 dark:bg-gray-900">
+                          <tr>
+                            <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Level</th>
+                            <th className="px-4 py-3 text-center font-semibold text-gray-700 dark:text-gray-300">Dirty Read</th>
+                            <th className="px-4 py-3 text-center font-semibold text-gray-700 dark:text-gray-300">Non-Repeatable</th>
+                            <th className="px-4 py-3 text-center font-semibold text-gray-700 dark:text-gray-300">Phantom</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                          <tr>
+                            <td className="px-4 py-3 font-semibold text-gray-900 dark:text-white">Read Uncommitted</td>
+                            <td className="px-4 py-3 text-center text-red-500">✗ Possible</td>
+                            <td className="px-4 py-3 text-center text-red-500">✗ Possible</td>
+                            <td className="px-4 py-3 text-center text-red-500">✗ Possible</td>
+                          </tr>
+                          <tr className="bg-gray-50 dark:bg-gray-900/50">
+                            <td className="px-4 py-3 font-semibold text-gray-900 dark:text-white">Read Committed</td>
+                            <td className="px-4 py-3 text-center text-green-500">✓ Prevented</td>
+                            <td className="px-4 py-3 text-center text-red-500">✗ Possible</td>
+                            <td className="px-4 py-3 text-center text-red-500">✗ Possible</td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-3 font-semibold text-gray-900 dark:text-white">Repeatable Read</td>
+                            <td className="px-4 py-3 text-center text-green-500">✓ Prevented</td>
+                            <td className="px-4 py-3 text-center text-green-500">✓ Prevented</td>
+                            <td className="px-4 py-3 text-center text-red-500">✗ Possible</td>
+                          </tr>
+                          <tr className="bg-gray-50 dark:bg-gray-900/50">
+                            <td className="px-4 py-3 font-semibold text-gray-900 dark:text-white">Serializable</td>
+                            <td className="px-4 py-3 text-center text-green-500">✓ Prevented</td>
+                            <td className="px-4 py-3 text-center text-green-500">✓ Prevented</td>
+                            <td className="px-4 py-3 text-center text-green-500">✓ Prevented</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* ACID vs BASE */}
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 p-4 dark:from-pink-900/30 dark:to-pink-800/30">
+                      <h4 className="mb-2 font-bold text-pink-800 dark:text-pink-300">ACID</h4>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">Strong consistency, transactions</p>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <span className="rounded-full bg-pink-200 px-2 py-1 text-xs text-pink-800 dark:bg-pink-800 dark:text-pink-200">Financial</span>
+                        <span className="rounded-full bg-pink-200 px-2 py-1 text-xs text-pink-800 dark:bg-pink-800 dark:text-pink-200">Inventory</span>
+                        <span className="rounded-full bg-pink-200 px-2 py-1 text-xs text-pink-800 dark:bg-pink-800 dark:text-pink-200">Booking</span>
+                      </div>
+                    </div>
+                    <div className="rounded-xl bg-gradient-to-br from-cyan-50 to-cyan-100 p-4 dark:from-cyan-900/30 dark:to-cyan-800/30">
+                      <h4 className="mb-2 font-bold text-cyan-800 dark:text-cyan-300">BASE</h4>
+                      <p className="text-sm text-gray-700 dark:text-gray-300">Basically Available, Soft state, Eventually consistent</p>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <span className="rounded-full bg-cyan-200 px-2 py-1 text-xs text-cyan-800 dark:bg-cyan-800 dark:text-cyan-200">Social feeds</span>
+                        <span className="rounded-full bg-cyan-200 px-2 py-1 text-xs text-cyan-800 dark:bg-cyan-800 dark:text-cyan-200">Analytics</span>
+                        <span className="rounded-full bg-cyan-200 px-2 py-1 text-xs text-cyan-800 dark:bg-cyan-800 dark:text-cyan-200">Caches</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Database Sharding */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="rounded-2xl border-l-4 border-red-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id="database-sharding"
+                >
+                  <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Database Sharding</h3>
+                  <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">Horizontal partitioning to split data across multiple databases</p>
+                  
+                  {/* Sharding Visualization */}
+                  <div className="mb-6 overflow-hidden rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 p-6 dark:from-gray-900 dark:to-gray-800">
+                    <div className="mb-4 text-center">
+                      <div className="mx-auto inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-bold text-white">Original Database</div>
+                    </div>
+                    <div className="mb-4 flex justify-center">
+                      <svg className="h-16 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                    </div>
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      {[
+                        { shard: 'Shard 1', range: 'A-F', color: 'from-blue-500 to-blue-600' },
+                        { shard: 'Shard 2', range: 'G-M', color: 'from-green-500 to-green-600' },
+                        { shard: 'Shard 3', range: 'N-Z', color: 'from-purple-500 to-purple-600' },
+                      ].map((s) => (
+                        <div key={s.shard} className={`rounded-xl bg-gradient-to-br ${s.color} p-4 text-center text-white shadow-lg`}>
+                          <div className="text-lg font-bold">{s.shard}</div>
+                          <div className="text-sm opacity-90">Range: {s.range}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Sharding Strategies */}
+                  <div className="grid gap-4 md:grid-cols-3">
+                    {[
+                      { name: 'Range', desc: 'Easy rebalancing', issue: 'Hot spots', icon: '📏' },
+                      { name: 'Hash', desc: 'Even distribution', issue: 'Hard range queries', icon: '🔢' },
+                      { name: 'Directory', desc: 'Flexible', issue: 'Lookup overhead', icon: '📋' },
+                    ].map((s) => (
+                      <div key={s.name} className="rounded-xl border border-gray-200 p-4 dark:border-gray-700">
+                        <div className="mb-2 text-2xl">{s.icon}</div>
+                        <div className="font-bold text-gray-900 dark:text-white">{s.name} Sharding</div>
+                        <div className="mt-2 text-sm text-green-600 dark:text-green-400">✓ {s.desc}</div>
+                        <div className="text-sm text-red-500">✗ {s.issue}</div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Load Balancing */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="rounded-2xl border-l-4 border-indigo-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id="load-balancing"
+                >
+                  <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Load Balancing Algorithms</h3>
+                  
+                  {/* Visual Diagram */}
+                  <div className="mb-6 flex items-center justify-center gap-4">
+                    <div className="rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 px-6 py-4 text-center text-white shadow-lg">
+                      <div className="text-2xl">🌐</div>
+                      <div className="text-sm font-bold">Traffic</div>
+                    </div>
+                    <svg className="h-8 w-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                    <div className="rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 px-6 py-4 text-center text-white shadow-lg">
+                      <div className="text-2xl">⚖️</div>
+                      <div className="text-sm font-bold">Load Balancer</div>
+                    </div>
+                    <svg className="h-8 w-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                    <div className="grid grid-cols-2 gap-2">
+                      {['S1', 'S2', 'S3', 'S4'].map((s) => (
+                        <div key={s} className="rounded-lg bg-green-500 px-3 py-2 text-center text-xs font-bold text-white">
+                          {s}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Algorithms Grid */}
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {[
+                      { name: 'Round Robin', desc: 'Even distribution', best: 'Stateless servers', icon: '🔄' },
+                      { name: 'Least Connections', desc: 'Smart routing', best: 'Varying request duration', icon: '📊' },
+                      { name: 'IP Hash', desc: 'Session affinity', best: 'Stateful connections', icon: '🔐' },
+                      { name: 'Weighted', desc: 'Proportional', best: 'Heterogeneous servers', icon: '⚖️' },
+                      { name: 'Layer 4 (TCP)', desc: 'Fast, simple', best: 'High throughput', icon: '🚀' },
+                      { name: 'Layer 7 (HTTP)', desc: 'Content-aware', best: 'Path-based routing', icon: '🎯' },
+                    ].map((algo) => (
+                      <div key={algo.name} className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900">
+                        <div className="mb-2 flex items-center gap-2">
+                          <span className="text-xl">{algo.icon}</span>
+                          <span className="font-bold text-gray-900 dark:text-white">{algo.name}</span>
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">{algo.desc}</div>
+                        <div className="mt-2 text-xs text-indigo-600 dark:text-indigo-400">Best: {algo.best}</div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Message Queues */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="rounded-2xl border-l-4 border-orange-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id="message-queues"
+                >
+                  <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Message Queues vs Event Streaming</h3>
+                  
+                  <div className="mb-6 grid gap-4 md:grid-cols-2">
+                    {/* Message Queue */}
+                    <div className="rounded-xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 p-5 dark:border-blue-800 dark:from-blue-900/30 dark:to-blue-800/30">
+                      <div className="mb-3 flex items-center gap-2">
+                        <span className="text-2xl">📬</span>
+                        <h4 className="text-lg font-bold text-blue-900 dark:text-blue-300">Message Queue</h4>
+                      </div>
+                      <ul className="mb-4 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                        <li>• Point-to-point or pub-sub</li>
+                        <li>• Messages consumed once</li>
+                        <li>• Good for task queues</li>
+                        <li>• Decoupling services</li>
+                      </ul>
+                      <div className="flex gap-2">
+                        <span className="rounded-lg bg-blue-200 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-800 dark:text-blue-200">RabbitMQ</span>
+                        <span className="rounded-lg bg-blue-200 px-3 py-1 text-xs font-medium text-blue-800 dark:bg-blue-800 dark:text-blue-200">SQS</span>
+                      </div>
+                    </div>
+
+                    {/* Event Streaming */}
+                    <div className="rounded-xl border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 p-5 dark:border-orange-800 dark:from-orange-900/30 dark:to-orange-800/30">
+                      <div className="mb-3 flex items-center gap-2">
+                        <span className="text-2xl">📊</span>
+                        <h4 className="text-lg font-bold text-orange-900 dark:text-orange-300">Event Streaming</h4>
+                      </div>
+                      <ul className="mb-4 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                        <li>• Persistent log</li>
+                        <li>• Multiple consumers</li>
+                        <li>• Replayable events</li>
+                        <li>• Ordered within partition</li>
+                      </ul>
+                      <div className="flex gap-2">
+                        <span className="rounded-lg bg-orange-200 px-3 py-1 text-xs font-medium text-orange-800 dark:bg-orange-800 dark:text-orange-200">Kafka</span>
+                        <span className="rounded-lg bg-orange-200 px-3 py-1 text-xs font-medium text-orange-800 dark:bg-orange-800 dark:text-orange-200">Kinesis</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Use Cases */}
+                  <div className="rounded-xl bg-gray-50 p-4 dark:bg-gray-900">
+                    <h4 className="mb-3 font-bold text-gray-900 dark:text-white">When to Use What</h4>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div>
+                        <div className="text-sm font-semibold text-blue-700 dark:text-blue-400">Use Message Queue for:</div>
+                        <ul className="mt-2 space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                          <li>• Task queues, worker pools</li>
+                          <li>• Exactly-once delivery</li>
+                          <li>• Simple decoupling</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-orange-700 dark:text-orange-400">Use Event Streaming for:</div>
+                        <ul className="mt-2 space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                          <li>• Event sourcing, audit logs</li>
+                          <li>• Fan-out to multiple consumers</li>
+                          <li>• Stream processing</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Database Indexes */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="rounded-2xl border-l-4 border-teal-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id="database-indexes"
+                >
+                  <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Database Indexes</h3>
+                  
+                  {/* Index Types Comparison */}
+                  <div className="mb-6 grid gap-4 md:grid-cols-3">
+                    {[
+                      { name: 'B-Tree', icon: '🌳', lookup: 'O(log n)', range: '✓ Yes', equality: '✓ Yes', color: 'from-teal-500 to-teal-600' },
+                      { name: 'Hash', icon: '🔑', lookup: 'O(1)', range: '✗ No', equality: '✓ Yes', color: 'from-blue-500 to-blue-600' },
+                      { name: 'LSM Tree', icon: '📝', lookup: 'O(log n)', range: '✓ Yes', equality: '✓ Yes', color: 'from-purple-500 to-purple-600' },
+                    ].map((idx) => (
+                      <div key={idx.name} className={`rounded-xl bg-gradient-to-br ${idx.color} p-5 text-white shadow-lg`}>
+                        <div className="mb-3 flex items-center justify-between">
+                          <span className="text-3xl">{idx.icon}</span>
+                          <span className="text-2xl font-black opacity-30">{idx.name[0]}</span>
+                        </div>
+                        <h4 className="mb-3 text-lg font-bold">{idx.name} Index</h4>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="opacity-80">Lookup:</span>
+                            <span className="font-bold">{idx.lookup}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="opacity-80">Range:</span>
+                            <span dangerouslySetInnerHTML={{ __html: idx.range }} />
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="opacity-80">Equality:</span>
+                            <span dangerouslySetInnerHTML={{ __html: idx.equality }} />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Composite Index Rule */}
+                  <div className="rounded-xl bg-amber-50 p-4 dark:bg-amber-900/20">
+                    <h4 className="mb-2 font-bold text-amber-800 dark:text-amber-400">Composite Index - Left Prefix Rule</h4>
+                    <p className="mb-3 text-sm text-amber-700 dark:text-amber-400">Index on (a, b, c) supports queries on:</p>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="rounded-lg bg-amber-200 px-3 py-2 text-sm font-medium text-amber-800 dark:bg-amber-800 dark:text-amber-200">✓ (a)</span>
+                      <span className="rounded-lg bg-amber-200 px-3 py-2 text-sm font-medium text-amber-800 dark:bg-amber-800 dark:text-amber-200">✓ (a, b)</span>
+                      <span className="rounded-lg bg-amber-200 px-3 py-2 text-sm font-medium text-amber-800 dark:bg-amber-800 dark:text-amber-200">✓ (a, b, c)</span>
+                      <span className="rounded-lg bg-red-200 px-3 py-2 text-sm font-medium text-red-800 dark:bg-red-800 dark:text-red-200">✗ (b)</span>
+                      <span className="rounded-lg bg-red-200 px-3 py-2 text-sm font-medium text-red-800 dark:bg-red-800 dark:text-red-200">✗ (c)</span>
+                      <span className="rounded-lg bg-red-200 px-3 py-2 text-sm font-medium text-red-800 dark:bg-red-800 dark:text-red-200">✗ (b, c)</span>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Consistent Hashing */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="rounded-2xl border-l-4 border-purple-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id="consistent-hashing"
+                >
+                  <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Consistent Hashing</h3>
+                  <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">Minimizes rehashing when nodes are added/removed</p>
+                  
+                  {/* Hash Ring Visualization */}
+                  <div className="mb-6 flex justify-center">
+                    <div className="relative h-64 w-64">
+                      <svg viewBox="0 0 200 200" className="h-full w-full">
+                        {/* Ring */}
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" strokeWidth="3" className="text-purple-300 dark:text-purple-700" />
+                        
+                        {/* Nodes */}
+                        <circle cx="100" cy="20" r="12" fill="#8B5CF6" />
+                        <text x="100" y="24" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">N1</text>
+                        
+                        <circle cx="180" cy="100" r="12" fill="#10B981" />
+                        <text x="180" y="104" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">N2</text>
+                        
+                        <circle cx="100" cy="180" r="12" fill="#3B82F6" />
+                        <text x="100" y="184" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">N3</text>
+                        
+                        <circle cx="20" cy="100" r="12" fill="#F59E0B" />
+                        <text x="20" y="104" textAnchor="middle" fill="white" fontSize="10" fontWeight="bold">N4</text>
+                        
+                        {/* Data points */}
+                        <circle cx="140" cy="50" r="6" fill="#EC4899" opacity="0.7" />
+                        <circle cx="150" cy="140" r="6" fill="#EC4899" opacity="0.7" />
+                        <circle cx="60" cy="150" r="6" fill="#EC4899" opacity="0.7" />
+                        <circle cx="50" cy="60" r="6" fill="#EC4899" opacity="0.7" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* Benefits */}
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    <div className="rounded-xl bg-green-50 p-4 dark:bg-green-900/20">
+                      <div className="mb-2 text-2xl">✓</div>
+                      <div className="font-bold text-green-800 dark:text-green-400">Minimal Rehashing</div>
+                      <div className="mt-1 text-sm text-green-700 dark:text-green-400">Only adjacent nodes affected</div>
+                    </div>
+                    <div className="rounded-xl bg-blue-50 p-4 dark:bg-blue-900/20">
+                      <div className="mb-2 text-2xl">⚡</div>
+                      <div className="font-bold text-blue-800 dark:text-blue-400">Horizontal Scaling</div>
+                      <div className="mt-1 text-sm text-blue-700 dark:text-blue-400">Add/remove nodes easily</div>
+                    </div>
+                    <div className="rounded-xl bg-purple-50 p-4 dark:bg-purple-900/20">
+                      <div className="mb-2 text-2xl">🎯</div>
+                      <div className="font-bold text-purple-800 dark:text-purple-400">Even Distribution</div>
+                      <div className="mt-1 text-sm text-purple-700 dark:text-purple-400">Virtual nodes improve balance</div>
+                    </div>
+                  </div>
+
+                  {/* Use Cases */}
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <span className="rounded-lg bg-purple-100 px-3 py-2 text-sm font-medium text-purple-800 dark:bg-purple-800 dark:text-purple-200">Cassandra</span>
+                    <span className="rounded-lg bg-purple-100 px-3 py-2 text-sm font-medium text-purple-800 dark:bg-purple-800 dark:text-purple-200">Redis Cluster</span>
+                    <span className="rounded-lg bg-purple-100 px-3 py-2 text-sm font-medium text-purple-800 dark:bg-purple-800 dark:text-purple-200">Memcached</span>
+                    <span className="rounded-lg bg-purple-100 px-3 py-2 text-sm font-medium text-purple-800 dark:bg-purple-800 dark:text-purple-200">CDNs</span>
+                    <span className="rounded-lg bg-purple-100 px-3 py-2 text-sm font-medium text-purple-800 dark:bg-purple-800 dark:text-purple-200">Load Balancers</span>
+                  </div>
+                </motion.div>
+
+                {/* Database Internals */}
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  className="rounded-2xl border-l-4 border-cyan-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id="database-internals"
+                >
+                  <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Database Internals</h3>
+                  
+                  {/* B-Tree vs LSM Tree */}
+                  <div className="mb-6 grid gap-4 md:grid-cols-2">
+                    <div className="rounded-xl border-2 border-cyan-200 bg-gradient-to-br from-cyan-50 to-cyan-100 p-5 dark:border-cyan-800 dark:from-cyan-900/30 dark:to-cyan-800/30">
+                      <div className="mb-3 flex items-center gap-2">
+                        <span className="text-2xl">🌳</span>
+                        <h4 className="text-lg font-bold text-cyan-900 dark:text-cyan-300">B-Tree</h4>
+                      </div>
+                      <ul className="mb-4 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                        <li>• Balanced tree structure</li>
+                        <li>• O(log n) reads</li>
+                        <li>• Range queries</li>
+                        <li>• OLTP databases</li>
+                      </ul>
+                      <div className="flex gap-2">
+                        <span className="rounded-lg bg-cyan-200 px-3 py-1 text-xs font-medium text-cyan-800 dark:bg-cyan-800 dark:text-cyan-200">Postgres</span>
+                        <span className="rounded-lg bg-cyan-200 px-3 py-1 text-xs font-medium text-cyan-800 dark:bg-cyan-800 dark:text-cyan-200">MySQL</span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 p-5 dark:border-purple-800 dark:from-purple-900/30 dark:to-purple-800/30">
+                      <div className="mb-3 flex items-center gap-2">
+                        <span className="text-2xl">📝</span>
+                        <h4 className="text-lg font-bold text-purple-900 dark:text-purple-300">LSM Tree</h4>
+                      </div>
+                      <ul className="mb-4 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                        <li>• Append-only writes</li>
+                        <li>• Memtable → SSTables</li>
+                        <li>• Fast writes, slower reads</li>
+                        <li>• Bloom filters optimize reads</li>
+                      </ul>
+                      <div className="flex gap-2">
+                        <span className="rounded-lg bg-purple-200 px-3 py-1 text-xs font-medium text-purple-800 dark:bg-purple-800 dark:text-purple-200">Cassandra</span>
+                        <span className="rounded-lg bg-purple-200 px-3 py-1 text-xs font-medium text-purple-800 dark:bg-purple-800 dark:text-purple-200">RocksDB</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Key Components Grid */}
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    {[
+                      { name: 'WAL', full: 'Write-Ahead Log', icon: '📜', desc: 'Crash recovery, replication' },
+                      { name: 'MVCC', full: 'Multi-Version Concurrency', icon: '🔄', desc: 'Snapshot isolation' },
+                      { name: 'Buffer Pool', full: 'In-memory cache', icon: '💾', desc: 'Hot pages in memory' },
+                      { name: 'Connection Pool', full: 'PgBouncer, ProxySQL', icon: '🔌', desc: 'Reuse connections' },
+                    ].map((comp) => (
+                      <div key={comp.name} className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-center dark:border-gray-700 dark:bg-gray-900">
+                        <div className="mb-2 text-2xl">{comp.icon}</div>
+                        <div className="font-bold text-gray-900 dark:text-white">{comp.name}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">{comp.full}</div>
+                        <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">{comp.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
               </div>
             </motion.div>
           )}

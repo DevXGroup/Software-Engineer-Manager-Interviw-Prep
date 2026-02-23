@@ -3,6 +3,8 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Brain, ChevronDown, ChevronUp, Search, Eye, EyeOff, X, Cpu, Shield, TrendingUp, Lightbulb } from 'lucide-react'
+import { QuizLauncher } from '@/components/QuizLauncher'
+import { aiInterviewQuestions } from '@/data/quizzes/ai-interview'
 
 type AIQuestion = {
   id: string
@@ -414,6 +416,8 @@ export default function AIInterviewPage() {
           <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">AI & Machine Learning Interview Prep</h1>
           <p className="text-xl text-gray-600 dark:text-gray-300">12 deep-dive Q&As · Key AI concepts · Practice mode · For SDMs and AI PMs</p>
         </motion.div>
+
+        <QuizLauncher sectionId="ai-interview" title="AI Interview" questions={aiInterviewQuestions} />
 
         {/* Tabs */}
         <div className="mb-8 flex gap-2 rounded-xl bg-white p-1 shadow dark:bg-gray-800">

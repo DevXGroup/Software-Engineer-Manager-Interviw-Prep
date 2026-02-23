@@ -1,8 +1,8 @@
-# FAANG Interview Prep - Engineering Manager Guide
+# Engineering Manager Interview Mastery
 
-A comprehensive, interactive Next.js application for preparing for **engineering manager (EM) and senior development manager (SDM) interviews** at top tech companies including Amazon, Google, Meta, Apple, Microsoft, and Netflix.
+A comprehensive, interactive Next.js application for preparing for **engineering manager (EM) and senior development manager (SDM) interviews** at top tech companies including Meta, Amazon, Apple, Netflix, Google, and Microsoft.
 
-Built with Next.js 14, TypeScript, and Tailwind CSS, featuring interactive system design diagrams, algorithm visualizations, STAR-format behavioral examples, and company-specific interview frameworks with progress tracking.
+Built with Next.js 14, TypeScript, and Tailwind CSS, featuring an AI-powered search system, interactive algorithm visualizer, STAR-format behavioral examples, system design patterns, knowledge quizzes, and company-specific interview frameworks with persistent progress tracking.
 
 ---
 
@@ -26,17 +26,20 @@ Built with Next.js 14, TypeScript, and Tailwind CSS, featuring interactive syste
 
 ## Features
 
-- **Behavioral Interview Prep** - STAR format examples with company-specific leadership principle frameworks
+- **Behavioral Interview Prep** - 12 full STAR format examples with company-specific leadership principle frameworks
 - **System Design** - Interactive canvas-based architecture diagrams and pattern library with pros/cons analysis
-- **Coding Practice** - Algorithm visualizations with complexity analysis and an SDM-focused coding guide
+- **Coding Practice** - Algorithm visualizations with complexity analysis, 10 essential DSA patterns, and SDM-focused coding guide
 - **Technical Leadership** - Hiring, performance management, and engineering strategy topics
 - **Team Management** - Conflict resolution, mentoring, and org-building scenarios
 - **AI Interview Prep** - AI/ML-focused interview scenarios and discussion prompts
-- **Company-Specific Guides** - Detailed interview loops, compensation data, and culture tips for Amazon, Google, Meta, Apple, Microsoft, and Netflix
+- **Knowledge Quizzes** - Interactive quizzes to test readiness across all sections
+- **Smart Search** - AI-powered search with fuzzy matching, type filtering, and keyboard shortcuts (Cmd+K)
+- **Company-Specific Guides** - Detailed interview loops, compensation data, and culture tips for Meta, Amazon, Apple, Netflix, Google, and Microsoft
 - **8-Week Study Roadmap** - Structured curriculum with weekly goals and milestones
 - **Progress Tracking** - Persistent progress tracking across all modules using local storage
 - **Dark Mode** - Full dark/light theme support with system preference detection
 - **Responsive Design** - Mobile-first layout with animated navigation and interactive cards
+- **Auto-rotating Feature Carousel** - Dynamic hero carousel showcasing key learning areas
 
 ---
 
@@ -144,14 +147,26 @@ src/
 │   ├── ThemeProvider.tsx         # Dark/light theme context provider
 │   ├── ProgressTracker.tsx       # Module progress dashboard widget
 │   ├── InteractiveCard.tsx       # Animated module card with gradient + topics
+│   ├── HeroCarousel.tsx          # Auto-rotating feature carousel on home page
+│   ├── SearchModal.tsx           # AI-powered search with fuzzy matching
+│   ├── Quiz.tsx                  # Quiz component for knowledge testing
+│   ├── QuizLauncher.tsx          # Quiz trigger/launcher component
+│   ├── DonateButton.tsx          # Donation button component
+│   ├── DonateToast.tsx           # Donation confirmation toast
+│   ├── Footer.tsx                # Application footer
+│   ├── PriorityBadge.tsx         # Priority indicator badge
+│   ├── PriorityFilter.tsx        # Priority filtering component
 │   ├── behavioral/
 │   │   ├── STARExample.tsx       # STAR format display (Situation/Task/Action/Result)
 │   │   └── CompanyFramework.tsx  # Company leadership principles grid
 │   └── system-design/
 │       ├── ArchitecturePattern.tsx  # Pattern card with pros/cons
 │       └── SystemDiagram.tsx     # Canvas-based architecture diagram
+├── data/                         # Static data and search index
+│   └── searchIndex.ts            # Comprehensive search index with fuzzy matching
 ├── hooks/
-│   └── useTheme.ts               # Re-exports useTheme from ThemeProvider
+│   ├── useTheme.ts               # Theme context hook
+│   └── useSearch.ts              # Search functionality hook
 └── store/
     └── progressStore.ts          # Zustand store with localStorage persistence
 ```
@@ -161,15 +176,20 @@ src/
 ```
 RootLayout (layout.tsx)
 ├── ThemeProvider              # Provides theme context (light/dark)
-│   ├── Navigation             # Fixed top nav with mobile hamburger menu
+│   ├── Navigation             # Fixed top nav with search trigger + theme toggle
+│   ├── SearchModal            # Global search modal (Cmd+K)
 │   └── <main>
-│       └── [Page Component]   # Route-specific page
-│           ├── InteractiveCard        # Module navigation cards (home)
-│           ├── ProgressTracker        # Progress widget (home)
-│           ├── STARExample            # Behavioral examples
-│           ├── CompanyFramework       # Leadership principles
-│           ├── ArchitecturePattern    # System design patterns
-│           └── SystemDiagram          # Canvas diagram
+│       ├── [Page Component]   # Route-specific page
+│       │   ├── HeroCarousel           # Auto-rotating feature showcase (home)
+│       │   ├── ProgressTracker        # Progress widget (home)
+│       │   ├── InteractiveCard        # Module navigation cards (home)
+│       │   ├── STARExample            # Behavioral examples
+│       │   ├── CompanyFramework       # Leadership principles
+│       │   ├── ArchitecturePattern    # System design patterns
+│       │   ├── Quiz                   # Knowledge quizzes
+│       │   ├── PriorityFilter         # Content filtering
+│       │   └── SystemDiagram          # Canvas diagram
+│       └── Footer              # Application footer with links
 ```
 
 ### Data Flow
@@ -271,6 +291,26 @@ companyData["newcompany"] = {
 
 3. The dynamic route `/companies/newcompany` will automatically resolve to your new entry.
 
+### Adding Content to Search Index
+
+1. Open `src/data/searchIndex.ts`
+2. Add a new entry to the `searchIndex` array:
+
+```typescript
+{
+  id: 'unique-id',
+  title: 'Content title',
+  description: 'Brief description of the content',
+  type: 'page' | 'section' | 'question' | 'pattern' | 'concept' | 'company' | 'principle',
+  href: '/path/to/page',
+  sectionId: 'optional-element-id', // For scrolling to specific section
+  category: 'Optional category',
+  keywords: ['keyword1', 'keyword2', 'keyword3']
+}
+```
+
+3. The search will automatically index and make this content discoverable with fuzzy matching.
+
 ### Adding a New Interview Module
 
 1. Create a new directory under `src/app/your-module/`
@@ -281,7 +321,42 @@ companyData["newcompany"] = {
 { name: 'Module Name', href: '/your-module', icon: IconComponent }
 ```
 
-4. Optionally add progress tracking by registering the module in `src/components/ProgressTracker.tsx`.
+4. Add search index entries for your new content in `src/data/searchIndex.ts`
+5. Optionally add progress tracking by registering the module in `src/components/ProgressTracker.tsx`.
+
+---
+
+## Advanced Features
+
+### Smart Search System
+
+The application includes an intelligent search system (Cmd+K) with:
+
+- **Fuzzy Matching** - Intelligently finds results even with typos or partial matches
+- **Type Filtering** - Filter by Pages, Sections, Questions, Patterns, Concepts, Companies, and Principles
+- **Rich Indexing** - Searches titles, descriptions, keywords, and categories
+- **Keyboard Navigation** - Arrow keys to browse, Enter to select, Esc to close
+- **Deep Linking** - Automatically scrolls to and highlights relevant sections
+
+Access via the search icon in the navigation bar or press Cmd+K / Ctrl+K.
+
+### Quiz System
+
+Interactive knowledge quizzes help reinforce learning:
+
+- Section-specific quizzes across all modules
+- Immediate feedback on answers
+- Progress tracking for quiz attempts
+- Mix of question types for comprehensive assessment
+
+### Hero Carousel
+
+The home page features an auto-rotating carousel that:
+
+- Cycles through 5 key learning areas (Behavioral, System Design, Coding, Leadership, Quizzes)
+- Auto-advances every 5 seconds
+- Manual navigation with dot indicators
+- Responsive design for all screen sizes
 
 ---
 
@@ -319,8 +394,11 @@ Custom Tailwind animations are defined in `tailwind.config.ts` under `animation`
 |-----------|------|----------------|
 | Navigation links | `components/Navigation.tsx` | `navItems` array |
 | Progress modules | `components/ProgressTracker.tsx` | `modules` array |
+| Hero carousel slides | `components/HeroCarousel.tsx` | `slides` array |
 | Home page cards | `app/page.tsx` | `sections` array |
 | Company data | `app/companies/[company]/page.tsx` | `companyData` record |
+| Search index | `data/searchIndex.ts` | `searchIndex` array for search results |
+| Quiz content | `components/Quiz.tsx` | Quiz questions and answers |
 
 ---
 

@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Play, Pause, RefreshCw, ChevronDown, ChevronUp, Code, Zap, GitBranch, Layers, Trophy, ArrowRight } from 'lucide-react'
+import { Play, Pause, RefreshCw, ChevronDown, ChevronUp, Code, Zap, GitBranch, Layers, Trophy, ArrowRight, BookOpen } from 'lucide-react'
 import Link from 'next/link'
+import { QuizLauncher } from '@/components/QuizLauncher'
+import { codingQuestions } from '@/data/quizzes/coding'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 type SortStep = { array: number[]; comparing: number[]; sorted: number[]; swapped: boolean }
@@ -357,12 +359,415 @@ const complexityReference = [
   { notation: 'O(n!)', name: 'Factorial', example: 'Brute force permutations', color: 'bg-red-900' },
 ]
 
+// ── Data Structures ──────────────────────────────────────────────────────────
+type DS = { name: string; category: string; slug: string; description: string; ops: { op: string; avg: string; worst: string }[]; template: string; useWhen: string; interviewNote: string }
+
+const dataStructures: DS[] = [
+  {
+    name: 'Array',
+    category: 'Linear',
+    slug: 'array',
+    description: 'Contiguous memory storing elements of the same type. O(1) random access by index. Dynamic arrays auto-resize, amortizing appends to O(1) average. Cache-friendly due to memory locality.',
+    ops: [
+      { op: 'Access by index', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Search (unsorted)', avg: 'O(n)', worst: 'O(n)' },
+      { op: 'Append (amortized)', avg: 'O(1)', worst: 'O(n)' },
+      { op: 'Insert at index', avg: 'O(n)', worst: 'O(n)' },
+      { op: 'Delete at index', avg: 'O(n)', worst: 'O(n)' },
+    ],
+    template: `// Two-pointer idiom:
+let left = 0, right = arr.length - 1
+while (left < right) { /* ... */ left++; right-- }
+
+// Prefix sum (O(1) range sum query):
+const prefix = [0]
+for (const x of arr) prefix.push(prefix.at(-1)! + x)
+// sum(arr[i..j]) = prefix[j+1] - prefix[i]
+
+// Kadane's (max subarray):
+function maxSubarray(nums: number[]): number {
+  let maxSum = nums[0], curr = nums[0]
+  for (let i = 1; i < nums.length; i++) {
+    curr = Math.max(nums[i], curr + nums[i])
+    maxSum = Math.max(maxSum, curr)
+  }
+  return maxSum
+}`,
+    useWhen: 'Random access by index. Cache-friendly iteration. Prefix sums. Two-pointer problems on sorted data.',
+    interviewNote: 'Prefix sums unlock O(1) range sum queries — critical for subarray sum problems. Kadane\'s algorithm solves maximum subarray in O(n). Arrays underlie most FAANG problems.',
+  },
+  {
+    name: 'Linked List',
+    category: 'Linear',
+    slug: 'linked-list',
+    description: 'Nodes linked by pointers. No random access. O(1) insert/delete at a known node. Singly: one direction. Doubly: O(1) delete given a direct node reference. Used inside LRU Cache.',
+    ops: [
+      { op: 'Access by index', avg: 'O(n)', worst: 'O(n)' },
+      { op: 'Search', avg: 'O(n)', worst: 'O(n)' },
+      { op: 'Insert at head', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Insert at tail (tail ptr)', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Delete (given node ref)', avg: 'O(1)', worst: 'O(1)' },
+    ],
+    template: `class ListNode {
+  constructor(public val: number, public next: ListNode | null = null) {}
+}
+
+// Reverse (iterative):
+function reverse(head: ListNode | null): ListNode | null {
+  let prev = null, curr = head
+  while (curr) {
+    const next = curr.next
+    curr.next = prev; prev = curr; curr = next
+  }
+  return prev
+}
+
+// Floyd's cycle detection (slow/fast pointers):
+function hasCycle(head: ListNode | null): boolean {
+  let slow = head, fast = head
+  while (fast?.next) {
+    slow = slow!.next; fast = fast.next.next
+    if (slow === fast) return true
+  }
+  return false
+}
+
+// Find middle (slow/fast):
+function middle(head: ListNode): ListNode {
+  let slow = head, fast = head
+  while (fast.next?.next) { slow = slow.next!; fast = fast.next.next }
+  return slow
+}`,
+    useWhen: 'Frequent insert/delete without random access. LRU Cache. Reverse, cycle-detect, or merge problems.',
+    interviewNote: 'Master: dummy head node (simplifies edge cases), slow/fast pointers (find middle, detect cycle), in-place reversal. LRU Cache = Doubly Linked List + HashMap.',
+  },
+  {
+    name: 'Stack',
+    category: 'Linear',
+    slug: 'stack',
+    description: 'LIFO: Last In, First Out. O(1) push/pop/peek. Built on array or linked list. Powers DFS, expression parsing, undo/redo, and the monotonic stack pattern.',
+    ops: [
+      { op: 'Push', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Pop', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Peek (top)', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Search', avg: 'O(n)', worst: 'O(n)' },
+    ],
+    template: `const stack: number[] = []
+stack.push(5)              // push
+const top = stack.at(-1)  // peek (no removal)
+const val = stack.pop()   // pop
+
+// Monotonic stack — next greater element:
+function nextGreater(nums: number[]): number[] {
+  const result = new Array(nums.length).fill(-1)
+  const stack: number[] = []  // indices, decreasing values
+  for (let i = 0; i < nums.length; i++) {
+    while (stack.length && nums[i] > nums[stack.at(-1)!]) {
+      result[stack.pop()!] = nums[i]
+    }
+    stack.push(i)
+  }
+  return result
+}
+
+// Valid Parentheses:
+function isValid(s: string): boolean {
+  const map: Record<string, string> = { ')':'(', ']':'[', '}':'{' }
+  const stack: string[] = []
+  for (const c of s) {
+    if ('([{'.includes(c)) stack.push(c)
+    else if (stack.pop() !== map[c]) return false
+  }
+  return stack.length === 0
+}`,
+    useWhen: 'Bracket/tag matching. DFS without recursion. Monotonic window problems. Expression evaluation.',
+    interviewNote: 'Monotonic stack is the key advanced pattern: maintain a decreasing stack to solve Next Greater Element, Largest Rectangle in Histogram, and Trapping Rain Water all in O(n).',
+  },
+  {
+    name: 'Queue & Deque',
+    category: 'Linear',
+    slug: 'queue',
+    description: 'Queue: FIFO — First In, First Out. Deque (Double-Ended Queue): O(1) insert/delete at both ends. Essential for BFS and the sliding window maximum pattern.',
+    ops: [
+      { op: 'Enqueue / Push back', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Dequeue / Pop front', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Push front (deque)', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Pop back (deque)', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Peek', avg: 'O(1)', worst: 'O(1)' },
+    ],
+    template: `// BFS with queue (level-order):
+function bfs(root: TreeNode | null): number[][] {
+  if (!root) return []
+  const queue: TreeNode[] = [root]
+  const levels: number[][] = []
+  while (queue.length) {
+    const size = queue.length; const level: number[] = []
+    for (let i = 0; i < size; i++) {
+      const node = queue.shift()!
+      level.push(node.val)
+      if (node.left) queue.push(node.left)
+      if (node.right) queue.push(node.right)
+    }
+    levels.push(level)
+  }
+  return levels
+}
+
+// Monotonic deque — sliding window maximum O(n):
+function maxSlidingWindow(nums: number[], k: number): number[] {
+  const deque: number[] = []  // indices, decreasing values
+  const result: number[] = []
+  for (let i = 0; i < nums.length; i++) {
+    while (deque.length && deque[0] < i - k + 1) deque.shift()
+    while (deque.length && nums[deque.at(-1)!] < nums[i]) deque.pop()
+    deque.push(i)
+    if (i >= k - 1) result.push(nums[deque[0]])
+  }
+  return result
+}`,
+    useWhen: 'BFS / level-order traversal. Sliding window maximum. Task scheduling. Producer-consumer patterns.',
+    interviewNote: 'Monotonic deque gives O(n) sliding window maximum vs O(n·k) naive. In JS, Array.shift() is O(n) — for correctness in interviews it\'s fine; note the trade-off.',
+  },
+  {
+    name: 'Hash Map & Set',
+    category: 'Hash-Based',
+    slug: 'hashmap-ds',
+    description: 'O(1) average insert/delete/lookup using a hash function. Hash Set: unique keys. Collision resolution via chaining or open addressing. Worst case O(n) on adversarial keys.',
+    ops: [
+      { op: 'Insert', avg: 'O(1)', worst: 'O(n)' },
+      { op: 'Delete', avg: 'O(1)', worst: 'O(n)' },
+      { op: 'Lookup', avg: 'O(1)', worst: 'O(n)' },
+      { op: 'Iterate all entries', avg: 'O(n)', worst: 'O(n)' },
+    ],
+    template: `// Frequency counter (group anagrams):
+function groupAnagrams(strs: string[]): string[][] {
+  const map = new Map<string, string[]>()
+  for (const s of strs) {
+    const key = [...s].sort().join('')
+    if (!map.has(key)) map.set(key, [])
+    map.get(key)!.push(s)
+  }
+  return [...map.values()]
+}
+
+// Complement lookup (Two Sum in O(n)):
+function twoSum(nums: number[], target: number): number[] {
+  const seen = new Map<number, number>()  // val → index
+  for (let i = 0; i < nums.length; i++) {
+    const comp = target - nums[i]
+    if (seen.has(comp)) return [seen.get(comp)!, i]
+    seen.set(nums[i], i)
+  }
+  return []
+}
+
+// Sliding window with frequency map:
+function lengthOfLongestSubstring(s: string): number {
+  const freq = new Map<string, number>()
+  let left = 0, max = 0
+  for (let right = 0; right < s.length; right++) {
+    freq.set(s[right], (freq.get(s[right]) ?? 0) + 1)
+    while (freq.get(s[right])! > 1) {
+      freq.set(s[left], freq.get(s[left])! - 1)
+      if (freq.get(s[left]) === 0) freq.delete(s[left])
+      left++
+    }
+    max = Math.max(max, right - left + 1)
+  }
+  return max
+}`,
+    useWhen: 'O(1) lookup / membership. Counting frequencies. Grouping by key. Two-sum style complement search. De-duplication.',
+    interviewNote: 'Hash maps turn O(n²) brute force into O(n). Always ask: "Can I precompute and look up?" Prefer Map over {} for non-string keys and guaranteed insertion order.',
+  },
+  {
+    name: 'Binary Search Tree',
+    category: 'Tree',
+    slug: 'bst',
+    description: 'Binary tree where left < node < right. O(log n) average for search/insert/delete. Degrades to O(n) when skewed. Self-balancing variants (AVL, Red-Black) guarantee O(log n) worst case.',
+    ops: [
+      { op: 'Search', avg: 'O(log n)', worst: 'O(n)' },
+      { op: 'Insert', avg: 'O(log n)', worst: 'O(n)' },
+      { op: 'Delete', avg: 'O(log n)', worst: 'O(n)' },
+      { op: 'In-order traversal', avg: 'O(n)', worst: 'O(n)' },
+      { op: 'Min / Max', avg: 'O(log n)', worst: 'O(n)' },
+    ],
+    template: `// In-order = sorted output:
+function inorder(root: TreeNode | null, res: number[] = []): number[] {
+  if (!root) return res
+  inorder(root.left, res); res.push(root.val); inorder(root.right, res)
+  return res
+}
+
+// Validate BST (min/max bound technique):
+function isValidBST(
+  root: TreeNode | null, min = -Infinity, max = Infinity
+): boolean {
+  if (!root) return true
+  if (root.val <= min || root.val >= max) return false
+  return isValidBST(root.left, min, root.val) &&
+         isValidBST(root.right, root.val, max)
+}
+
+// Lowest Common Ancestor (LCA) in BST:
+function lcaBST(root: TreeNode, p: TreeNode, q: TreeNode): TreeNode {
+  if (p.val < root.val && q.val < root.val) return lcaBST(root.left!, p, q)
+  if (p.val > root.val && q.val > root.val) return lcaBST(root.right!, p, q)
+  return root  // split point = LCA
+}`,
+    useWhen: 'Maintain sorted dynamic set. Range queries. kth smallest/largest. Ordered statistics.',
+    interviewNote: 'In-order traversal of BST = sorted array. Use min/max bounds for validation (not parent comparison). LCA in BST exploits ordering — no general LCA algorithm needed.',
+  },
+  {
+    name: 'Heap / Priority Queue',
+    category: 'Tree',
+    slug: 'heap-ds',
+    description: 'Complete binary tree satisfying heap property. Min-heap: parent ≤ children, peek min in O(1). Max-heap: parent ≥ children. Stored as an array: children of i are at 2i+1 and 2i+2.',
+    ops: [
+      { op: 'Peek min/max', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Insert', avg: 'O(log n)', worst: 'O(log n)' },
+      { op: 'Extract min/max', avg: 'O(log n)', worst: 'O(log n)' },
+      { op: 'Build from array', avg: 'O(n)', worst: 'O(n)' },
+    ],
+    template: `class MinHeap {
+  private h: number[] = []
+  push(v: number) {
+    this.h.push(v); let i = this.h.length - 1
+    while (i > 0) {
+      const p = (i - 1) >> 1
+      if (this.h[p] <= this.h[i]) break
+      ;[this.h[p], this.h[i]] = [this.h[i], this.h[p]]; i = p
+    }
+  }
+  pop(): number {
+    const top = this.h[0]; const last = this.h.pop()!
+    if (this.h.length) {
+      this.h[0] = last; let i = 0
+      while (true) {
+        let m = i, l = 2*i+1, r = 2*i+2
+        if (l < this.h.length && this.h[l] < this.h[m]) m = l
+        if (r < this.h.length && this.h[r] < this.h[m]) m = r
+        if (m === i) break
+        ;[this.h[m], this.h[i]] = [this.h[i], this.h[m]]; i = m
+      }
+    }
+    return top
+  }
+  peek() { return this.h[0] }
+  size() { return this.h.length }
+}
+
+// K largest: min-heap of size K
+for (const n of nums) { heap.push(n); if (heap.size() > k) heap.pop() }
+// heap now contains the K largest elements`,
+    useWhen: 'K largest/smallest elements. Streaming median. Dijkstra\'s shortest path. Merge K sorted lists. Priority scheduling.',
+    interviewNote: '"K largest" = min-heap of size K. "Streaming median" = two heaps (max-heap lower half + min-heap upper half), balance sizes to get O(log n) insert and O(1) median.',
+  },
+  {
+    name: 'Trie',
+    category: 'Tree',
+    slug: 'trie-ds',
+    description: 'Prefix tree. Each node = one character. Shared prefixes stored once. O(L) operations where L = string length, independent of number of words. Space-efficient for large shared-prefix dictionaries.',
+    ops: [
+      { op: 'Insert', avg: 'O(L)', worst: 'O(L)' },
+      { op: 'Search (exact match)', avg: 'O(L)', worst: 'O(L)' },
+      { op: 'Starts-with (prefix)', avg: 'O(L)', worst: 'O(L)' },
+    ],
+    template: `class TrieNode {
+  children = new Map<string, TrieNode>()
+  isEnd = false
+}
+
+class Trie {
+  root = new TrieNode()
+
+  insert(word: string) {
+    let node = this.root
+    for (const ch of word) {
+      if (!node.children.has(ch)) node.children.set(ch, new TrieNode())
+      node = node.children.get(ch)!
+    }
+    node.isEnd = true
+  }
+
+  search(word: string): boolean {
+    return this.traverse(word)?.isEnd ?? false
+  }
+
+  startsWith(prefix: string): boolean {
+    return this.traverse(prefix) !== null
+  }
+
+  private traverse(s: string): TrieNode | null {
+    let node = this.root
+    for (const ch of s) {
+      if (!node.children.has(ch)) return null
+      node = node.children.get(ch)!
+    }
+    return node
+  }
+}`,
+    useWhen: 'Autocomplete / prefix matching. Spell checking. Word Search on a grid (DFS + Trie). IP routing (longest prefix match).',
+    interviewNote: 'Tries are the go-to for "Design Autocomplete" system design questions. Combined with DFS, solves Word Search II in O(rows × cols × L) vs O(words × rows × cols × L) brute force.',
+  },
+  {
+    name: 'Graph',
+    category: 'Graph',
+    slug: 'graph-ds',
+    description: 'Nodes (vertices) connected by edges. Directed or undirected, weighted or unweighted. Adjacency list: space-efficient for sparse graphs (O(V+E)). Adjacency matrix: O(1) edge lookup at O(V²) space.',
+    ops: [
+      { op: 'Add edge (adj list)', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Check edge (adj matrix)', avg: 'O(1)', worst: 'O(1)' },
+      { op: 'Get neighbors (adj list)', avg: 'O(degree)', worst: 'O(V)' },
+      { op: 'BFS / DFS traversal', avg: 'O(V+E)', worst: 'O(V+E)' },
+      { op: 'Topological sort', avg: 'O(V+E)', worst: 'O(V+E)' },
+    ],
+    template: `// Topological sort (Kahn's / BFS):
+function topoSort(n: number, edges: number[][]): number[] {
+  const graph = new Map<number, number[]>()
+  const inDegree = new Array(n).fill(0)
+  for (const [u, v] of edges) {
+    if (!graph.has(u)) graph.set(u, [])
+    graph.get(u)!.push(v); inDegree[v]++
+  }
+  const queue = []
+  for (let i = 0; i < n; i++) if (inDegree[i] === 0) queue.push(i)
+  const order: number[] = []
+  while (queue.length) {
+    const node = queue.shift()!; order.push(node)
+    for (const nb of graph.get(node) ?? []) {
+      if (--inDegree[nb] === 0) queue.push(nb)
+    }
+  }
+  return order.length === n ? order : []  // empty = cycle
+}
+
+// Grid BFS (4-directional):
+const DIRS = [[0,1],[0,-1],[1,0],[-1,0]]
+function bfsGrid(grid: number[][], sr: number, sc: number) {
+  const rows = grid.length, cols = grid[0].length
+  const visited = new Set<string>(); visited.add(\`\${sr},\${sc}\`)
+  const queue = [[sr, sc]]
+  while (queue.length) {
+    const [r, c] = queue.shift()!
+    for (const [dr, dc] of DIRS) {
+      const nr = r+dr, nc = c+dc, key = \`\${nr},\${nc}\`
+      if (nr>=0 && nr<rows && nc>=0 && nc<cols && !visited.has(key) && grid[nr][nc]===1) {
+        visited.add(key); queue.push([nr, nc])
+      }
+    }
+  }
+}`,
+    useWhen: 'Any relationship problem: social networks, dependencies, routing, connected components, shortest paths. Grid problems are disguised graphs.',
+    interviewNote: 'BFS for shortest path (unweighted). DFS for connectivity / cycle detection. Topological sort for dependency ordering. Grid cells are nodes — treat 2D arrays as implicit adjacency lists.',
+  },
+]
+
 function randomArray(size = 16) {
   return Array.from({ length: size }, () => Math.floor(Math.random() * 90) + 10)
 }
 
 // ── Component ────────────────────────────────────────────────────────────────
-type MainTab = 'visualizer' | 'patterns' | 'complexity' | 'challenges' | 'frontend'
+type MainTab = 'visualizer' | 'patterns' | 'complexity' | 'datastructs' | 'challenges' | 'frontend'
 
 export default function CodingPage() {
   const [mainTab, setMainTab] = useState<MainTab>('visualizer')
@@ -374,6 +779,7 @@ export default function CodingPage() {
   const [speed, setSpeed] = useState(120)
   const [selectedPattern, setSelectedPattern] = useState<Pattern>(patterns[0])
   const [expandedPattern, setExpandedPattern] = useState<string | null>(patterns[0].slug)
+  const [selectedDS, setSelectedDS] = useState<DS>(dataStructures[0])
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const generateSteps = useCallback((a: Algo, arr: number[]) => {
@@ -420,9 +826,11 @@ export default function CodingPage() {
           <p className="text-xl text-gray-600 dark:text-gray-300">Interactive visualizer · 10 essential patterns · Big O reference</p>
         </motion.div>
 
+        <QuizLauncher sectionId="coding" title="Coding" questions={codingQuestions} />
+
         {/* Main Tabs */}
         <div className="mb-8 flex gap-2 rounded-xl bg-white p-1 shadow dark:bg-gray-800 overflow-x-auto">
-          {([['visualizer', Zap, 'Algorithm Visualizer'], ['patterns', GitBranch, 'DSA Patterns'], ['complexity', Layers, 'Big O Reference'], ['challenges', Trophy, 'Challenges'], ['frontend', Code, 'JS/TS/React']] as const).map(([t, Icon, label]) => (
+          {([['visualizer', Zap, 'Algorithm Visualizer'], ['patterns', GitBranch, 'DSA Patterns'], ['complexity', Layers, 'Big O Reference'], ['datastructs', BookOpen, 'Data Structures'], ['challenges', Trophy, 'Challenges'], ['frontend', Code, 'JS/TS/React']] as const).map(([t, Icon, label]) => (
             <button key={t} onClick={() => setMainTab(t)}
               className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${mainTab === t ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}>
               <Icon className="h-4 w-4" />{label}
@@ -433,7 +841,8 @@ export default function CodingPage() {
         <AnimatePresence mode="wait">
           {/* ── Sorting Visualizer ── */}
           {mainTab === 'visualizer' && (
-            <motion.div key="vis" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="vis" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+              id="sorting-algorithms">
               <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
                 {/* Algorithm selector */}
                 <div className="mb-6 flex flex-wrap gap-3">
@@ -532,7 +941,8 @@ export default function CodingPage() {
                 <div className="space-y-2">
                   {patterns.map(p => (
                     <button key={p.slug} onClick={() => { setSelectedPattern(p); setExpandedPattern(p.slug) }}
-                      className={`w-full rounded-xl px-4 py-3 text-left transition-all ${selectedPattern.slug === p.slug ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg' : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}>
+                      className={`w-full rounded-xl px-4 py-3 text-left transition-all ${selectedPattern.slug === p.slug ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg' : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}
+                      id={`${p.slug}-pattern`}>
                       <p className="font-bold">{p.name}</p>
                       <p className={`mt-0.5 text-xs ${selectedPattern.slug === p.slug ? 'text-orange-100' : 'text-gray-500'}`}>{p.complexity}</p>
                     </button>
@@ -581,7 +991,8 @@ export default function CodingPage() {
 
           {/* ── Big O Reference ── */}
           {mainTab === 'complexity' && (
-            <motion.div key="complexity" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="complexity" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+              id="big-o">
               <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
                 <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Big O Complexity Reference</h2>
 
@@ -664,6 +1075,92 @@ export default function CodingPage() {
                       <li>• Confusing worst-case with average-case complexity</li>
                     </ul>
                   </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* ── Data Structures ── */}
+          {mainTab === 'datastructs' && (
+            <motion.div key="datastructs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+              <div className="grid gap-6 lg:grid-cols-3">
+                {/* Left: DS list grouped by category */}
+                <div className="space-y-5">
+                  {(['Linear', 'Hash-Based', 'Tree', 'Graph'] as const).map(cat => (
+                    <div key={cat}>
+                      <p className="mb-2 px-1 text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">{cat}</p>
+                      <div className="space-y-1">
+                        {dataStructures.filter(ds => ds.category === cat).map(ds => (
+                          <button key={ds.slug} onClick={() => setSelectedDS(ds)}
+                            className={`w-full rounded-xl px-4 py-3 text-left transition-all ${selectedDS.slug === ds.slug ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg' : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}
+                            id={`${ds.slug}-ds`}>
+                            <p className="font-bold text-sm">{ds.name}</p>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Right: Detail panel */}
+                <div className="lg:col-span-2">
+                  <AnimatePresence mode="wait">
+                    <motion.div key={selectedDS.slug} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
+                      className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+
+                      <h2 className="mb-3 text-2xl font-bold text-gray-900 dark:text-white">{selectedDS.name}</h2>
+
+                      {/* Description */}
+                      <div className="mb-4 rounded-xl bg-gray-50 p-4 dark:bg-gray-900">
+                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{selectedDS.description}</p>
+                      </div>
+
+                      {/* Operations Table */}
+                      <div className="mb-4">
+                        <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">Operations</p>
+                        <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-gray-700">
+                          <table className="w-full text-sm">
+                            <thead>
+                              <tr className="border-b border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-900">
+                                <th className="py-2 pl-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-400">Operation</th>
+                                <th className="py-2 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Average</th>
+                                <th className="py-2 pr-4 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Worst</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-50 dark:divide-gray-700">
+                              {selectedDS.ops.map((row, i) => (
+                                <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                                  <td className="py-2 pl-4 text-sm text-gray-800 dark:text-gray-200">{row.op}</td>
+                                  <td className={`py-2 text-center font-mono text-xs font-bold ${row.avg.includes('(1)') ? 'text-green-600 dark:text-green-400' : row.avg.includes('log') ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-500'}`}>{row.avg}</td>
+                                  <td className={`py-2 pr-4 text-center font-mono text-xs ${row.worst.includes('(1)') ? 'text-green-600 dark:text-green-400' : row.worst.includes('log') ? 'text-yellow-600 dark:text-yellow-400' : 'text-red-500'}`}>{row.worst}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+
+                      {/* Code Template */}
+                      <div className="mb-4">
+                        <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">Code Template</p>
+                        <pre className="overflow-x-auto rounded-xl bg-gray-900 p-4 text-xs text-green-300 leading-relaxed">
+                          <code>{selectedDS.template}</code>
+                        </pre>
+                      </div>
+
+                      {/* Use When + Interview Note */}
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        <div className="rounded-xl bg-amber-50 p-4 dark:bg-amber-900/20">
+                          <p className="mb-1 text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">Use when</p>
+                          <p className="text-sm text-amber-800 dark:text-amber-300">{selectedDS.useWhen}</p>
+                        </div>
+                        <div className="rounded-xl bg-blue-50 p-4 dark:bg-blue-900/20">
+                          <p className="mb-1 text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400">Interview insight</p>
+                          <p className="text-sm text-blue-800 dark:text-blue-300">{selectedDS.interviewNote}</p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
               </div>
             </motion.div>
