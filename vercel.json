@@ -7,11 +7,6 @@
   "env": {
     "NEXT_PUBLIC_APP_NAME": "Engineering Manager Interview Mastery"
   },
-  "functions": {
-    "api/**/*.ts": {
-      "maxDuration": 60
-    }
-  },
   "redirects": [],
   "rewrites": [],
   "headers": [
