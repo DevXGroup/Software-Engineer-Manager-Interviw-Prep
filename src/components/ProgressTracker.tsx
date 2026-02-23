@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { CheckCircle, Circle } from 'lucide-react'
+import { CheckCircle, Circle, Trophy } from 'lucide-react'
 import { useProgressStore } from '@/store/progressStore'
 
 const modules = [
@@ -10,22 +10,23 @@ const modules = [
   { id: 'coding', name: 'Coding', total: 30 },
   { id: 'leadership', name: 'Leadership', total: 10 },
   { id: 'team', name: 'Team Management', total: 12 },
+  { id: 'ai-interview', name: 'AI Interview', total: 12 },
 ]
 
 export function ProgressTracker() {
-  const { progress } = useProgressStore()
-  
+  const { progress, quizResults } = useProgressStore()
+
   const totalProgress = modules.reduce((acc, module) => {
     const completed = progress[module.id] || 0
     return acc + (completed / module.total) * 100
   }, 0) / modules.length
-  
+
   return (
     <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
       <h3 className="mb-4 text-lg font-bold text-gray-900 dark:text-white">
         Your Progress
       </h3>
-      
+
       <div className="mb-6">
         <div className="mb-2 flex justify-between text-sm text-gray-600 dark:text-gray-400">
           <span>Overall Progress</span>
@@ -40,12 +41,13 @@ export function ProgressTracker() {
           />
         </div>
       </div>
-      
+
       <div className="space-y-3">
         {modules.map((module) => {
           const completed = progress[module.id] || 0
           const percentage = (completed / module.total) * 100
-          
+          const quizResult = quizResults[module.id]
+
           return (
             <div key={module.id} className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -57,6 +59,17 @@ export function ProgressTracker() {
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {module.name}
                 </span>
+                {quizResult && (
+                  quizResult.passed ? (
+                    <span className="flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-bold text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                      <Trophy className="h-3 w-3" /> PASSED
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                      {quizResult.score}/{quizResult.total}
+                    </span>
+                  )
+                )}
               </div>
               <div className="flex items-center gap-2">
                 <div className="h-2 w-24 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
