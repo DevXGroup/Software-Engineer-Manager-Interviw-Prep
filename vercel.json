@@ -5,10 +5,7 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "env": {
-    "NEXT_PUBLIC_APP_NAME": {
-      "description": "Application name",
-      "default": "Engineering Manager Interview Mastery"
-    }
+    "NEXT_PUBLIC_APP_NAME": "Engineering Manager Interview Mastery"
   },
   "functions": {
     "api/**/*.ts": {
