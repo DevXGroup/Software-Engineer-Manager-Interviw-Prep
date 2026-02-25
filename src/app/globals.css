@@ -34,6 +34,31 @@
     @apply transition-all duration-300 hover:scale-105 hover:shadow-2xl;
   }
 
+  /* Hero title animated gradient */
+  .hero-gradient-text {
+    background: linear-gradient(
+      90deg,
+      #9333ea 0%,
+      #7c3aed 20%,
+      #4f46e5 40%,
+      #2563eb 60%,
+      #06b6d4 80%,
+      #9333ea 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: heroGradientFlow 5s ease-in-out infinite;
+  }
+
+  @keyframes heroGradientFlow {
+    0%   { background-position: 0% center; }
+    50%  { background-position: 100% center; }
+    100% { background-position: 0% center; }
+  }
+
   /* Hide scrollbar but keep functionality */
   .scrollbar-hide {
     -ms-overflow-style: none;  /* IE and Edge */

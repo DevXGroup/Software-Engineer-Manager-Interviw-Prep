@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -22,9 +22,20 @@ const navItems = [
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
+  const openedAt = useRef(0)
   const pathname = usePathname()
   const { theme, toggleTheme } = useTheme()
   const { isSearchOpen, openSearch, closeSearch } = useSearch()
+
+  const handleMenuToggle = () => {
+    if (!isOpen) openedAt.current = Date.now()
+    setIsOpen(prev => !prev)
+  }
+
+  const handleBackdropClose = () => {
+    // Guard against the iOS ghost-click that fires 300ms after the hamburger tap
+    if (Date.now() - openedAt.current > 350) setIsOpen(false)
+  }
 
   return (
     <nav className="fixed top-0 z-50 w-full glass-effect border-b border-gray-200 dark:border-gray-700">
@@ -112,8 +123,10 @@ export function Navigation() {
 
             {/* Mobile Menu Button */}
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              type="button"
+              onClick={handleMenuToggle}
               className="rounded-xl p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 lg:hidden transition-all"
+              style={{ touchAction: 'manipulation' }}
             >
               {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
@@ -130,8 +143,8 @@ export function Navigation() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-              className="fixed inset-0 z-30 bg-black/20 md:hidden"
+              onClick={handleBackdropClose}
+              className="fixed inset-0 z-30 bg-black/20 md:hidden touch-none"
             />
             {/* Menu */}
             <motion.div
@@ -139,15 +152,21 @@ export function Navigation() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-0 z-40 md:hidden overflow-y-auto"
+              className="fixed inset-0 z-40 md:hidden"
+              style={{ overscrollBehavior: 'contain' }}
             >
-              <div className="flex min-h-screen w-full flex-col bg-white dark:bg-gray-800 pt-16">
+              <div
+                className="flex w-full flex-col bg-white dark:bg-gray-800 pt-16 overflow-y-auto"
+                style={{ minHeight: '100dvh', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+              >
               {/* Mobile menu header */}
               <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 px-4 py-4">
                 <span className="text-lg font-bold text-gray-900 dark:text-white">Menu</span>
                 <button
+                  type="button"
                   onClick={() => setIsOpen(false)}
                   className="rounded-lg p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                  style={{ touchAction: 'manipulation' }}
                 >
                   <X className="h-6 w-6" />
                 </button>

@@ -90,12 +90,37 @@ export default function HomePage() {
           </motion.div>
 
           {/* Title */}
-          <h1 className="mb-5 text-5xl font-extrabold leading-tight tracking-tight text-gray-900 dark:text-white sm:text-6xl lg:text-7xl">
-            <span className="bg-gradient-to-r from-purple-600 via-violet-600 to-blue-600 bg-clip-text text-transparent">
-              Engineering Manager
+          <h1 className="mb-5 text-5xl font-extrabold leading-tight tracking-tight sm:text-6xl lg:text-7xl">
+            {/* Line 1 — animated gradient, word-by-word reveal */}
+            <span className="flex flex-wrap justify-center gap-x-[0.28em]">
+              {['Engineering', 'Manager'].map((word, i) => (
+                <span key={word} className="overflow-hidden inline-block">
+                  <motion.span
+                    initial={{ y: '105%', opacity: 0 }}
+                    animate={{ y: '0%', opacity: 1 }}
+                    transition={{ delay: 0.2 + i * 0.14, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    className="hero-gradient-text inline-block"
+                  >
+                    {word}
+                  </motion.span>
+                </span>
+              ))}
             </span>
-            <br />
-            <span className="text-gray-900 dark:text-white">Interview Mastery</span>
+            {/* Line 2 — plain text, staggered slightly later */}
+            <span className="flex flex-wrap justify-center gap-x-[0.28em] mt-1">
+              {['Interview', 'Mastery'].map((word, i) => (
+                <span key={word} className="overflow-hidden inline-block">
+                  <motion.span
+                    initial={{ y: '105%', opacity: 0 }}
+                    animate={{ y: '0%', opacity: 1 }}
+                    transition={{ delay: 0.48 + i * 0.14, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    className="inline-block text-gray-900 dark:text-white"
+                  >
+                    {word}
+                  </motion.span>
+                </span>
+              ))}
+            </span>
           </h1>
 
           {/* Subtitle */}
