@@ -33,9 +33,26 @@ export function Navigation() {
           {/* Logo Section */}
           <div className="flex items-center gap-8">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600"></div>
+              <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+                <defs>
+                  <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#9333ea"/>
+                    <stop offset="100%" stopColor="#2563eb"/>
+                  </linearGradient>
+                </defs>
+                <rect width="32" height="32" rx="8" fill="url(#logoGrad)"/>
+                <text
+                  x="16"
+                  y="22"
+                  fontFamily="system-ui,-apple-system,BlinkMacSystemFont,sans-serif"
+                  fontWeight="800"
+                  fontSize="13"
+                  fill="white"
+                  textAnchor="middle"
+                >EM</text>
+              </svg>
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                InterviewPrep
+                EM Mastery
               </span>
             </Link>
 

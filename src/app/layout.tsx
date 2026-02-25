@@ -60,6 +60,11 @@ export const metadata: Metadata = {
     creator: '@devxgroup',
     site: '@devxgroup',
   },
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 }
 
 export default function RootLayout({
