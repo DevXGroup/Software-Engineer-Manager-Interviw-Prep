@@ -24,7 +24,7 @@ export function Footer() {
               className="group flex flex-col items-center text-center lg:items-start lg:text-left"
             >
               {/* DevX Group LLC Logo */}
-              <div className="relative h-16 w-40 shrink-0 overflow-hidden rounded-2xl bg-white/30 p-2 shadow-xl backdrop-blur-sm ring-2 ring-white/40 transition-all group-hover:scale-105 group-hover:shadow-2xl group-hover:bg-white/40">
+              <div className="relative h-16 w-40 shrink-0 overflow-hidden rounded-2xl bg-white/70 p-2 shadow-xl backdrop-blur-sm ring-2 ring-white/80 transition-all group-hover:scale-105 group-hover:shadow-2xl group-hover:bg-white/85">
                 <Image
                   src="/devx-logo.png"
                   alt="DevX Group LLC"
