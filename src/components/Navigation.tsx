@@ -112,7 +112,7 @@ export function Navigation() {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-40 md:hidden"
+            className="fixed top-16 left-0 right-0 bottom-0 z-40 md:hidden"
           >
             <div className="flex h-full w-full flex-col bg-white dark:bg-gray-800">
               {/* Mobile menu header */}
