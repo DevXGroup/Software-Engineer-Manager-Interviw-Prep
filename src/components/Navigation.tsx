@@ -107,14 +107,24 @@ export function Navigation() {
       {/* Mobile menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-16 left-0 right-0 bottom-0 z-40 md:hidden"
-          >
-            <div className="flex h-full w-full flex-col bg-white dark:bg-gray-800">
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 z-30 bg-black/20 md:hidden"
+            />
+            {/* Menu */}
+            <motion.div
+              initial={{ opacity: 0, x: '100%' }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-0 z-40 md:hidden overflow-y-auto"
+            >
+              <div className="flex min-h-screen w-full flex-col bg-white dark:bg-gray-800 pt-16">
               {/* Mobile menu header */}
               <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 px-4 py-4">
                 <span className="text-lg font-bold text-gray-900 dark:text-white">Menu</span>
@@ -170,7 +180,8 @@ export function Navigation() {
                 <DonateButton className="w-full justify-center" />
               </div>
             </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
