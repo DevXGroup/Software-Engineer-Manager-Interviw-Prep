@@ -1,8 +1,9 @@
 'use client'
 
 import { useEffect, useState, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Command, FileText, BookOpen, Code, Layers, Target, Users, Brain, Building, ChevronRight, Zap, Grid, List, Award } from 'lucide-react'
+import { Search, X, Command, FileText, BookOpen, Building, ChevronRight, Zap, Grid, List, Award } from 'lucide-react'
 import { searchIndex, type SearchItem, type SearchItemType } from '@/data/searchIndex'
 
 interface SearchModalProps {
@@ -91,12 +92,17 @@ function fuzzyMatch(item: SearchItem, query: string): { score: number; matches: 
 }
 
 export function SearchModal({ isOpen, onClose }: SearchModalProps) {
+  const [mounted, setMounted] = useState(false)
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [filteredResults, setFilteredResults] = useState<SearchItem[]>([])
   const [selectedType, setSelectedType] = useState<SearchItemType | 'all'>('all')
   const inputRef = useRef<HTMLInputElement>(null)
   const resultsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Filter and sort results
   useEffect(() => {
@@ -191,7 +197,9 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     { value: 'company', label: 'Companies', count: searchIndex.filter(i => i.type === 'company').length },
   ]
 
-  return (
+  if (!mounted) return null
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
@@ -209,34 +217,34 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="fixed left-1/2 top-[10%] z-50 w-[90vw] max-w-3xl -translate-x-1/2"
+            className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pb-4 pt-20 sm:px-6 sm:pt-24"
           >
-            <div className="overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+            <div className="flex max-h-[calc(100dvh-6rem)] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800 sm:max-h-[calc(100dvh-8rem)]">
               {/* Search Input */}
-              <div className="flex items-center gap-3 border-b border-gray-200 dark:border-gray-700 p-4">
-                <Search className="h-5 w-5 text-gray-400" />
+              <div className="flex items-center gap-3 border-b border-gray-200 p-4 dark:border-gray-700">
+                <Search className="h-5 w-5 shrink-0 text-gray-400" />
                 <input
                   ref={inputRef}
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search topics, concepts, questions, patterns..."
-                  className="flex-1 bg-transparent text-lg text-gray-900 placeholder-gray-400 dark:text-white focus:outline-none"
+                  className="min-w-0 flex-1 bg-transparent text-base text-gray-900 placeholder-gray-400 focus:outline-none dark:text-white sm:text-lg"
                 />
-                <div className="flex items-center gap-1 rounded-lg bg-gray-100 dark:bg-gray-700 px-2 py-1">
+                <div className="hidden items-center gap-1 rounded-lg bg-gray-100 px-2 py-1 dark:bg-gray-700 sm:flex">
                   <Command className="h-3.5 w-3.5 text-gray-400" />
                   <span className="text-xs text-gray-400">K</span>
                 </div>
                 <button
                   onClick={onClose}
-                  className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700"
+                  className="shrink-0 rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
 
               {/* Type Filters */}
-              <div className="flex gap-2 overflow-x-auto border-b border-gray-200 dark:border-gray-700 px-4 py-2">
+              <div className="scrollbar-hide flex gap-2 overflow-x-auto border-b border-gray-200 px-4 py-2 dark:border-gray-700">
                 {types.map((type) => (
                   <button
                     key={type.value}
@@ -265,7 +273,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
               {/* Results */}
               <div 
                 ref={resultsRef}
-                className="max-h-[60vh] overflow-y-auto p-2"
+                className="min-h-0 flex-1 overflow-y-auto p-2"
               >
                 {filteredResults.length === 0 ? (
                   query.trim() ? (
@@ -312,12 +320,12 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                             <Icon className="h-4 w-4" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <h3 className="font-semibold text-gray-900 dark:text-white truncate">
+                            <div className="flex min-w-0 items-center gap-2">
+                              <h3 className="min-w-0 truncate font-semibold text-gray-900 dark:text-white">
                                 {highlightMatch(item.title, query)}
                               </h3>
                               {item.category && (
-                                <span className="rounded-md bg-gray-100 dark:bg-gray-700 px-2 py-0.5 text-xs text-gray-500 dark:text-gray-400">
+                                <span className="shrink-0 rounded-md bg-gray-100 px-2 py-0.5 text-xs text-gray-500 dark:bg-gray-700 dark:text-gray-400">
                                   {item.category}
                                 </span>
                               )}
@@ -348,8 +356,8 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
               {/* Footer */}
               {filteredResults.length > 0 && (
-                <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 py-2 text-xs text-gray-500 dark:text-gray-400">
-                  <div className="flex items-center gap-3">
+                <div className="flex flex-col gap-2 border-t border-gray-200 px-4 py-2 text-xs text-gray-500 dark:border-gray-700 dark:text-gray-400 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex flex-wrap items-center gap-3">
                     <span className="flex items-center gap-1">
                       <kbd className="rounded bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5">↑↓</kbd>
                       Navigate
@@ -363,7 +371,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       Close
                     </span>
                   </div>
-                  <span>{filteredResults.length} results</span>
+                  <span className="self-end sm:self-auto">{filteredResults.length} results</span>
                 </div>
               )}
             </div>
@@ -371,5 +379,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
         </>
       )}
     </AnimatePresence>
+    ,
+    document.body
   )
 }
