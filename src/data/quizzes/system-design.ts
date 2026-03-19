@@ -14,7 +14,7 @@ export const systemDesignQuestions: QuizQuestion[] = [
     question: 'In the CAP theorem, what does a distributed system have to choose between when a network partition occurs?',
     options: ['Consistency and Availability', 'Cost and Performance', 'Capacity and Availability', 'Concurrency and Atomicity'],
     correctIndex: 0,
-    explanation: 'CAP theorem: during a network partition, you must choose between Consistency (all nodes see the same data) and Availability (every request gets a response). You cannot have both.',
+    explanation: 'CAP theorem: in a distributed system, partition tolerance is assumed. Once a partition occurs, you typically choose between Consistency (same data everywhere) and Availability (every request gets a response).',
     priority: 'must-know',
   },
   {

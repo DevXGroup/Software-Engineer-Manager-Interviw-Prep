@@ -1,16 +1,44 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Users, Star, TrendingUp, MessageSquare, Heart, Award, ChevronDown, ChevronUp, CheckCircle, BarChart2, Mic } from 'lucide-react'
 import { QuizLauncher } from '@/components/QuizLauncher'
+import { SearchParamSync, type SearchParamsLike } from '@/components/SearchParamSync'
 import { teamManagementQuestions } from '@/data/quizzes/team-management'
 
 type Tab = 'hiring' | 'performance' | 'oneones' | 'career' | 'feedback' | 'culture' | 'talent' | 'communication'
 
+const sectionIdByTab: Record<Tab, string> = {
+  career: 'career',
+  communication: 'communication',
+  culture: 'culture',
+  feedback: 'feedback',
+  hiring: 'hiring',
+  oneones: 'one-on-one',
+  performance: 'performance',
+  talent: 'talent',
+}
+
 export default function TeamManagementPage() {
   const [tab, setTab] = useState<Tab>('hiring')
   const [expanded, setExpanded] = useState<string | null>(null)
+
+  const syncSearchParams = useCallback((searchParams: SearchParamsLike) => {
+    const tabParam = searchParams.get('tab')
+    if (
+      tabParam === 'hiring' ||
+      tabParam === 'performance' ||
+      tabParam === 'oneones' ||
+      tabParam === 'career' ||
+      tabParam === 'feedback' ||
+      tabParam === 'culture' ||
+      tabParam === 'talent' ||
+      tabParam === 'communication'
+    ) {
+      setTab(tabParam)
+    }
+  }, [])
 
   const toggle = (id: string) => setExpanded(expanded === id ? null : id)
 
@@ -27,6 +55,7 @@ export default function TeamManagementPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+      <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
           <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">Team Management</h1>
@@ -45,7 +74,7 @@ export default function TeamManagementPage() {
         </div>
 
         <AnimatePresence mode="wait">
-          <motion.div key={tab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+          <motion.div key={tab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} id={sectionIdByTab[tab]}>
             {/* ── Hiring ── */}
             {tab === 'hiring' && (
               <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">

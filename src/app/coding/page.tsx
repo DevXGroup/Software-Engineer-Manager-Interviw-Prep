@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Play, Pause, RefreshCw, ChevronDown, ChevronUp, Code, Zap, GitBranch, Layers, Trophy, ArrowRight, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import { QuizLauncher } from '@/components/QuizLauncher'
+import { SearchParamSync, type SearchParamsLike } from '@/components/SearchParamSync'
 import { codingQuestions } from '@/data/quizzes/coding'
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -769,6 +770,40 @@ function randomArray(size = 16) {
 // ── Component ────────────────────────────────────────────────────────────────
 type MainTab = 'visualizer' | 'patterns' | 'complexity' | 'datastructs' | 'challenges' | 'frontend'
 
+const algorithmSearchIds: Record<Algo, string> = {
+  'Bubble Sort': 'bubble-sort',
+  'Insertion Sort': 'insertion-sort',
+  'Selection Sort': 'selection-sort',
+}
+
+const dsSearchIdsBySlug: Record<string, string> = {
+  array: 'array',
+  bst: 'bst',
+  'graph-ds': 'graph',
+  'hashmap-ds': 'hashmap-ds',
+  'heap-ds': 'heap-ds',
+  'linked-list': 'linked-list',
+  queue: 'queue',
+  stack: 'stack',
+  'trie-ds': 'trie',
+}
+
+function getAlgorithmSearchId(algo: Algo): string {
+  return algorithmSearchIds[algo]
+}
+
+function getAlgorithmFromSearchId(searchId: string): Algo | null {
+  return ALGOS.find((algo) => getAlgorithmSearchId(algo) === searchId) ?? null
+}
+
+function getDataStructureSearchId(slug: string): string {
+  return dsSearchIdsBySlug[slug] ?? slug
+}
+
+function isMainTab(value: string | null): value is MainTab {
+  return value === 'visualizer' || value === 'patterns' || value === 'complexity' || value === 'datastructs' || value === 'challenges' || value === 'frontend'
+}
+
 export default function CodingPage() {
   const [mainTab, setMainTab] = useState<MainTab>('visualizer')
   const [algo, setAlgo] = useState<Algo>('Bubble Sort')
@@ -786,6 +821,41 @@ export default function CodingPage() {
     if (a === 'Bubble Sort') return bubbleSortSteps(arr)
     if (a === 'Selection Sort') return selectionSortSteps(arr)
     return insertionSortSteps(arr)
+  }, [])
+
+  const syncSearchParams = useCallback((searchParams: SearchParamsLike) => {
+    const tabParam = searchParams.get('tab')
+    if (isMainTab(tabParam)) {
+      setMainTab(tabParam)
+    }
+
+    const algorithmParam = searchParams.get('algorithm')
+    if (algorithmParam) {
+      const nextAlgo = getAlgorithmFromSearchId(algorithmParam)
+      if (nextAlgo) {
+        setMainTab('visualizer')
+        setAlgo(nextAlgo)
+      }
+    }
+
+    const patternParam = searchParams.get('pattern')
+    if (patternParam) {
+      const nextPattern = patterns.find((pattern) => pattern.slug === patternParam)
+      if (nextPattern) {
+        setMainTab('patterns')
+        setSelectedPattern(nextPattern)
+        setExpandedPattern(nextPattern.slug)
+      }
+    }
+
+    const dsParam = searchParams.get('ds')
+    if (dsParam) {
+      const nextDataStructure = dataStructures.find((ds) => getDataStructureSearchId(ds.slug) === dsParam)
+      if (nextDataStructure) {
+        setMainTab('datastructs')
+        setSelectedDS(nextDataStructure)
+      }
+    }
   }, [])
 
   useEffect(() => {
@@ -820,6 +890,7 @@ export default function CodingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+      <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
           <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">Coding Interview Mastery</h1>
@@ -921,7 +992,11 @@ export default function CodingPage() {
                     { label: 'Selection Sort', time: 'O(n²)', space: 'O(1)', note: 'Minimizes swaps. Not stable. Slightly better than bubble.' },
                     { label: 'Insertion Sort', time: 'O(n²) worst, O(n) best', space: 'O(1)', note: 'Excellent for nearly-sorted data. Used in Timsort internals.' },
                   ].map(info => (
-                    <div key={info.label} className={`rounded-xl p-4 ${algo === info.label ? 'bg-orange-50 ring-2 ring-orange-300 dark:bg-orange-900/20' : 'bg-gray-50 dark:bg-gray-900'}`}>
+                    <div
+                      key={info.label}
+                      className={`rounded-xl p-4 ${algo === info.label ? 'bg-orange-50 ring-2 ring-orange-300 dark:bg-orange-900/20' : 'bg-gray-50 dark:bg-gray-900'}`}
+                      id={getAlgorithmSearchId(info.label as Algo)}
+                    >
                       <p className="font-bold text-sm text-gray-900 dark:text-white">{info.label}</p>
                       <p className="text-xs text-gray-500 mt-1">Time: {info.time}</p>
                       <p className="text-xs text-gray-500">Space: {info.space}</p>
@@ -953,7 +1028,8 @@ export default function CodingPage() {
                 <div className="lg:col-span-2">
                   <AnimatePresence mode="wait">
                     <motion.div key={selectedPattern.slug} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
-                      className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+                      className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800"
+                      id={selectedPattern.slug}>
                       <h2 className="mb-1 text-2xl font-bold text-gray-900 dark:text-white">{selectedPattern.name}</h2>
                       <p className="mb-4 text-sm font-medium text-orange-500">{selectedPattern.complexity}</p>
 
@@ -1106,7 +1182,8 @@ export default function CodingPage() {
                 <div className="lg:col-span-2">
                   <AnimatePresence mode="wait">
                     <motion.div key={selectedDS.slug} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
-                      className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+                      className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800"
+                      id={getDataStructureSearchId(selectedDS.slug)}>
 
                       <h2 className="mb-3 text-2xl font-bold text-gray-900 dark:text-white">{selectedDS.name}</h2>
 

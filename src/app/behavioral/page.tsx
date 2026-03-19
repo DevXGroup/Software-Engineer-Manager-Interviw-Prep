@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ChevronDown, ChevronUp, Star, Building, Search,
@@ -10,6 +10,7 @@ import {
 import { QuizLauncher } from '@/components/QuizLauncher'
 import { PriorityBadge } from '@/components/PriorityBadge'
 import { PriorityFilter } from '@/components/PriorityFilter'
+import { SearchParamSync, type SearchParamsLike } from '@/components/SearchParamSync'
 import { behavioralQuestions as quizQuestions } from '@/data/quizzes/behavioral'
 import type { Priority } from '@/data/quizzes/types'
 
@@ -577,6 +578,28 @@ export default function BehavioralPage() {
   const [expandedPrinciple, setExpandedPrinciple] = useState<string | null>(null)
   const [priorityFilter, setPriorityFilter] = useState<'all' | Priority>('all')
 
+  const syncSearchParams = useCallback((searchParams: SearchParamsLike) => {
+    const tabParam = searchParams.get('tab')
+    if (tabParam === 'principles' || tabParam === 'questions' || tabParam === 'practice') {
+      setTab(tabParam)
+    }
+
+    const companyParam = searchParams.get('company')
+    if (companyParam) {
+      const company = companies.find((candidate) => candidate.name.toLowerCase() === companyParam)
+      if (company) {
+        setSelectedCompany(company)
+      }
+    }
+
+    if (tabParam === 'questions') {
+      const hash = window.location.hash
+      if (hash.startsWith('#question-')) {
+        setExpandedQuestion(hash.replace('#question-', ''))
+      }
+    }
+  }, [])
+
   const filteredQuestions = useMemo(() => {
     return questions.filter(q => {
       const matchSearch = !search || q.title.toLowerCase().includes(search.toLowerCase()) || q.question.toLowerCase().includes(search.toLowerCase())
@@ -594,6 +617,7 @@ export default function BehavioralPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+      <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
           <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">Behavioral Interview Mastery</h1>

@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Database, Server, Cloud, Shield, Zap, GitBranch, Globe, MessageSquare, Search, ChevronDown, ChevronUp } from 'lucide-react'
+import { Database, Server, Cloud, Shield, Zap, GitBranch, Globe, MessageSquare, Search, ChevronDown, ChevronUp, PlayCircle, ExternalLink } from 'lucide-react'
 import { QuizLauncher } from '@/components/QuizLauncher'
+import { SearchParamSync, type SearchParamsLike } from '@/components/SearchParamSync'
 import { systemDesignQuestions } from '@/data/quizzes/system-design'
 
 type Scenario = {
@@ -20,6 +21,16 @@ type Scenario = {
   keyComponents: { name: string; why: string }[]
   tradeoffs: string[]
   followUps: string[]
+}
+
+type DeepDiveVideo = {
+  title: string
+  channel: string
+  href: string
+  embedId: string
+  focus: string
+  whenToWatch: string
+  tags: string[]
 }
 
 const scenarios: Scenario[] = [
@@ -143,6 +154,115 @@ const architecturePatterns = [
   { name: 'Bulkhead', icon: Server, description: 'Isolate components to prevent one failure from taking down the whole system', pros: ['Failure isolation', 'Resource partitioning', 'Predictable degradation'], cons: ['Resource waste in some configurations', 'Added complexity'], when: 'Multi-tenant systems. Services where one customer/feature should not starve others.' },
 ]
 
+const capPillars = [
+  {
+    key: 'C',
+    title: 'Consistency',
+    description: 'Every client sees the same write result across replicas.',
+    chip: 'Strong correctness',
+    className: 'border-blue-200 bg-blue-50 text-blue-900 dark:border-blue-500/20 dark:bg-blue-500/10 dark:text-blue-100',
+    chipClassName: 'bg-blue-500/10 text-blue-700 dark:bg-blue-500/20 dark:text-blue-200',
+  },
+  {
+    key: 'A',
+    title: 'Availability',
+    description: 'Every request gets a response, even if some replicas disagree.',
+    chip: 'Fast responses',
+    className: 'border-emerald-200 bg-emerald-50 text-emerald-900 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:text-emerald-100',
+    chipClassName: 'bg-emerald-500/10 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-200',
+  },
+  {
+    key: 'P',
+    title: 'Partition Tolerance',
+    description: 'The system keeps operating even when replicas lose network contact.',
+    chip: 'Assumed in distributed systems',
+    className: 'border-violet-200 bg-violet-50 text-violet-900 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-100',
+    chipClassName: 'bg-violet-500/10 text-violet-700 dark:bg-violet-500/20 dark:text-violet-200',
+  },
+] as const
+
+const deepDiveVideos: DeepDiveVideo[] = [
+  {
+    title: 'CAP Theorem Simplified',
+    channel: 'ByteByteGo',
+    href: 'https://www.youtube.com/watch?v=BHqjEjzAicA',
+    embedId: 'BHqjEjzAicA',
+    focus: 'Explains the interview-safe nuance that partitions force a C vs A trade-off.',
+    whenToWatch: 'Watch before practicing CAP, PACELC, or database trade-off questions.',
+    tags: ['CAP', 'Partitions', 'Trade-offs'],
+  },
+  {
+    title: 'Introduction to NoSQL databases',
+    channel: 'Gaurav Sen',
+    href: 'https://www.youtube.com/watch?v=xQnIN9bW0og',
+    embedId: 'xQnIN9bW0og',
+    focus: 'Strong intuition for why NoSQL systems scale and what you give up compared with relational models.',
+    whenToWatch: 'Use when SQL vs NoSQL answers still feel hand-wavy.',
+    tags: ['NoSQL', 'Cassandra', 'Scaling'],
+  },
+  {
+    title: 'Caching Pitfalls Every Developer Should Know',
+    channel: 'ByteByteGo',
+    href: 'https://www.youtube.com/watch?v=wh98s0XhMmQ',
+    embedId: 'wh98s0XhMmQ',
+    focus: 'Covers invalidation, staleness, and failure modes that interviewers often probe after the happy path.',
+    whenToWatch: 'Best right before cache-aside or hot-key follow-up practice.',
+    tags: ['Caching', 'Invalidation', 'Performance'],
+  },
+  {
+    title: 'Consistent Hashing | Algorithms You Should Know #1',
+    channel: 'ByteByteGo',
+    href: 'https://www.youtube.com/watch?v=UF9Iqmg94tk',
+    embedId: 'UF9Iqmg94tk',
+    focus: 'Turns a common distributed systems buzzword into a concrete mental model you can explain on a whiteboard.',
+    whenToWatch: 'Use before discussing sharding, rebalancing, or load distribution.',
+    tags: ['Consistent Hashing', 'Sharding', 'Distributed Systems'],
+  },
+  {
+    title: 'What is a Load Balancer?',
+    channel: 'IBM Technology',
+    href: 'https://www.youtube.com/watch?v=sCR3SAVdyCc',
+    embedId: 'sCR3SAVdyCc',
+    focus: 'Clear explanation of how traffic distribution, health checks, and routing strategy actually work.',
+    whenToWatch: 'Use before talking about L4 vs L7, stateless scaling, or reliability patterns.',
+    tags: ['Load Balancing', 'Traffic Routing', 'Availability'],
+  },
+  {
+    title: 'System Design: Why is Kafka fast?',
+    channel: 'ByteByteGo',
+    href: 'https://www.youtube.com/watch?v=UNUz1-msbOM',
+    embedId: 'UNUz1-msbOM',
+    focus: 'Gives you concrete language for partitions, sequential disk IO, batching, and consumer replay.',
+    whenToWatch: 'Best before answering Kafka vs queue, event streaming, or analytics pipeline questions.',
+    tags: ['Kafka', 'Streaming', 'Message Queues'],
+  },
+] as const
+
+const architecturePatternSearchIds: Record<string, string> = {
+  Bulkhead: 'bulkhead-pattern',
+  'Circuit Breaker': 'circuit-breaker-pattern',
+  CQRS: 'cqrs-pattern',
+  'Event Sourcing': 'event-sourcing-pattern',
+  Microservices: 'microservices-pattern',
+  'Saga Pattern': 'saga-pattern',
+}
+
+function getArchitecturePatternSearchId(name: string): string {
+  return architecturePatternSearchIds[name] ?? `${name.toLowerCase().replace(/\s+/g, '-')}-pattern`
+}
+
+function getScenarioFromSearchId(searchId: string) {
+  return scenarios.find((scenario) => `${scenario.id}-scenario` === searchId)
+}
+
+function getArchitecturePatternFromSearchId(searchId: string) {
+  return architecturePatterns.find((pattern) => getArchitecturePatternSearchId(pattern.name) === searchId)
+}
+
+function isMainTab(value: string | null): value is MainTab {
+  return value === 'scenarios' || value === 'patterns' || value === 'concepts'
+}
+
 type MainTab = 'scenarios' | 'patterns' | 'concepts'
 
 export default function SystemDesignPage() {
@@ -151,8 +271,35 @@ export default function SystemDesignPage() {
   const [expandedStep, setExpandedStep] = useState<string | null>('1')
   const [selectedPattern, setSelectedPattern] = useState(architecturePatterns[0])
 
+  const syncSearchParams = useCallback((searchParams: SearchParamsLike) => {
+    const tabParam = searchParams.get('tab')
+    if (isMainTab(tabParam)) {
+      setMainTab(tabParam)
+    }
+
+    const scenarioParam = searchParams.get('scenario')
+    if (scenarioParam) {
+      const scenario = getScenarioFromSearchId(scenarioParam)
+      if (scenario) {
+        setMainTab('scenarios')
+        setSelectedScenario(scenario)
+        setExpandedStep('1')
+      }
+    }
+
+    const patternParam = searchParams.get('pattern')
+    if (patternParam) {
+      const pattern = getArchitecturePatternFromSearchId(patternParam)
+      if (pattern) {
+        setMainTab('patterns')
+        setSelectedPattern(pattern)
+      }
+    }
+  }, [])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+      <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
           <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">System Design</h1>
@@ -284,7 +431,7 @@ export default function SystemDesignPage() {
                     return (
                       <button key={p.name} onClick={() => setSelectedPattern(p)}
                         className={`flex w-full items-center gap-3 rounded-xl p-4 text-left transition-all ${selectedPattern.name === p.name ? 'bg-gradient-to-r from-green-500 to-teal-600 text-white shadow-lg' : 'bg-white shadow hover:shadow-md dark:bg-gray-800 text-gray-700 dark:text-gray-300'}`}
-                        id={`${p.name.toLowerCase().replace(/\s+/g, '-')}-pattern`}>
+                        id={getArchitecturePatternSearchId(p.name)}>
                         <Icon className="h-5 w-5 shrink-0" />
                         <div>
                           <p className="font-bold text-sm">{p.name}</p>
@@ -296,7 +443,8 @@ export default function SystemDesignPage() {
                 </div>
                 <AnimatePresence mode="wait">
                   <motion.div key={selectedPattern.name} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
-                    className="lg:col-span-2 rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+                    className="lg:col-span-2 rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800"
+                    id={getArchitecturePatternSearchId(selectedPattern.name)}>
                     <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">{selectedPattern.name}</h2>
                     <p className="mb-5 text-gray-500 dark:text-gray-400">{selectedPattern.description}</p>
                     <div className="mb-5 rounded-xl bg-amber-50 p-4 dark:bg-amber-900/20">
@@ -331,34 +479,140 @@ export default function SystemDesignPage() {
                   id="cap-theorem"
                 >
                   <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">CAP Theorem</h3>
-                  <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">Choose 2 of 3: Consistency, Availability, Partition Tolerance</p>
-                  
-                  {/* CAP Triangle Visualization */}
-                  <div className="mb-6 flex justify-center">
-                    <div className="relative">
-                      <svg viewBox="0 0 300 260" className="h-48 w-full max-w-sm">
-                        {/* Triangle */}
-                        <polygon points="150,20 20,220 280,220" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-300 dark:text-gray-600" />
-                        
-                        {/* Vertices */}
-                        <circle cx="150" cy="20" r="35" fill="#3B82F6" className="opacity-20" />
-                        <circle cx="150" cy="20" r="20" fill="#3B82F6" />
-                        <text x="150" y="25" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">C</text>
-                        <text x="150" y="55" textAnchor="middle" fontSize="10" className="fill-blue-600 dark:fill-blue-400">Consistency</text>
-                        
-                        <circle cx="20" cy="220" r="35" fill="#10B981" className="opacity-20" />
-                        <circle cx="20" cy="220" r="20" fill="#10B981" />
-                        <text x="20" y="225" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">A</text>
-                        <text x="20" y="255" textAnchor="middle" fontSize="10" className="fill-green-600 dark:fill-green-400">Availability</text>
-                        
-                        <circle cx="280" cy="220" r="35" fill="#8B5CF6" className="opacity-20" />
-                        <circle cx="280" cy="220" r="20" fill="#8B5CF6" />
-                        <text x="280" y="225" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">P</text>
-                        <text x="280" y="255" textAnchor="middle" fontSize="10" className="fill-purple-600 dark:fill-purple-400">Partition</text>
-                        
-                        {/* Center text */}
-                        <text x="150" y="140" textAnchor="middle" fontSize="11" fontWeight="bold" className="fill-gray-500">Choose 2</text>
-                      </svg>
+                  <p className="mb-6 max-w-3xl text-sm text-gray-600 dark:text-gray-400">
+                    Interview-safe framing: in a real distributed system, partition tolerance is assumed. The real question is what you do
+                    during a partition: preserve consistency or stay available.
+                  </p>
+
+                  <div className="mb-6 grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.65fr)]">
+                    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-blue-50 p-5 dark:border-slate-700 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950/30">
+                      <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.12),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(139,92,246,0.14),transparent_34%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(139,92,246,0.18),transparent_34%)]"
+                      />
+
+                      <div className="relative grid gap-3 md:grid-cols-3">
+                        {capPillars.map((pillar) => (
+                          <div key={pillar.key} className={`rounded-xl border p-4 ${pillar.className}`}>
+                            <div className="mb-3 flex items-center justify-between">
+                              <span className="text-3xl font-black opacity-90">{pillar.key}</span>
+                              <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${pillar.chipClassName}`}>
+                                {pillar.chip}
+                              </span>
+                            </div>
+                            <h4 className="text-base font-bold">{pillar.title}</h4>
+                            <p className="mt-2 text-sm opacity-80">{pillar.description}</p>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="relative mt-5 overflow-hidden rounded-2xl border border-slate-800 bg-slate-950 p-4 text-white shadow-[0_18px_40px_rgba(15,23,42,0.32)]">
+                        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-xs uppercase tracking-[0.24em] text-slate-400">
+                          <span>Replica Group A</span>
+                          <span className="rounded-full border border-rose-500/30 bg-rose-500/10 px-3 py-1 text-[10px] font-bold tracking-[0.18em] text-rose-200">
+                            network partition
+                          </span>
+                          <span>Replica Group B</span>
+                        </div>
+
+                        <div className="grid items-center gap-4 md:grid-cols-[1fr_auto_1fr]">
+                          <div className="space-y-3 rounded-2xl border border-blue-500/20 bg-blue-500/10 p-4">
+                            <div className="flex items-center gap-2 text-sm font-semibold text-blue-100">
+                              <Database className="h-4 w-4" />
+                              Clients hit the left cluster
+                            </div>
+                            <div className="grid grid-cols-3 gap-2">
+                              {['C1', 'C2', 'C3'].map((node) => (
+                                <div key={node} className="rounded-xl border border-blue-400/25 bg-blue-400/15 px-3 py-2 text-center text-xs font-bold text-blue-100">
+                                  {node}
+                                </div>
+                              ))}
+                            </div>
+                            <p className="text-xs leading-relaxed text-slate-300">
+                              If this side cannot confirm the latest write, a CP system may reject or delay the request.
+                            </p>
+                          </div>
+
+                          <div className="flex h-full min-h-28 items-center justify-center">
+                            <div className="relative h-full w-10">
+                              <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-rose-400 to-transparent" />
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="rounded-full border border-rose-400/40 bg-rose-500/15 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-rose-200">
+                                  split
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="space-y-3 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4">
+                            <div className="flex items-center gap-2 text-sm font-semibold text-emerald-100">
+                              <Server className="h-4 w-4" />
+                              Clients hit the right cluster
+                            </div>
+                            <div className="grid grid-cols-3 gap-2">
+                              {['A1', 'A2', 'A3'].map((node) => (
+                                <div key={node} className="rounded-xl border border-emerald-400/25 bg-emerald-400/15 px-3 py-2 text-center text-xs font-bold text-emerald-100">
+                                  {node}
+                                </div>
+                              ))}
+                            </div>
+                            <p className="text-xs leading-relaxed text-slate-300">
+                              An AP system keeps serving traffic here, even if the answer might be temporarily stale.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 grid gap-3 md:grid-cols-2">
+                          <div className="rounded-2xl border border-blue-500/25 bg-blue-500/10 p-4">
+                            <div className="mb-1 text-sm font-bold text-blue-100">Choose CP</div>
+                            <p className="text-xs leading-relaxed text-slate-300">
+                              Preserve correctness, but you may reject requests or look unavailable until the partition heals.
+                            </p>
+                          </div>
+                          <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/10 p-4">
+                            <div className="mb-1 text-sm font-bold text-emerald-100">Choose AP</div>
+                            <p className="text-xs leading-relaxed text-slate-300">
+                              Keep serving traffic, but you accept eventual consistency and reconciliation later.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-blue-200 bg-blue-50/80 p-5 dark:border-blue-500/20 dark:bg-blue-500/10">
+                      <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-white">
+                        <Search className="h-3.5 w-3.5" />
+                        Interview shortcut
+                      </div>
+                      <div className="space-y-3 text-sm text-blue-900 dark:text-blue-100">
+                        <p className="font-semibold">
+                          Say this out loud: “During a partition, you usually choose between consistency and availability.”
+                        </p>
+                        <div className="rounded-xl bg-white/80 p-3 dark:bg-slate-900/50">
+                          <div className="font-semibold">Common mistake</div>
+                          <p className="mt-1 text-blue-800/80 dark:text-blue-100/80">
+                            Saying “just choose any 2 of 3” without mentioning that partitions are the actual trigger.
+                          </p>
+                        </div>
+                        <div className="rounded-xl bg-white/80 p-3 dark:bg-slate-900/50">
+                          <div className="font-semibold">PACELC reminder</div>
+                          <p className="mt-1 text-blue-800/80 dark:text-blue-100/80">
+                            Outside partitions, modern interviews often care just as much about latency vs consistency trade-offs.
+                          </p>
+                        </div>
+                        <div className="rounded-xl bg-white/80 p-3 dark:bg-slate-900/50">
+                          <div className="font-semibold">When to pick CP</div>
+                          <p className="mt-1 text-blue-800/80 dark:text-blue-100/80">
+                            Money movement, locks, inventory reservations, and anything where stale reads create business damage.
+                          </p>
+                        </div>
+                        <div className="rounded-xl bg-white/80 p-3 dark:bg-slate-900/50">
+                          <div className="font-semibold">When to pick AP</div>
+                          <p className="mt-1 text-blue-800/80 dark:text-blue-100/80">
+                            Feeds, carts, analytics, and systems that prefer serving slightly stale data over timing out.
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -367,28 +621,31 @@ export default function SystemDesignPage() {
                     <table className="w-full text-sm">
                       <thead className="bg-gray-50 dark:bg-gray-900">
                         <tr>
-                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Choice</th>
-                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Trade-off</th>
-                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Use Cases</th>
-                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Technologies</th>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Choice During Partition</th>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">What You Prioritize</th>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Good For</th>
+                          <th className="px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-300">Common Examples</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                         <tr className="bg-blue-50/50 dark:bg-blue-900/10">
                           <td className="px-4 py-3 font-semibold text-blue-700 dark:text-blue-400">CP</td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Consistent + Partition-tolerant, may be unavailable</td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Banks, Financial systems</td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">ZooKeeper, HBase, Redis</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Correctness over uptime. Some requests may fail or block.</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Payments, locks, metadata services, inventory reservation</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">ZooKeeper, etcd, HBase</td>
                         </tr>
                         <tr className="bg-green-50/50 dark:bg-green-900/10">
                           <td className="px-4 py-3 font-semibold text-green-700 dark:text-green-400">AP</td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Available + Partition-tolerant, eventually consistent</td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Social media, Shopping carts</td>
-                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Cassandra, DynamoDB</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Uptime over freshness. Data may reconcile later.</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Feeds, carts, social systems, high-write event ingestion</td>
+                          <td className="px-4 py-3 text-gray-600 dark:text-gray-400">Cassandra, DynamoDB, Riak</td>
                         </tr>
                       </tbody>
                     </table>
                   </div>
+                  <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
+                    CA only really exists when partitions are ignored or impossible, such as a single-node system or tightly coupled local setup.
+                  </p>
                 </motion.div>
 
                 {/* SQL vs NoSQL */}
@@ -423,23 +680,27 @@ export default function SystemDesignPage() {
                     </div>
 
                     {/* NoSQL */}
-                    <div className="rounded-xl bg-gradient-to-br from-orange-50 to-orange-100 p-5 dark:from-orange-900/30 dark:to-orange-800/30">
+                    <div className="relative overflow-hidden rounded-xl border border-orange-200/70 bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] dark:border-orange-400/15 dark:from-orange-950/45 dark:via-slate-900 dark:to-orange-900/25">
+                      <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,146,60,0.22),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(251,191,36,0.12),transparent_38%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(251,146,60,0.2),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(251,191,36,0.08),transparent_38%)]"
+                      />
                       <div className="mb-3 flex items-center gap-2">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-600 text-white shadow">
-                          <span className="text-lg font-bold">NoSQL</span>
+                        <div className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-orange-500 text-white shadow-lg shadow-orange-900/20 ring-1 ring-white/10">
+                          <Database className="h-5 w-5" />
                         </div>
-                        <h4 className="text-lg font-bold text-orange-900 dark:text-orange-300">NoSQL</h4>
+                        <h4 className="relative text-lg font-bold text-orange-950 dark:text-orange-200">NoSQL</h4>
                       </div>
-                      <ul className="mb-4 space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                      <ul className="relative mb-4 space-y-2 text-sm text-gray-700 dark:text-gray-300">
                         <li className="flex items-start gap-2"><span className="mt-1 text-green-500">✓</span> Horizontal scaling</li>
                         <li className="flex items-start gap-2"><span className="mt-1 text-green-500">✓</span> Flexible schema</li>
                         <li className="flex items-start gap-2"><span className="mt-1 text-green-500">✓</span> High write throughput</li>
                         <li className="flex items-start gap-2"><span className="mt-1 text-red-500">✗</span> Eventual consistency (usually)</li>
                       </ul>
-                      <div className="flex flex-wrap gap-2">
-                        <span className="rounded-full bg-orange-200 px-3 py-1 text-xs font-medium text-orange-800 dark:bg-orange-800 dark:text-orange-200">MongoDB</span>
-                        <span className="rounded-full bg-orange-200 px-3 py-1 text-xs font-medium text-orange-800 dark:bg-orange-800 dark:text-orange-200">Redis</span>
-                        <span className="rounded-full bg-orange-200 px-3 py-1 text-xs font-medium text-orange-800 dark:bg-orange-800 dark:text-orange-200">Cassandra</span>
+                      <div className="relative flex flex-wrap gap-2">
+                        <span className="rounded-full bg-orange-200/90 px-3 py-1 text-xs font-medium text-orange-900 dark:bg-orange-500/15 dark:text-orange-100">MongoDB</span>
+                        <span className="rounded-full bg-orange-200/90 px-3 py-1 text-xs font-medium text-orange-900 dark:bg-orange-500/15 dark:text-orange-100">Redis</span>
+                        <span className="rounded-full bg-orange-200/90 px-3 py-1 text-xs font-medium text-orange-900 dark:bg-orange-500/15 dark:text-orange-100">Cassandra</span>
                       </div>
                     </div>
                   </div>
@@ -937,6 +1198,86 @@ export default function SystemDesignPage() {
                     <span className="rounded-lg bg-purple-100 px-3 py-2 text-sm font-medium text-purple-800 dark:bg-purple-800 dark:text-purple-200">Memcached</span>
                     <span className="rounded-lg bg-purple-100 px-3 py-2 text-sm font-medium text-purple-800 dark:bg-purple-800 dark:text-purple-200">CDNs</span>
                     <span className="rounded-lg bg-purple-100 px-3 py-2 text-sm font-medium text-purple-800 dark:bg-purple-800 dark:text-purple-200">Load Balancers</span>
+                  </div>
+                </motion.div>
+
+                {/* Deep Dive Videos */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-2xl border-l-4 border-rose-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  id="deep-dive-videos"
+                >
+                  <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-900 dark:text-white">Deep Dive Videos</h3>
+                      <p className="mt-2 max-w-3xl text-sm text-gray-600 dark:text-gray-400">
+                        Shortlist only. These are here for the concepts that most often need a second pass after the fast-review notes.
+                      </p>
+                    </div>
+                    <div className="inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-rose-700 dark:bg-rose-500/10 dark:text-rose-200">
+                      <PlayCircle className="h-3.5 w-3.5" />
+                      Credible YouTube picks
+                    </div>
+                  </div>
+
+                  <div className="grid gap-5 lg:grid-cols-2">
+                    {deepDiveVideos.map((video) => (
+                      <div
+                        key={video.embedId}
+                        className="overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 shadow-sm dark:border-gray-700 dark:bg-gray-900"
+                      >
+                        <div className="aspect-video w-full overflow-hidden bg-black">
+                          <iframe
+                            className="h-full w-full"
+                            src={`https://www.youtube-nocookie.com/embed/${video.embedId}`}
+                            title={video.title}
+                            loading="lazy"
+                            referrerPolicy="strict-origin-when-cross-origin"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowFullScreen
+                          />
+                        </div>
+                        <div className="space-y-4 p-5">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-rose-600 dark:text-rose-300">
+                                {video.channel}
+                              </p>
+                              <h4 className="mt-1 text-lg font-bold text-gray-900 dark:text-white">{video.title}</h4>
+                            </div>
+                            <a
+                              href={video.href}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex shrink-0 items-center gap-1 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-gray-700 shadow-sm ring-1 ring-gray-200 transition-colors hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:ring-gray-700 dark:hover:bg-gray-700"
+                            >
+                              Open
+                              <ExternalLink className="h-3.5 w-3.5" />
+                            </a>
+                          </div>
+
+                          <div className="rounded-xl bg-white p-3 text-sm text-gray-700 shadow-sm dark:bg-gray-800 dark:text-gray-300">
+                            <span className="font-semibold text-gray-900 dark:text-white">Why this one:</span> {video.focus}
+                          </div>
+
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            <span className="font-semibold text-gray-900 dark:text-white">Best use:</span> {video.whenToWatch}
+                          </p>
+
+                          <div className="flex flex-wrap gap-2">
+                            {video.tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="rounded-full bg-rose-100 px-3 py-1 text-xs font-medium text-rose-700 dark:bg-rose-500/15 dark:text-rose-200"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </motion.div>
 

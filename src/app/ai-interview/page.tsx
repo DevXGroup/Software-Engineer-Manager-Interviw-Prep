@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Brain, ChevronDown, ChevronUp, Search, Eye, EyeOff, X, Cpu, Shield, TrendingUp, Lightbulb } from 'lucide-react'
 import { QuizLauncher } from '@/components/QuizLauncher'
+import { SearchParamSync, type SearchParamsLike } from '@/components/SearchParamSync'
 import { aiInterviewQuestions } from '@/data/quizzes/ai-interview'
 
 type AIQuestion = {
@@ -374,8 +375,18 @@ const categoryIcons: Record<string, React.ElementType> = {
 
 type Tab = 'qa' | 'practice' | 'concepts'
 
-const keyConcepts = [
-  { term: 'RAG (Retrieval-Augmented Generation)', definition: 'Architecture where a model retrieves relevant documents from a vector store before generating a response. Reduces hallucination by grounding outputs in retrieved facts.', example: 'Enterprise search, customer support bots, knowledge management systems' },
+type KeyConcept = {
+  id?: string
+  term: string
+  definition: string
+  example: string
+}
+
+const keyConcepts: KeyConcept[] = [
+  { id: 'rag', term: 'RAG (Retrieval-Augmented Generation)', definition: 'Architecture where a model retrieves relevant documents from a vector store before generating a response. Reduces hallucination by grounding outputs in retrieved facts.', example: 'Enterprise search, customer support bots, knowledge management systems' },
+  { id: 'llm-architecture', term: 'LLM Architecture', definition: 'Think in layers: base model, system prompt, retrieval/tooling layer, safety filters, and application orchestration. Strong answers explain how tokenization, attention, context window limits, and serving infrastructure shape product decisions.', example: 'A production assistant might use a hosted transformer model, retrieval over company docs, output validation, and a fallback workflow when confidence is low.' },
+  { id: 'responsible-ai', term: 'Responsible AI', definition: 'Responsible AI means designing for safety, fairness, privacy, auditability, and human control from the first architecture draft. It is not a post-launch policy document.', example: 'Add red-team evals, guardrails, human escalation, PII handling rules, and outcome monitoring before exposing an LLM to end users.' },
+  { id: 'metrics', term: 'AI/ML Metrics', definition: 'You need a layered scorecard: model quality, latency, cost, safety, and business impact. A model can improve offline accuracy and still fail in production if users do not trust or adopt it.', example: 'Track precision/recall or judge scores alongside hallucination rate, P95 latency, cost per request, task completion, and override rate.' },
   { term: 'Fine-tuning vs. Prompting', definition: 'Fine-tuning trains the model on domain-specific data (expensive, slow, but high quality for narrow tasks). Prompting instructs a pre-trained model (cheap, fast, but limited by prompt length).', example: 'Use prompting for 95% of cases. Fine-tune when prompting hits a quality ceiling with sufficient data.' },
   { term: 'Embeddings', definition: 'Dense vector representations of text (or images, code) that capture semantic meaning. Similar content has similar vectors. The foundation of semantic search and RAG.', example: 'text-embedding-3-large produces 3072-dimensional vectors for each text chunk' },
   { term: 'Context Window', definition: 'Maximum tokens a model can process at once. GPT-4o: 128K. Claude 3.5 Sonnet: 200K. Gemini 1.5 Pro: 1M. Larger windows enable more context but cost more and can reduce focus.', example: 'Design prompts to use <80% of context window for reliability' },
@@ -397,6 +408,13 @@ export default function AIInterviewPage() {
   const [categoryFilter, setCategoryFilter] = useState('All')
   const [levelFilter, setLevelFilter] = useState('All')
 
+  const syncSearchParams = useCallback((searchParams: SearchParamsLike) => {
+    const tabParam = searchParams.get('tab')
+    if (tabParam === 'qa' || tabParam === 'practice' || tabParam === 'concepts') {
+      setTab(tabParam)
+    }
+  }, [])
+
   const filtered = useMemo(() => {
     return aiQuestions.filter(q => {
       const matchSearch = !search || q.question.toLowerCase().includes(search.toLowerCase())
@@ -408,6 +426,7 @@ export default function AIInterviewPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+      <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-1.5 text-sm font-medium text-white">
@@ -554,7 +573,8 @@ export default function AIInterviewPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 {keyConcepts.map((c, i) => (
                   <motion.div key={c.term} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
-                    className="rounded-2xl bg-white p-5 shadow-lg dark:bg-gray-800">
+                    className="rounded-2xl bg-white p-5 shadow-lg dark:bg-gray-800"
+                    id={c.id}>
                     <h3 className="mb-2 font-bold text-gray-900 dark:text-white">{c.term}</h3>
                     <p className="mb-3 text-sm text-gray-600 dark:text-gray-400">{c.definition}</p>
                     <div className="rounded-lg bg-violet-50 p-3 dark:bg-violet-900/20">

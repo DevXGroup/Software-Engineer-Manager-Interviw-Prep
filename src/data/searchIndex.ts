@@ -568,11 +568,11 @@ export const searchIndex: SearchItem[] = [
   {
     id: 'cap-theorem',
     title: 'CAP Theorem',
-    description: 'Consistency, Availability, Partition Tolerance - choose 2 of 3',
+    description: 'During a partition, you choose consistency or availability; partition tolerance is assumed',
     type: 'concept',
     href: '/system-design',
     sectionId: 'cap-theorem',
-    keywords: ['cap', 'theorem', 'consistency', 'availability', 'partition', 'distributed', 'cp', 'ap'],
+    keywords: ['cap', 'theorem', 'consistency', 'availability', 'partition', 'distributed', 'cp', 'ap', 'pacelc'],
     category: 'Key Concepts',
   },
   {
@@ -603,6 +603,16 @@ export const searchIndex: SearchItem[] = [
     href: '/system-design',
     sectionId: 'consistent-hashing',
     keywords: ['consistent hashing', 'hash ring', 'distributed', 'load balancing', 'vnodes'],
+    category: 'Key Concepts',
+  },
+  {
+    id: 'deep-dive-videos',
+    title: 'System Design Deep Dive Videos',
+    description: 'Curated embedded videos for CAP theorem, NoSQL, caching, consistent hashing, load balancing, and Kafka',
+    type: 'section',
+    href: '/system-design',
+    sectionId: 'deep-dive-videos',
+    keywords: ['videos', 'youtube', 'deep dive', 'cap theorem', 'nosql', 'caching', 'consistent hashing', 'load balancing', 'kafka', 'streaming'],
     category: 'Key Concepts',
   },
   {

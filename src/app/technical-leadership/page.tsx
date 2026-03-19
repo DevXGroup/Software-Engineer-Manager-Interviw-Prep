@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, ChevronUp, Target, AlertTriangle, CheckCircle, GitBranch, Shield, TrendingUp, Clock, Wrench, LayoutList, GitMerge, Crosshair } from 'lucide-react'
 import { QuizLauncher } from '@/components/QuizLauncher'
+import { SearchParamSync, type SearchParamsLike } from '@/components/SearchParamSync'
 import { technicalLeadershipQuestions } from '@/data/quizzes/technical-leadership'
 
 type Section = { id: string; title: string; icon: React.ElementType; color: string; content: React.ReactNode }
@@ -177,8 +178,37 @@ const CodeReviewCulture = () => {
 
 type SectionTab = 'debt' | 'adr' | 'makebuy' | 'oncall' | 'codereview' | 'roadmap' | 'pmlc' | 'tbd' | 'scoping'
 
+const sectionIdByTab: Record<SectionTab, string> = {
+  adr: 'adr',
+  codereview: 'codereview',
+  debt: 'tech-debt',
+  makebuy: 'make-vs-buy',
+  oncall: 'oncall',
+  pmlc: 'pmlc',
+  roadmap: 'roadmap',
+  scoping: 'scoping',
+  tbd: 'tbd',
+}
+
 export default function TechnicalLeadershipPage() {
   const [activeTab, setActiveTab] = useState<SectionTab>('debt')
+
+  const syncSearchParams = useCallback((searchParams: SearchParamsLike) => {
+    const tabParam = searchParams.get('tab')
+    if (
+      tabParam === 'debt' ||
+      tabParam === 'adr' ||
+      tabParam === 'makebuy' ||
+      tabParam === 'oncall' ||
+      tabParam === 'codereview' ||
+      tabParam === 'roadmap' ||
+      tabParam === 'pmlc' ||
+      tabParam === 'tbd' ||
+      tabParam === 'scoping'
+    ) {
+      setActiveTab(tabParam)
+    }
+  }, [])
 
   const tabs: { id: SectionTab; label: string; icon: React.ElementType }[] = [
     { id: 'debt', label: 'Tech Debt', icon: Wrench },
@@ -194,6 +224,7 @@ export default function TechnicalLeadershipPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+      <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
           <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">Technical Leadership</h1>
@@ -214,7 +245,8 @@ export default function TechnicalLeadershipPage() {
 
         <AnimatePresence mode="wait">
           <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-            className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+            className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800"
+            id={sectionIdByTab[activeTab]}>
             {activeTab === 'debt' && (
               <>
                 <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">Managing Technical Debt</h2>
