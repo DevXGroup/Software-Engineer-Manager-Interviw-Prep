@@ -4,7 +4,9 @@ import { useEffect, useState, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, X, Command, FileText, BookOpen, Building, ChevronRight, Zap, Grid, List, Award } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
 import { searchIndex, type SearchItem, type SearchItemType } from '@/data/searchIndex'
+import { buildSearchTarget, hasSearchNavigationState } from '@/lib/searchNavigation'
 
 interface SearchModalProps {
   isOpen: boolean
@@ -97,6 +99,8 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [filteredResults, setFilteredResults] = useState<SearchItem[]>([])
   const [selectedType, setSelectedType] = useState<SearchItemType | 'all'>('all')
+  const router = useRouter()
+  const pathname = usePathname()
   const inputRef = useRef<HTMLInputElement>(null)
   const resultsRef = useRef<HTMLDivElement>(null)
 
@@ -161,26 +165,46 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }
   }, [isOpen])
 
-  const handleSelect = useCallback((item: SearchItem) => {
-    // Navigate to the page
-    window.location.href = item.href
-    
-    // If there's a sectionId, scroll to it after navigation
-    if (item.sectionId) {
-      setTimeout(() => {
-        const element = document.getElementById(item.sectionId!)
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-          element.classList.add('ring-2', 'ring-purple-500', 'ring-offset-2', 'dark:ring-offset-gray-900')
-          setTimeout(() => {
-            element.classList.remove('ring-2', 'ring-purple-500', 'ring-offset-2', 'dark:ring-offset-gray-900')
-          }, 2000)
-        }
-      }, 300)
+  const highlightSection = useCallback((sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (!element) return false
+
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    element.classList.add('ring-2', 'ring-purple-500', 'ring-offset-2', 'dark:ring-offset-gray-900')
+    setTimeout(() => {
+      element.classList.remove('ring-2', 'ring-purple-500', 'ring-offset-2', 'dark:ring-offset-gray-900')
+    }, 2000)
+    return true
+  }, [])
+
+  const highlightSectionWhenReady = useCallback((sectionId: string, attemptsLeft = 24) => {
+    if (highlightSection(sectionId) || attemptsLeft <= 0) {
+      return
     }
-    
+
+    window.setTimeout(() => {
+      highlightSectionWhenReady(sectionId, attemptsLeft - 1)
+    }, 120)
+  }, [highlightSection])
+
+  const handleSelect = useCallback((item: SearchItem) => {
     onClose()
-  }, [onClose])
+
+    const target = buildSearchTarget(item)
+    const needsNavigationState = hasSearchNavigationState(item)
+
+    if (item.sectionId && item.href === pathname && !needsNavigationState && highlightSection(item.sectionId)) {
+      return
+    }
+
+    router.push(target)
+
+    if (item.sectionId) {
+      window.setTimeout(() => {
+        highlightSectionWhenReady(item.sectionId!)
+      }, 80)
+    }
+  }, [highlightSection, highlightSectionWhenReady, onClose, pathname, router])
 
   const getTypeIcon = (type: SearchItemType) => {
     const Icon = typeIcons[type]
