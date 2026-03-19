@@ -118,7 +118,7 @@ export default function HomePage() {
                   Interview
                 </motion.span>
               </span>
-              <span className="inline-block overflow-hidden pb-[0.12em] align-bottom">
+              <span className="inline-block overflow-hidden pb-[0.12em] pr-[0.15em] align-bottom">
                 <motion.span
                   initial={{ y: '105%', opacity: 0 }}
                   animate={{ y: '0%', opacity: 1 }}
