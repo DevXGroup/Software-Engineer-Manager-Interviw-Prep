@@ -94,7 +94,7 @@ export default function HomePage() {
             {/* Line 1 — animated gradient, word-by-word reveal */}
             <span className="flex flex-wrap justify-center gap-x-[0.28em]">
               {['Engineering', 'Manager'].map((word, i) => (
-                <span key={word} className="overflow-hidden inline-block">
+                <span key={word} className="inline-block overflow-hidden pb-[0.12em] align-bottom">
                   <motion.span
                     initial={{ y: '105%', opacity: 0 }}
                     animate={{ y: '0%', opacity: 1 }}
@@ -109,7 +109,7 @@ export default function HomePage() {
             {/* Line 2 — plain text, staggered slightly later */}
             <span className="flex flex-wrap justify-center gap-x-[0.28em] mt-1">
               {['Interview', 'Mastery'].map((word, i) => (
-                <span key={word} className="overflow-hidden inline-block">
+                <span key={word} className="inline-block overflow-hidden pb-[0.12em] align-bottom">
                   <motion.span
                     initial={{ y: '105%', opacity: 0 }}
                     animate={{ y: '0%', opacity: 1 }}
