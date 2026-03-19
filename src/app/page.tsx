@@ -106,20 +106,28 @@ export default function HomePage() {
                 </span>
               ))}
             </span>
-            {/* Line 2 — plain text, staggered slightly later */}
-            <span className="flex flex-wrap justify-center gap-x-[0.28em] mt-1">
-              {['Interview', 'Mastery'].map((word, i) => (
-                <span key={word} className="inline-block overflow-hidden pb-[0.12em] align-bottom">
-                  <motion.span
-                    initial={{ y: '105%', opacity: 0 }}
-                    animate={{ y: '0%', opacity: 1 }}
-                    transition={{ delay: 0.48 + i * 0.14, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                    className="inline-block text-gray-900 dark:text-white"
-                  >
-                    {word}
-                  </motion.span>
-                </span>
-              ))}
+            {/* Line 2 — plain text + script accent on "Mastery" */}
+            <span className="flex flex-wrap justify-center gap-x-[0.28em]">
+              <span className="inline-block overflow-hidden pb-[0.12em] align-bottom">
+                <motion.span
+                  initial={{ y: '105%', opacity: 0 }}
+                  animate={{ y: '0%', opacity: 1 }}
+                  transition={{ delay: 0.48, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  className="inline-block text-gray-900 dark:text-white"
+                >
+                  Interview
+                </motion.span>
+              </span>
+              <span className="inline-block overflow-hidden pb-[0.12em] align-bottom">
+                <motion.span
+                  initial={{ y: '105%', opacity: 0 }}
+                  animate={{ y: '0%', opacity: 1 }}
+                  transition={{ delay: 0.62, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                  className="hero-gradient-text inline-block font-playfair italic tracking-tight"
+                >
+                  Mastery
+                </motion.span>
+              </span>
             </span>
           </h1>
 
