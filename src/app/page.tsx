@@ -118,12 +118,12 @@ export default function HomePage() {
                   Interview
                 </motion.span>
               </span>
-              <span className="inline-block overflow-hidden pb-[0.12em] pr-[0.15em] align-bottom">
+              <span className="inline-block overflow-hidden pb-[0.12em] pl-[0.08em] pr-[0.15em] align-bottom">
                 <motion.span
                   initial={{ y: '105%', opacity: 0 }}
                   animate={{ y: '0%', opacity: 1 }}
                   transition={{ delay: 0.62, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                  className="inline-block font-playfair tracking-tight text-white"
+                  className="inline-block font-playfair tracking-tight text-gray-900 dark:text-white"
                 >
                   Mastery
                 </motion.span>
