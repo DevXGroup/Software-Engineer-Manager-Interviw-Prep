@@ -90,11 +90,11 @@ export default function HomePage() {
           </motion.div>
 
           {/* Title */}
-          <h1 className="mb-5 text-5xl font-extrabold leading-tight tracking-tight sm:text-6xl lg:text-7xl">
+          <h1 className="mb-5 text-5xl font-extrabold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
             {/* Line 1 — animated gradient, word-by-word reveal */}
             <span className="flex flex-wrap justify-center gap-x-[0.28em]">
               {['Engineering', 'Manager'].map((word, i) => (
-                <span key={word} className="inline-block overflow-hidden pb-[0.35em] align-bottom">
+                <span key={word} className="inline-block overflow-hidden pb-[0.15em] align-bottom">
                   <motion.span
                     initial={{ y: '105%', opacity: 0 }}
                     animate={{ y: '0%', opacity: 1 }}
@@ -123,7 +123,7 @@ export default function HomePage() {
                   initial={{ y: '105%', opacity: 0 }}
                   animate={{ y: '0%', opacity: 1 }}
                   transition={{ delay: 0.62, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                  className="hero-gradient-text inline-block font-playfair italic tracking-tight"
+                  className="inline-block font-playfair tracking-tight text-white"
                 >
                   Mastery
                 </motion.span>
