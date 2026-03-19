@@ -7,6 +7,10 @@
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
   
   .dark {
     --background: 222.2 84% 4.9%;
@@ -51,6 +55,7 @@
     -webkit-text-fill-color: transparent;
     color: transparent;
     animation: heroGradientFlow 5s ease-in-out infinite;
+    padding-bottom: 0.2em;
   }
 
   @keyframes heroGradientFlow {

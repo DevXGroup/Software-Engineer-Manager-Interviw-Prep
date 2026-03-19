@@ -61,10 +61,13 @@ export const metadata: Metadata = {
     site: '@devxgroup',
   },
   icons: {
-    icon: '/favicon.svg',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
     shortcut: '/favicon.svg',
-    apple: '/favicon.svg',
+    apple: '/apple-touch-icon.png',
   },
+  manifest: '/site.webmanifest',
 }
 
 export default function RootLayout({

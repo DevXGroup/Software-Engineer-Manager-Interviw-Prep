@@ -43,27 +43,43 @@ export function Navigation() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo Section */}
           <div className="flex items-center gap-8">
-            <Link href="/" className="flex items-center space-x-2">
-              <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+            <Link href="/" className="flex items-center space-x-2.5">
+              <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
                 <defs>
-                  <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#9333ea"/>
-                    <stop offset="100%" stopColor="#2563eb"/>
+                  <linearGradient id="logoBg" x1="0" y1="0" x2="34" y2="34" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#c026d3"/>
+                    <stop offset="50%" stopColor="#7c3aed"/>
+                    <stop offset="100%" stopColor="#1d4ed8"/>
+                  </linearGradient>
+                  <linearGradient id="logoShine" x1="0" y1="0" x2="0" y2="15" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="white" stopOpacity="0.22"/>
+                    <stop offset="100%" stopColor="white" stopOpacity="0"/>
                   </linearGradient>
                 </defs>
-                <rect width="32" height="32" rx="8" fill="url(#logoGrad)"/>
+                {/* Background */}
+                <rect width="34" height="34" rx="9" fill="url(#logoBg)"/>
+                {/* Shine */}
+                <rect width="34" height="15" rx="9" fill="url(#logoShine)"/>
+                {/* Subtle border */}
+                <rect x="0.5" y="0.5" width="33" height="33" rx="8.5" stroke="white" strokeOpacity="0.15" strokeWidth="1"/>
+                {/* EM text */}
                 <text
-                  x="16"
-                  y="22"
-                  fontFamily="system-ui,-apple-system,BlinkMacSystemFont,sans-serif"
+                  x="17"
+                  y="19"
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fontFamily="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
                   fontWeight="800"
                   fontSize="13"
+                  letterSpacing="-0.5"
                   fill="white"
-                  textAnchor="middle"
                 >EM</text>
+                {/* Growth chart accent */}
+                <polyline points="8,28 13,25 19,26.5 26,21.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.7"/>
+                <circle cx="26" cy="21.5" r="1.8" fill="white" fillOpacity="0.9"/>
               </svg>
-              <span className="text-xl font-bold text-gray-900 dark:text-white">
-                EM Mastery
+              <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+                EM <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Mastery</span>
               </span>
             </Link>
 
