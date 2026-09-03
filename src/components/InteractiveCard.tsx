@@ -27,10 +27,10 @@ export function InteractiveCard({
         whileHover={{ y: -5 }}
         className="group relative h-full overflow-hidden rounded-xl bg-white p-6 shadow-lg transition-all hover:shadow-2xl dark:bg-gray-800"
       >
-        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 transition-opacity group-hover:opacity-10`}></div>
+        <div className={`absolute inset-0 ${gradient} opacity-0 transition-opacity group-hover:opacity-10`}></div>
         
         <div className="relative z-10">
-          <div className={`mb-4 inline-flex rounded-lg bg-gradient-to-br ${gradient} p-3`}>
+          <div className={`mb-4 inline-flex rounded-lg ${gradient} p-3`}>
             <Icon className="h-6 w-6 text-white" />
           </div>
           

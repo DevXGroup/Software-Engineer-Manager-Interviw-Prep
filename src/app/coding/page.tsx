@@ -889,7 +889,7 @@ export default function CodingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
@@ -903,7 +903,7 @@ export default function CodingPage() {
         <div className="mb-8 flex gap-2 rounded-xl bg-white p-1 shadow dark:bg-gray-800 overflow-x-auto">
           {([['visualizer', Zap, 'Algorithm Visualizer'], ['patterns', GitBranch, 'DSA Patterns'], ['complexity', Layers, 'Big O Reference'], ['datastructs', BookOpen, 'Data Structures'], ['challenges', Trophy, 'Challenges'], ['frontend', Code, 'JS/TS/React']] as const).map(([t, Icon, label]) => (
             <button key={t} onClick={() => setMainTab(t)}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${mainTab === t ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}>
+              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${mainTab === t ? 'bg-orange-500 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
@@ -919,7 +919,7 @@ export default function CodingPage() {
                 <div className="mb-6 flex flex-wrap gap-3">
                   {ALGOS.map(a => (
                     <button key={a} onClick={() => setAlgo(a)}
-                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${algo === a ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow' : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'}`}>
+                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${algo === a ? 'bg-orange-500 text-white shadow' : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'}`}>
                       {a}
                     </button>
                   ))}
@@ -952,7 +952,7 @@ export default function CodingPage() {
                     <span>{Math.round((stepIdx / Math.max(steps.length - 1, 1)) * 100)}% complete</span>
                   </div>
                   <div className="h-2 w-full rounded-full bg-gray-100 dark:bg-gray-700">
-                    <motion.div className="h-2 rounded-full bg-gradient-to-r from-orange-500 to-red-500"
+                    <motion.div className="h-2 rounded-full bg-orange-500"
                       animate={{ width: `${(stepIdx / Math.max(steps.length - 1, 1)) * 100}%` }} />
                   </div>
                 </div>
@@ -967,7 +967,7 @@ export default function CodingPage() {
                     ← Prev
                   </button>
                   <button onClick={() => setPlaying(p => !p)}
-                    className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 px-4 py-2 text-sm font-medium text-white hover:opacity-90">
+                    className="flex items-center gap-2 rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:opacity-90">
                     {playing ? <><Pause className="h-4 w-4" />Pause</> : <><Play className="h-4 w-4" />Play</>}
                   </button>
                   <button onClick={() => setStepIdx(i => Math.min(steps.length - 1, i + 1))} disabled={stepIdx >= steps.length - 1}
@@ -1016,7 +1016,7 @@ export default function CodingPage() {
                 <div className="space-y-2">
                   {patterns.map(p => (
                     <button key={p.slug} onClick={() => { setSelectedPattern(p); setExpandedPattern(p.slug) }}
-                      className={`w-full rounded-xl px-4 py-3 text-left transition-all ${selectedPattern.slug === p.slug ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg' : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}
+                      className={`w-full rounded-xl px-4 py-3 text-left transition-all ${selectedPattern.slug === p.slug ? 'bg-orange-500 text-white shadow-lg' : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}
                       id={`${p.slug}-pattern`}>
                       <p className="font-bold">{p.name}</p>
                       <p className={`mt-0.5 text-xs ${selectedPattern.slug === p.slug ? 'text-orange-100' : 'text-gray-500'}`}>{p.complexity}</p>
@@ -1126,7 +1126,7 @@ export default function CodingPage() {
                       ))}
                     </tbody>
                   </table>
-                  <p className="mt-2 text-xs text-gray-400">* Average case</p>
+                  <p className="mt-2 text-xs text-gray-500">* Average case</p>
                 </div>
 
                 {/* Quick tips */}
@@ -1164,11 +1164,11 @@ export default function CodingPage() {
                 <div className="space-y-5">
                   {(['Linear', 'Hash-Based', 'Tree', 'Graph'] as const).map(cat => (
                     <div key={cat}>
-                      <p className="mb-2 px-1 text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">{cat}</p>
+                      <p className="mb-2 px-1 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-500">{cat}</p>
                       <div className="space-y-1">
                         {dataStructures.filter(ds => ds.category === cat).map(ds => (
                           <button key={ds.slug} onClick={() => setSelectedDS(ds)}
-                            className={`w-full rounded-xl px-4 py-3 text-left transition-all ${selectedDS.slug === ds.slug ? 'bg-gradient-to-r from-orange-500 to-red-600 text-white shadow-lg' : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}
+                            className={`w-full rounded-xl px-4 py-3 text-left transition-all ${selectedDS.slug === ds.slug ? 'bg-orange-500 text-white shadow-lg' : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}
                             id={`${ds.slug}-ds`}>
                             <p className="font-bold text-sm">{ds.name}</p>
                           </button>
@@ -1247,7 +1247,7 @@ export default function CodingPage() {
           {mainTab === 'challenges' && (
             <motion.div key="challenges" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
               {/* Hero */}
-              <div className="mb-6 rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 p-8 text-white shadow-xl">
+              <div className="mb-6 rounded-2xl bg-orange-500 p-8 text-white shadow-xl">
                 <div className="flex items-center gap-4">
                   <div className="rounded-2xl bg-white/20 p-4">
                     <Trophy className="h-10 w-10" />
@@ -1280,12 +1280,12 @@ export default function CodingPage() {
               {/* Difficulty cards */}
               <div className="mb-6 grid gap-4 sm:grid-cols-3">
                 {[
-                  { label: 'Easy', count: 5, color: 'from-green-500 to-emerald-600', bg: 'bg-green-50 dark:bg-green-900/20', problems: ['Two Sum', 'Valid Parentheses', 'Max Subarray', 'Buy/Sell Stock', 'Climbing Stairs'], slug: 'Easy' },
-                  { label: 'Medium', count: 7, color: 'from-yellow-500 to-orange-500', bg: 'bg-yellow-50 dark:bg-yellow-900/20', problems: ['Longest Substring', '3Sum', 'Coin Change', 'Number of Islands', 'LRU Cache', '+2 more'], slug: 'Medium' },
-                  { label: 'Hard', count: 4, color: 'from-red-500 to-pink-600', bg: 'bg-red-50 dark:bg-red-900/20', problems: ['Trapping Rain Water', 'Merge K Sorted Lists', 'Min Window Substr', 'Word Ladder'], slug: 'Hard' },
+                  { label: 'Easy', count: 5, color: 'green-500', bg: 'bg-green-50 dark:bg-green-900/20', problems: ['Two Sum', 'Valid Parentheses', 'Max Subarray', 'Buy/Sell Stock', 'Climbing Stairs'], slug: 'Easy' },
+                  { label: 'Medium', count: 7, color: 'yellow-500', bg: 'bg-yellow-50 dark:bg-yellow-900/20', problems: ['Longest Substring', '3Sum', 'Coin Change', 'Number of Islands', 'LRU Cache', '+2 more'], slug: 'Medium' },
+                  { label: 'Hard', count: 4, color: 'red-500', bg: 'bg-red-50 dark:bg-red-900/20', problems: ['Trapping Rain Water', 'Merge K Sorted Lists', 'Min Window Substr', 'Word Ladder'], slug: 'Hard' },
                 ].map(card => (
                   <div key={card.label} className={`rounded-2xl ${card.bg} p-5 shadow`}>
-                    <div className={`mb-3 inline-block rounded-xl bg-gradient-to-r ${card.color} px-3 py-1 text-sm font-bold text-white`}>
+                    <div className={`mb-3 inline-block rounded-xl ${card.color} px-3 py-1 text-sm font-bold text-white`}>
                       {card.label} · {card.count} problems
                     </div>
                     <ul className="mb-4 space-y-1">
@@ -1294,7 +1294,7 @@ export default function CodingPage() {
                       ))}
                     </ul>
                     <Link href={`/coding/challenges`}>
-                      <button className={`w-full rounded-lg bg-gradient-to-r ${card.color} py-2 text-sm font-medium text-white hover:opacity-90`}>
+                      <button className={`w-full rounded-lg ${card.color} py-2 text-sm font-medium text-white hover:opacity-90`}>
                         Practice {card.label}
                       </button>
                     </Link>
@@ -1329,7 +1329,7 @@ export default function CodingPage() {
                 </div>
                 <div className="mt-6 text-center">
                   <Link href="/coding/challenges">
-                    <button className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-red-600 px-8 py-3 font-medium text-white shadow-lg hover:opacity-90">
+                    <button className="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-8 py-3 font-medium text-white shadow-lg hover:opacity-90">
                       <Trophy className="h-5 w-5" />
                       Open All 16 Challenges
                       <ArrowRight className="h-5 w-5" />

@@ -25,7 +25,7 @@ const weeks: WeekPlan[] = [
     title: 'Behavioral Foundations',
     theme: 'STAR Method + Company Principles',
     icon: Brain,
-    color: 'from-purple-500 to-blue-600',
+    color: 'purple-500',
     bgColor: 'bg-purple-50 dark:bg-purple-900/20',
     goal: 'Master the STAR format and understand Amazon\'s 16 LPs inside out',
     dailyTasks: [
@@ -43,7 +43,7 @@ const weeks: WeekPlan[] = [
     title: 'Company Deep-Dives',
     theme: 'Meta, Google, Netflix, Apple, Microsoft',
     icon: Target,
-    color: 'from-blue-500 to-cyan-600',
+    color: 'blue-500',
     bgColor: 'bg-blue-50 dark:bg-blue-900/20',
     goal: 'Know each company\'s unique values, interview style, and top questions',
     dailyTasks: [
@@ -61,7 +61,7 @@ const weeks: WeekPlan[] = [
     title: 'System Design Basics',
     theme: 'Scalability Fundamentals',
     icon: Layers,
-    color: 'from-green-500 to-teal-600',
+    color: 'green-500',
     bgColor: 'bg-green-50 dark:bg-green-900/20',
     goal: 'Understand horizontal scaling, databases, caching, and load balancing',
     dailyTasks: [
@@ -79,7 +79,7 @@ const weeks: WeekPlan[] = [
     title: 'System Design Advanced',
     theme: 'Distributed Systems at FAANG Scale',
     icon: Layers,
-    color: 'from-teal-500 to-emerald-600',
+    color: 'teal-500',
     bgColor: 'bg-teal-50 dark:bg-teal-900/20',
     goal: 'Design complex systems: Twitter feed, notification system, rate limiter',
     dailyTasks: [
@@ -97,7 +97,7 @@ const weeks: WeekPlan[] = [
     title: 'Coding Patterns',
     theme: 'TypeScript DSA Core Patterns',
     icon: Code,
-    color: 'from-orange-500 to-red-600',
+    color: 'orange-500',
     bgColor: 'bg-orange-50 dark:bg-orange-900/20',
     goal: 'Internalize Sliding Window, Two Pointers, Binary Search, BFS/DFS',
     dailyTasks: [
@@ -115,7 +115,7 @@ const weeks: WeekPlan[] = [
     title: 'Coding — Hard Problems',
     theme: 'DP, Heaps, Advanced Graph',
     icon: Code,
-    color: 'from-red-500 to-pink-600',
+    color: 'red-500',
     bgColor: 'bg-red-50 dark:bg-red-900/20',
     goal: 'Tackle Medium-Hard problems and practice explaining complexity trade-offs',
     dailyTasks: [
@@ -133,7 +133,7 @@ const weeks: WeekPlan[] = [
     title: 'Technical Leadership',
     theme: 'Architecture, Tech Debt, On-Call',
     icon: Target,
-    color: 'from-purple-500 to-pink-600',
+    color: 'purple-500',
     bgColor: 'bg-purple-50 dark:bg-purple-900/20',
     goal: 'Articulate make vs buy decisions, tech debt frameworks, and incident management',
     dailyTasks: [
@@ -151,7 +151,7 @@ const weeks: WeekPlan[] = [
     title: 'Mock Interviews & Polish',
     theme: 'Full Simulation Week',
     icon: TrendingUp,
-    color: 'from-violet-500 to-indigo-600',
+    color: 'violet-500',
     bgColor: 'bg-violet-50 dark:bg-violet-900/20',
     goal: 'Run full-length mock interviews across all categories and sharpen weak spots',
     dailyTasks: [
@@ -196,12 +196,12 @@ export default function RoadmapPage() {
   const overallPct = Math.round((totalDone / totalTasks) * 100)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
       <div className="mx-auto max-w-4xl">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
           <div className="mb-4 flex justify-center">
-            <span className="rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 p-3 shadow-lg">
+            <span className="rounded-2xl bg-blue-500 p-3 shadow-lg">
               <Calendar className="h-8 w-8 text-white" />
             </span>
           </div>
@@ -220,7 +220,7 @@ export default function RoadmapPage() {
               <motion.div
                 animate={{ width: `${overallPct}%` }}
                 transition={{ duration: 0.6 }}
-                className="h-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
+                className="h-3 rounded-full bg-blue-500"
               />
             </div>
           </div>
@@ -246,12 +246,12 @@ export default function RoadmapPage() {
                   onClick={() => setActiveWeek(isOpen ? null : week.week)}
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`rounded-xl bg-gradient-to-r ${week.color} p-3 text-white shadow`}>
+                    <div className={`rounded-xl ${week.color} p-3 text-white shadow`}>
                       <Icon className="h-5 w-5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs font-bold text-gray-400">WEEK {week.week}</span>
+                        <span className="text-xs font-bold text-gray-500">WEEK {week.week}</span>
                         {done === total && (
                           <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700 dark:bg-green-900/30 dark:text-green-400">
                             Complete ✓
@@ -265,7 +265,7 @@ export default function RoadmapPage() {
                       <p className="text-sm font-bold text-gray-700 dark:text-gray-300">{done}/{total}</p>
                       <div className="mt-1 h-1.5 w-20 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
                         <div
-                          className={`h-1.5 rounded-full bg-gradient-to-r ${week.color} transition-all duration-500`}
+                          className={`h-1.5 rounded-full ${week.color} transition-all duration-500`}
                           style={{ width: `${pct}%` }}
                         />
                       </div>
@@ -300,9 +300,9 @@ export default function RoadmapPage() {
                             >
                               {checked[key]
                                 ? <CheckCircle className="h-5 w-5 shrink-0 text-green-500" />
-                                : <Circle className="h-5 w-5 shrink-0 text-gray-300 group-hover:text-gray-400" />
+                                : <Circle className="h-5 w-5 shrink-0 text-gray-500 group-hover:text-gray-500" />
                               }
-                              <span className={`flex-1 text-sm ${checked[key] ? 'line-through text-gray-400' : 'text-gray-700 dark:text-gray-300'}`}>
+                              <span className={`flex-1 text-sm ${checked[key] ? 'line-through text-gray-500' : 'text-gray-700 dark:text-gray-300'}`}>
                                 {task.label}
                               </span>
                               {task.link && (
@@ -347,7 +347,7 @@ export default function RoadmapPage() {
 
         {/* Footer CTA */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
-          className="mt-10 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-center text-white shadow-xl">
+          className="mt-10 rounded-2xl bg-blue-500 p-6 text-center text-white shadow-xl">
           <Clock className="mx-auto mb-3 h-8 w-8 opacity-80" />
           <h2 className="mb-2 text-xl font-bold">Pro Tip: Consistency beats intensity</h2>
           <p className="text-blue-100">45 minutes of focused practice daily beats 4-hour sessions twice a week. Track your progress above and complete each milestone before moving to the next week.</p>

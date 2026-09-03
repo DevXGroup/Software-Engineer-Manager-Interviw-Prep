@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import localFont from 'next/font/local'
+import { IBM_Plex_Sans, IBM_Plex_Mono, Source_Serif_4 } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { Navigation } from '@/components/Navigation'
@@ -8,10 +7,26 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { Footer } from '@/components/Footer'
 import { DonateToast } from '@/components/DonateToast'
 
-const inter = Inter({ subsets: ['latin'] })
-const ephesis = localFont({
-  src: '../../public/fonts/Ephesis-Regular.ttf',
-  variable: '--font-playfair',
+const sans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-sans',
+  display: 'swap',
+})
+
+const display = Source_Serif_4({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-display',
+  display: 'swap',
+})
+
+const mono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-mono',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -82,7 +97,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} ${ephesis.variable}`}>
+      <body className={`${sans.variable} ${display.variable} ${mono.variable} font-sans antialiased`}>
         <ThemeProvider>
           <Navigation />
           <main className="min-h-screen pt-16">

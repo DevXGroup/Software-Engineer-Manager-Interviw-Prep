@@ -29,7 +29,7 @@ type Question = {
 const companies: Company[] = [
   {
     name: 'Amazon',
-    color: 'from-orange-500 to-orange-600',
+    color: 'orange-500',
     textColor: 'text-orange-600',
     principles: [
       { name: 'Customer Obsession', description: 'Leaders start with the customer and work backwards. They work vigorously to earn and keep customer trust.', example: 'Reversed a product decision because NPS dropped 12 points' },
@@ -63,7 +63,7 @@ const companies: Company[] = [
   },
   {
     name: 'Meta',
-    color: 'from-blue-500 to-blue-700',
+    color: 'blue-500',
     textColor: 'text-blue-600',
     principles: [
       { name: 'Move Fast', description: 'Speed enables learning. Move fast and iterate rather than waiting for perfection.', example: 'Launched beta in 3 weeks, learned more than 3 months of planning' },
@@ -87,7 +87,7 @@ const companies: Company[] = [
   },
   {
     name: 'Google',
-    color: 'from-green-500 to-green-600',
+    color: 'green-500',
     textColor: 'text-green-600',
     principles: [
       { name: 'Focus on the User', description: 'All else will follow. Great user experiences drive long-term success.', example: 'Redesigned API based on developer feedback, reduced friction 60%' },
@@ -111,7 +111,7 @@ const companies: Company[] = [
   },
   {
     name: 'Apple',
-    color: 'from-gray-600 to-gray-900',
+    color: 'gray-600',
     textColor: 'text-gray-700 dark:text-gray-300',
     principles: [
       { name: 'Radical Simplicity', description: "The hardest thing is making things simple. Cut everything that doesn't belong.", example: 'Reduced feature set by 50% to deliver a product that just works' },
@@ -135,7 +135,7 @@ const companies: Company[] = [
   },
   {
     name: 'Netflix',
-    color: 'from-red-600 to-red-700',
+    color: 'red-600',
     textColor: 'text-red-600',
     principles: [
       { name: 'Judgment', description: 'You make wise decisions despite ambiguity. You identify root causes, not symptoms.', example: 'Identified pattern in data that predicted churn 30 days in advance' },
@@ -162,7 +162,7 @@ const companies: Company[] = [
   },
   {
     name: 'Microsoft',
-    color: 'from-blue-700 to-blue-900',
+    color: 'blue-700',
     textColor: 'text-blue-700',
     principles: [
       { name: 'Growth Mindset', description: 'Embrace challenges, learn from failure, and believe abilities can be developed.', example: 'Treated product failure as research, pivoted to successful adjacent market' },
@@ -616,7 +616,7 @@ export default function BehavioralPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
@@ -632,7 +632,7 @@ export default function BehavioralPage() {
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${tab === t ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}
+              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${tab === t ? 'bg-purple-600 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}
             >
               <Icon className="h-4 w-4" />
               {label}
@@ -648,7 +648,7 @@ export default function BehavioralPage() {
                 {companies.map(c => (
                   <motion.button key={c.name} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                     onClick={() => setSelectedCompany(c)}
-                    className={`flex items-center gap-2 rounded-lg px-4 py-2 font-medium transition-all ${selectedCompany.name === c.name ? `bg-gradient-to-r ${c.color} text-white shadow-lg` : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}>
+                    className={`flex items-center gap-2 rounded-lg px-4 py-2 font-medium transition-all ${selectedCompany.name === c.name ? `${c.color} text-white shadow-lg` : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}>
                     <Building className="h-4 w-4" />
                     {c.name}
                   </motion.button>
@@ -659,7 +659,7 @@ export default function BehavioralPage() {
                 <motion.div key={selectedCompany.name} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
                   className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800"
                   id={`${selectedCompany.name.toLowerCase()}-principles`}>
-                  <div className={`mb-6 rounded-xl bg-gradient-to-r ${selectedCompany.color} p-4 text-white`}>
+                  <div className={`mb-6 rounded-xl ${selectedCompany.color} p-4 text-white`}>
                     <h2 className="text-2xl font-bold">{selectedCompany.name} Leadership Principles</h2>
                     <p className="mt-1 opacity-90">{selectedCompany.principles.length} principles · {selectedCompany.topQuestions.length} top questions</p>
                   </div>
@@ -674,7 +674,7 @@ export default function BehavioralPage() {
                             <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-green-500" />
                             <span className="font-semibold text-gray-900 dark:text-white">{p.name}</span>
                           </div>
-                          {expandedPrinciple === p.name ? <ChevronUp className="h-4 w-4 shrink-0 text-gray-400" /> : <ChevronDown className="h-4 w-4 shrink-0 text-gray-400" />}
+                          {expandedPrinciple === p.name ? <ChevronUp className="h-4 w-4 shrink-0 text-gray-500" /> : <ChevronDown className="h-4 w-4 shrink-0 text-gray-500" />}
                         </div>
                         <AnimatePresence>
                           {expandedPrinciple === p.name && (
@@ -729,16 +729,16 @@ export default function BehavioralPage() {
               {/* Filters */}
               <div className="mb-6 space-y-3">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
                   <input
                     value={search} onChange={e => setSearch(e.target.value)} placeholder="Search questions..."
                     className="w-full rounded-lg border border-gray-200 bg-white py-3 pl-10 pr-4 text-sm shadow focus:outline-none focus:ring-2 focus:ring-purple-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
                   />
-                  {search && <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2"><X className="h-4 w-4 text-gray-400" /></button>}
+                  {search && <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2"><X className="h-4 w-4 text-gray-500" /></button>}
                 </div>
                 <PriorityFilter value={priorityFilter} onChange={setPriorityFilter} />
                 <div className="flex flex-wrap gap-2">
-                  <Filter className="h-4 w-4 mt-1.5 text-gray-400 shrink-0" />
+                  <Filter className="h-4 w-4 mt-1.5 text-gray-500 shrink-0" />
                   {DIFFICULTIES.map(d => (
                     <button key={d} onClick={() => setDifficultyFilter(d)}
                       className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${difficultyFilter === d ? 'bg-purple-600 text-white' : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-400'}`}>
@@ -775,7 +775,7 @@ export default function BehavioralPage() {
                           </h3>
                           <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">{q.question}</p>
                         </div>
-                        {expandedQuestion === q.id ? <ChevronUp className="h-5 w-5 shrink-0 text-gray-400" /> : <ChevronDown className="h-5 w-5 shrink-0 text-gray-400" />}
+                        {expandedQuestion === q.id ? <ChevronUp className="h-5 w-5 shrink-0 text-gray-500" /> : <ChevronDown className="h-5 w-5 shrink-0 text-gray-500" />}
                       </div>
                       <div className="mt-3 flex flex-wrap gap-1.5">
                         {q.categories.map(c => <span key={c} className="rounded-full bg-purple-50 px-2 py-0.5 text-xs text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">{c}</span>)}
@@ -824,7 +824,7 @@ export default function BehavioralPage() {
           {/* ── Practice Mode Tab ── */}
           {tab === 'practice' && (
             <motion.div key="practice" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <div className="mb-6 rounded-2xl bg-gradient-to-r from-purple-600 to-blue-600 p-6 text-white">
+              <div className="mb-6 rounded-2xl bg-purple-600 p-6 text-white">
                 <h2 className="text-xl font-bold">Practice Mode</h2>
                 <p className="mt-1 text-purple-100">Read each question. Think through your STAR answer. Then reveal to compare.</p>
               </div>

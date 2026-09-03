@@ -38,7 +38,7 @@ const scenarios: Scenario[] = [
     id: 'url',
     title: 'URL Shortener (Bit.ly)',
     icon: Globe,
-    color: 'from-blue-500 to-blue-600',
+    color: 'blue-500',
     difficulty: 'Medium',
     timeEstimate: '35-40 min',
     functionalReqs: ['Given a long URL, generate a short URL (6-7 chars)', 'Given a short URL, redirect to the original URL', 'Support custom short URLs (optional)', 'Track analytics: clicks, geolocation, device'],
@@ -67,7 +67,7 @@ const scenarios: Scenario[] = [
     id: 'twitter',
     title: 'Twitter / X Feed',
     icon: MessageSquare,
-    color: 'from-sky-500 to-sky-600',
+    color: 'sky-500',
     difficulty: 'Hard',
     timeEstimate: '45-50 min',
     functionalReqs: ['Post tweets (text, images, video)', 'Follow other users', 'View home timeline (tweets from followed users)', 'Like, retweet, reply', 'Search tweets and users'],
@@ -96,7 +96,7 @@ const scenarios: Scenario[] = [
     id: 'ratelimiter',
     title: 'Rate Limiter',
     icon: Shield,
-    color: 'from-red-500 to-red-600',
+    color: 'red-500',
     difficulty: 'Medium',
     timeEstimate: '30-35 min',
     functionalReqs: ['Limit requests per user/IP per time window', 'Multiple rules: 100 req/min for free tier, 1000 req/min for paid', 'Return 429 Too Many Requests when limit exceeded', 'Distributed — work across multiple servers'],
@@ -121,7 +121,7 @@ const scenarios: Scenario[] = [
     id: 'notifications',
     title: 'Notification System',
     icon: Zap,
-    color: 'from-yellow-500 to-orange-500',
+    color: 'yellow-500',
     difficulty: 'Medium',
     timeEstimate: '35-40 min',
     functionalReqs: ['Send notifications via email, SMS, push (iOS/Android)', 'Support immediate and scheduled notifications', 'User preference management (opt-out per channel/type)', 'Notification history and delivery tracking'],
@@ -298,7 +298,7 @@ export default function SystemDesignPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
@@ -312,7 +312,7 @@ export default function SystemDesignPage() {
         <div className="mb-8 flex gap-2 rounded-xl bg-white p-1 shadow dark:bg-gray-800">
           {([['scenarios', Server, 'Design Scenarios'], ['patterns', GitBranch, 'Architecture Patterns'], ['concepts', Database, 'Key Concepts']] as const).map(([t, Icon, label]) => (
             <button key={t} onClick={() => setMainTab(t)}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${mainTab === t ? 'bg-gradient-to-r from-green-500 to-teal-600 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}>
+              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${mainTab === t ? 'bg-green-500 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
@@ -329,7 +329,7 @@ export default function SystemDesignPage() {
                   return (
                     <motion.button key={s.id} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                       onClick={() => { setSelectedScenario(s); setExpandedStep('1') }}
-                      className={`rounded-xl p-4 text-left transition-all ${selectedScenario.id === s.id ? `bg-gradient-to-r ${s.color} text-white shadow-lg` : 'bg-white shadow hover:shadow-md dark:bg-gray-800'}`}>
+                      className={`rounded-xl p-4 text-left transition-all ${selectedScenario.id === s.id ? `${s.color} text-white shadow-lg` : 'bg-white shadow hover:shadow-md dark:bg-gray-800'}`}>
                       <Icon className="mb-2 h-6 w-6" />
                       <p className="font-bold text-sm">{s.title}</p>
                       <p className={`mt-1 text-xs ${selectedScenario.id === s.id ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'}`}>{s.difficulty} · {s.timeEstimate}</p>
@@ -342,7 +342,7 @@ export default function SystemDesignPage() {
                 <motion.div key={selectedScenario.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
                   id={`${selectedScenario.id}-scenario`}>
                   {/* Scenario header */}
-                  <div className={`mb-6 rounded-2xl bg-gradient-to-r ${selectedScenario.color} p-6 text-white`}>
+                  <div className={`mb-6 rounded-2xl ${selectedScenario.color} p-6 text-white`}>
                     <h2 className="text-2xl font-bold">{selectedScenario.title}</h2>
                     <p className="mt-1 text-white/80">{selectedScenario.difficulty} · {selectedScenario.timeEstimate}</p>
                   </div>
@@ -370,7 +370,7 @@ export default function SystemDesignPage() {
                         <button onClick={() => setExpandedStep(expandedStep === String(i + 1) ? null : String(i + 1))}
                           className="flex w-full items-center justify-between p-4 text-left">
                           <span className="font-semibold text-gray-900 dark:text-white">{step.title}</span>
-                          {expandedStep === String(i + 1) ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
+                          {expandedStep === String(i + 1) ? <ChevronUp className="h-4 w-4 text-gray-500" /> : <ChevronDown className="h-4 w-4 text-gray-500" />}
                         </button>
                         <AnimatePresence>
                           {expandedStep === String(i + 1) && (
@@ -430,7 +430,7 @@ export default function SystemDesignPage() {
                     const Icon = p.icon
                     return (
                       <button key={p.name} onClick={() => setSelectedPattern(p)}
-                        className={`flex w-full items-center gap-3 rounded-xl p-4 text-left transition-all ${selectedPattern.name === p.name ? 'bg-gradient-to-r from-green-500 to-teal-600 text-white shadow-lg' : 'bg-white shadow hover:shadow-md dark:bg-gray-800 text-gray-700 dark:text-gray-300'}`}
+                        className={`flex w-full items-center gap-3 rounded-xl p-4 text-left transition-all ${selectedPattern.name === p.name ? 'bg-green-500 text-white shadow-lg' : 'bg-white shadow hover:shadow-md dark:bg-gray-800 text-gray-700 dark:text-gray-300'}`}
                         id={getArchitecturePatternSearchId(p.name)}>
                         <Icon className="h-5 w-5 shrink-0" />
                         <div>
@@ -485,7 +485,7 @@ export default function SystemDesignPage() {
                   </p>
 
                   <div className="mb-6 grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.65fr)]">
-                    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 via-white to-blue-50 p-5 dark:border-slate-700 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950/30">
+                    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 p-5 dark:border-slate-700 dark:bg-slate-950/30">
                       <div
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.12),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(139,92,246,0.14),transparent_34%)] dark:bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.18),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(139,92,246,0.18),transparent_34%)]"
@@ -535,7 +535,7 @@ export default function SystemDesignPage() {
 
                           <div className="flex h-full min-h-28 items-center justify-center">
                             <div className="relative h-full w-10">
-                              <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-rose-400 to-transparent" />
+                              <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2" />
                               <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="rounded-full border border-rose-400/40 bg-rose-500/15 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-rose-200">
                                   split
@@ -659,7 +659,7 @@ export default function SystemDesignPage() {
                   
                   <div className="mb-6 grid gap-4 md:grid-cols-2">
                     {/* SQL */}
-                    <div className="rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 p-5 dark:from-blue-900/30 dark:to-blue-800/30">
+                    <div className="rounded-xl bg-blue-50 p-5/30/30">
                       <div className="mb-3 flex items-center gap-2">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-600 text-white shadow">
                           <span className="text-lg font-bold">SQL</span>
@@ -680,7 +680,7 @@ export default function SystemDesignPage() {
                     </div>
 
                     {/* NoSQL */}
-                    <div className="relative overflow-hidden rounded-xl border border-orange-200/70 bg-gradient-to-br from-orange-50 via-amber-50 to-orange-100 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] dark:border-orange-400/15 dark:from-orange-950/45 dark:via-slate-900 dark:to-orange-900/25">
+                    <div className="relative overflow-hidden rounded-xl border border-orange-200/70 bg-orange-50 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] dark:border-orange-400/15/45/25">
                       <div
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(251,146,60,0.22),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(251,191,36,0.12),transparent_38%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(251,146,60,0.2),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(251,191,36,0.08),transparent_38%)]"
@@ -824,12 +824,12 @@ export default function SystemDesignPage() {
                   {/* ACID Acronym Visualization */}
                   <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {[
-                      { letter: 'A', word: 'Atomicity', desc: 'All-or-nothing', icon: '⚛️', color: 'from-red-500 to-red-600' },
-                      { letter: 'C', word: 'Consistency', desc: 'Valid state → Valid state', icon: '✓', color: 'from-green-500 to-green-600' },
-                      { letter: 'I', word: 'Isolation', desc: 'Concurrent = Serial', icon: '🔒', color: 'from-blue-500 to-blue-600' },
-                      { letter: 'D', word: 'Durability', desc: 'Committed = Survives crash', icon: '💾', color: 'from-purple-500 to-purple-600' },
+                      { letter: 'A', word: 'Atomicity', desc: 'All-or-nothing', icon: '⚛️', color: 'red-500' },
+                      { letter: 'C', word: 'Consistency', desc: 'Valid state → Valid state', icon: '✓', color: 'green-500' },
+                      { letter: 'I', word: 'Isolation', desc: 'Concurrent = Serial', icon: '🔒', color: 'blue-500' },
+                      { letter: 'D', word: 'Durability', desc: 'Committed = Survives crash', icon: '💾', color: 'purple-500' },
                     ].map((item) => (
-                      <div key={item.letter} className={`rounded-xl bg-gradient-to-br ${item.color} p-4 text-white shadow-lg`}>
+                      <div key={item.letter} className={`rounded-xl ${item.color} p-4 text-white shadow-lg`}>
                         <div className="mb-2 flex items-center justify-between">
                           <span className="text-3xl">{item.icon}</span>
                           <span className="text-4xl font-black opacity-30">{item.letter}</span>
@@ -885,7 +885,7 @@ export default function SystemDesignPage() {
 
                   {/* ACID vs BASE */}
                   <div className="grid gap-4 md:grid-cols-2">
-                    <div className="rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 p-4 dark:from-pink-900/30 dark:to-pink-800/30">
+                    <div className="rounded-xl bg-pink-50 p-4/30/30">
                       <h4 className="mb-2 font-bold text-pink-800 dark:text-pink-300">ACID</h4>
                       <p className="text-sm text-gray-700 dark:text-gray-300">Strong consistency, transactions</p>
                       <div className="mt-2 flex flex-wrap gap-2">
@@ -894,7 +894,7 @@ export default function SystemDesignPage() {
                         <span className="rounded-full bg-pink-200 px-2 py-1 text-xs text-pink-800 dark:bg-pink-800 dark:text-pink-200">Booking</span>
                       </div>
                     </div>
-                    <div className="rounded-xl bg-gradient-to-br from-cyan-50 to-cyan-100 p-4 dark:from-cyan-900/30 dark:to-cyan-800/30">
+                    <div className="rounded-xl bg-cyan-50 p-4/30/30">
                       <h4 className="mb-2 font-bold text-cyan-800 dark:text-cyan-300">BASE</h4>
                       <p className="text-sm text-gray-700 dark:text-gray-300">Basically Available, Soft state, Eventually consistent</p>
                       <div className="mt-2 flex flex-wrap gap-2">
@@ -917,20 +917,20 @@ export default function SystemDesignPage() {
                   <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">Horizontal partitioning to split data across multiple databases</p>
                   
                   {/* Sharding Visualization */}
-                  <div className="mb-6 overflow-hidden rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 p-6 dark:from-gray-900 dark:to-gray-800">
+                  <div className="mb-6 overflow-hidden rounded-xl bg-gray-50 p-6 dark:bg-gray-900">
                     <div className="mb-4 text-center">
                       <div className="mx-auto inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-bold text-white">Original Database</div>
                     </div>
                     <div className="mb-4 flex justify-center">
-                      <svg className="h-16 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                      <svg className="h-16 w-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
                     </div>
                     <div className="grid gap-4 sm:grid-cols-3">
                       {[
-                        { shard: 'Shard 1', range: 'A-F', color: 'from-blue-500 to-blue-600' },
-                        { shard: 'Shard 2', range: 'G-M', color: 'from-green-500 to-green-600' },
-                        { shard: 'Shard 3', range: 'N-Z', color: 'from-purple-500 to-purple-600' },
+                        { shard: 'Shard 1', range: 'A-F', color: 'blue-500' },
+                        { shard: 'Shard 2', range: 'G-M', color: 'green-500' },
+                        { shard: 'Shard 3', range: 'N-Z', color: 'purple-500' },
                       ].map((s) => (
-                        <div key={s.shard} className={`rounded-xl bg-gradient-to-br ${s.color} p-4 text-center text-white shadow-lg`}>
+                        <div key={s.shard} className={`rounded-xl ${s.color} p-4 text-center text-white shadow-lg`}>
                           <div className="text-lg font-bold">{s.shard}</div>
                           <div className="text-sm opacity-90">Range: {s.range}</div>
                         </div>
@@ -966,12 +966,12 @@ export default function SystemDesignPage() {
                   
                   {/* Visual Diagram */}
                   <div className="mb-6 flex items-center justify-center gap-4">
-                    <div className="rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 px-6 py-4 text-center text-white shadow-lg">
+                    <div className="rounded-xl bg-indigo-500 px-6 py-4 text-center text-white shadow-lg">
                       <div className="text-2xl">🌐</div>
                       <div className="text-sm font-bold">Traffic</div>
                     </div>
                     <svg className="h-8 w-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-                    <div className="rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 px-6 py-4 text-center text-white shadow-lg">
+                    <div className="rounded-xl bg-purple-500 px-6 py-4 text-center text-white shadow-lg">
                       <div className="text-2xl">⚖️</div>
                       <div className="text-sm font-bold">Load Balancer</div>
                     </div>
@@ -1018,7 +1018,7 @@ export default function SystemDesignPage() {
                   
                   <div className="mb-6 grid gap-4 md:grid-cols-2">
                     {/* Message Queue */}
-                    <div className="rounded-xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100 p-5 dark:border-blue-800 dark:from-blue-900/30 dark:to-blue-800/30">
+                    <div className="rounded-xl border-2 border-blue-200 bg-blue-50 p-5 dark:border-blue-800/30/30">
                       <div className="mb-3 flex items-center gap-2">
                         <span className="text-2xl">📬</span>
                         <h4 className="text-lg font-bold text-blue-900 dark:text-blue-300">Message Queue</h4>
@@ -1036,7 +1036,7 @@ export default function SystemDesignPage() {
                     </div>
 
                     {/* Event Streaming */}
-                    <div className="rounded-xl border-2 border-orange-200 bg-gradient-to-br from-orange-50 to-orange-100 p-5 dark:border-orange-800 dark:from-orange-900/30 dark:to-orange-800/30">
+                    <div className="rounded-xl border-2 border-orange-200 bg-orange-50 p-5 dark:border-orange-800/30/30">
                       <div className="mb-3 flex items-center gap-2">
                         <span className="text-2xl">📊</span>
                         <h4 className="text-lg font-bold text-orange-900 dark:text-orange-300">Event Streaming</h4>
@@ -1090,11 +1090,11 @@ export default function SystemDesignPage() {
                   {/* Index Types Comparison */}
                   <div className="mb-6 grid gap-4 md:grid-cols-3">
                     {[
-                      { name: 'B-Tree', icon: '🌳', lookup: 'O(log n)', range: '✓ Yes', equality: '✓ Yes', color: 'from-teal-500 to-teal-600' },
-                      { name: 'Hash', icon: '🔑', lookup: 'O(1)', range: '✗ No', equality: '✓ Yes', color: 'from-blue-500 to-blue-600' },
-                      { name: 'LSM Tree', icon: '📝', lookup: 'O(log n)', range: '✓ Yes', equality: '✓ Yes', color: 'from-purple-500 to-purple-600' },
+                      { name: 'B-Tree', icon: '🌳', lookup: 'O(log n)', range: '✓ Yes', equality: '✓ Yes', color: 'teal-500' },
+                      { name: 'Hash', icon: '🔑', lookup: 'O(1)', range: '✗ No', equality: '✓ Yes', color: 'blue-500' },
+                      { name: 'LSM Tree', icon: '📝', lookup: 'O(log n)', range: '✓ Yes', equality: '✓ Yes', color: 'purple-500' },
                     ].map((idx) => (
-                      <div key={idx.name} className={`rounded-xl bg-gradient-to-br ${idx.color} p-5 text-white shadow-lg`}>
+                      <div key={idx.name} className={`rounded-xl ${idx.color} p-5 text-white shadow-lg`}>
                         <div className="mb-3 flex items-center justify-between">
                           <span className="text-3xl">{idx.icon}</span>
                           <span className="text-2xl font-black opacity-30">{idx.name[0]}</span>
@@ -1292,7 +1292,7 @@ export default function SystemDesignPage() {
                   
                   {/* B-Tree vs LSM Tree */}
                   <div className="mb-6 grid gap-4 md:grid-cols-2">
-                    <div className="rounded-xl border-2 border-cyan-200 bg-gradient-to-br from-cyan-50 to-cyan-100 p-5 dark:border-cyan-800 dark:from-cyan-900/30 dark:to-cyan-800/30">
+                    <div className="rounded-xl border-2 border-cyan-200 bg-cyan-50 p-5 dark:border-cyan-800/30/30">
                       <div className="mb-3 flex items-center gap-2">
                         <span className="text-2xl">🌳</span>
                         <h4 className="text-lg font-bold text-cyan-900 dark:text-cyan-300">B-Tree</h4>
@@ -1309,7 +1309,7 @@ export default function SystemDesignPage() {
                       </div>
                     </div>
 
-                    <div className="rounded-xl border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100 p-5 dark:border-purple-800 dark:from-purple-900/30 dark:to-purple-800/30">
+                    <div className="rounded-xl border-2 border-purple-200 bg-purple-50 p-5 dark:border-purple-800/30/30">
                       <div className="mb-3 flex items-center gap-2">
                         <span className="text-2xl">📝</span>
                         <h4 className="text-lg font-bold text-purple-900 dark:text-purple-300">LSM Tree</h4>

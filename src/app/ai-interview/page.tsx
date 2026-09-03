@@ -425,11 +425,11 @@ export default function AIInterviewPage() {
   }, [search, categoryFilter, levelFilter])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-1.5 text-sm font-medium text-white">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-violet-600 px-4 py-1.5 text-sm font-medium text-white">
             <Brain className="h-4 w-4" /> New: AI Interview Prep
           </div>
           <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">AI & Machine Learning Interview Prep</h1>
@@ -442,7 +442,7 @@ export default function AIInterviewPage() {
         <div className="mb-8 flex gap-2 rounded-xl bg-white p-1 shadow dark:bg-gray-800">
           {([['qa', Brain, 'AI Q&A Bank'], ['practice', Eye, 'Practice Mode'], ['concepts', Cpu, 'Key Concepts']] as const).map(([t, Icon, label]) => (
             <button key={t} onClick={() => setTab(t)}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${tab === t ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}>
+              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${tab === t ? 'bg-violet-600 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
@@ -454,10 +454,10 @@ export default function AIInterviewPage() {
             <motion.div key="qa" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
               <div className="mb-6 space-y-3">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
                   <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search AI questions..."
                     className="w-full rounded-lg border border-gray-200 bg-white py-3 pl-10 pr-4 text-sm shadow focus:outline-none focus:ring-2 focus:ring-violet-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white" />
-                  {search && <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2"><X className="h-4 w-4 text-gray-400" /></button>}
+                  {search && <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2"><X className="h-4 w-4 text-gray-500" /></button>}
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {levels.map(l => (
@@ -494,7 +494,7 @@ export default function AIInterviewPage() {
                             </div>
                             <h3 className="font-bold text-gray-900 dark:text-white">{q.question}</h3>
                           </div>
-                          {expandedQ === q.id ? <ChevronUp className="h-5 w-5 shrink-0 text-gray-400" /> : <ChevronDown className="h-5 w-5 shrink-0 text-gray-400" />}
+                          {expandedQ === q.id ? <ChevronUp className="h-5 w-5 shrink-0 text-gray-500" /> : <ChevronDown className="h-5 w-5 shrink-0 text-gray-500" />}
                         </div>
                       </div>
 
@@ -527,7 +527,7 @@ export default function AIInterviewPage() {
           {/* ── Practice Tab ── */}
           {tab === 'practice' && (
             <motion.div key="practice" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <div className="mb-6 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 p-6 text-white">
+              <div className="mb-6 rounded-2xl bg-violet-600 p-6 text-white">
                 <h2 className="text-xl font-bold">Practice Mode</h2>
                 <p className="mt-1 text-violet-100">Formulate your answer before revealing. AI interviewers probe depth — practice speaking for 2-3 minutes per question.</p>
               </div>

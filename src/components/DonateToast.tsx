@@ -29,7 +29,7 @@ export function DonateToast() {
           exit={{ opacity: 0, y: 60 }}
           className="fixed bottom-6 right-6 z-50 flex max-w-sm items-start gap-3 rounded-xl bg-white p-4 shadow-2xl dark:bg-gray-800"
         >
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-red-500">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pink-500">
             <Heart className="h-5 w-5 text-white" />
           </div>
           <div className="flex-1">
@@ -43,7 +43,7 @@ export function DonateToast() {
               href="https://buymeacoffee.com/max.sheikhizadeh"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-pink-500 to-red-500 px-3 py-1.5 text-xs font-medium text-white hover:brightness-110"
+              className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-pink-500 px-3 py-1.5 text-xs font-medium text-white hover:brightness-110"
             >
               <Heart className="h-3 w-3" />
               Buy Me a Coffee
@@ -51,7 +51,7 @@ export function DonateToast() {
           </div>
           <button
             onClick={dismiss}
-            className="shrink-0 rounded-lg p-1 text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+            className="shrink-0 rounded-lg p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <X className="h-4 w-4" />
           </button>

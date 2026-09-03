@@ -26,7 +26,7 @@ export function PriorityFilter({
           onClick={() => onChange(val)}
           className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
             value === val
-              ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow'
+              ? 'bg-purple-600 text-white shadow'
               : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-400'
           }`}
         >

@@ -38,7 +38,7 @@ export function Navigation() {
   }
 
   return (
-    <nav className="fixed top-0 z-50 w-full glass-effect border-b border-gray-200 dark:border-gray-700">
+    <nav className="fixed top-0 z-50 w-full bg-white/95 dark:bg-ink-900/95 border-b border-gray-200 dark:border-gray-700">
       <div className="mx-auto max-w-[1800px] px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo Section */}
@@ -79,7 +79,7 @@ export function Navigation() {
                 <circle cx="26" cy="21.5" r="1.8" fill="white" fillOpacity="0.9"/>
               </svg>
               <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-                EM <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Mastery</span>
+                EM <span className="bg-purple-600 bg-clip-text text-transparent">Mastery</span>
               </span>
             </Link>
 
@@ -97,7 +97,7 @@ export function Navigation() {
                       className={`
                         flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium whitespace-nowrap transition-all
                         ${isActive
-                          ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-md'
+                          ? 'bg-purple-600 text-white shadow-md'
                           : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
                         }
                       `}

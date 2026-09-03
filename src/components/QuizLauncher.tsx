@@ -24,7 +24,7 @@ export function QuizLauncher({
     <div className="mb-8 rounded-2xl bg-white p-5 shadow-lg dark:bg-gray-800">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-purple-600 to-blue-600">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-600">
             <CheckSquare className="h-5 w-5 text-white" />
           </div>
           <div>
@@ -50,7 +50,7 @@ export function QuizLauncher({
               )}
               <button
                 onClick={() => resetQuizResult(sectionId)}
-                className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700"
                 title="Reset quiz"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
@@ -60,7 +60,7 @@ export function QuizLauncher({
 
           <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Trigger asChild>
-              <button className="rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90">
+              <button className="rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white shadow hover:opacity-90">
                 {result ? 'Retake Quiz' : 'Start Quiz'}
               </button>
             </Dialog.Trigger>

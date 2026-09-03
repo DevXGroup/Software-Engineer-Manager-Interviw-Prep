@@ -22,7 +22,7 @@ const sections = [
     description: 'Master STAR format and company-specific leadership principles',
     icon: Brain,
     href: '/behavioral',
-    color: 'from-blue-500 to-purple-600',
+    color: 'blue-500',
     topics: ['Leadership Principles', 'STAR Format', 'Conflict Resolution', 'Team Building']
   },
   {
@@ -30,7 +30,7 @@ const sections = [
     description: 'Architecture patterns and distributed systems for managers',
     icon: Layers,
     href: '/system-design',
-    color: 'from-green-500 to-teal-600',
+    color: 'green-500',
     topics: ['Scalability', 'Microservices', 'Databases', 'Load Balancing']
   },
   {
@@ -38,7 +38,7 @@ const sections = [
     description: 'Interactive algorithm visualizer and DSA pattern library',
     icon: Code,
     href: '/coding',
-    color: 'from-orange-500 to-red-600',
+    color: 'orange-500',
     topics: ['Data Structures', 'Algorithms', 'Big O Reference', '10 Essential Patterns']
   },
   {
@@ -46,7 +46,7 @@ const sections = [
     description: 'Architecture decisions, tech debt, and engineering culture',
     icon: Target,
     href: '/technical-leadership',
-    color: 'from-purple-500 to-pink-600',
+    color: 'purple-500',
     topics: ['Tech Debt Framework', 'ADR Templates', 'Make vs Buy', 'On-Call']
   },
   {
@@ -54,7 +54,7 @@ const sections = [
     description: 'Hiring, performance reviews, 1:1s, and team growth',
     icon: Users,
     href: '/team-management',
-    color: 'from-cyan-500 to-blue-600',
+    color: 'cyan-500',
     topics: ['Hiring Rubrics', 'Performance Reviews', '1:1 Framework', 'Career Ladders']
   },
   {
@@ -62,14 +62,14 @@ const sections = [
     description: 'LLM systems, responsible AI, and AI product strategy',
     icon: TrendingUp,
     href: '/ai-interview',
-    color: 'from-violet-500 to-indigo-600',
+    color: 'violet-500',
     topics: ['RAG Systems', 'Responsible AI', 'AI Metrics', 'LLM Architecture']
   }
 ]
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Hero Section */}
       <section className="relative overflow-hidden px-4 pb-16 pt-24 sm:px-6 lg:px-8">
         <motion.div
@@ -99,7 +99,7 @@ export default function HomePage() {
                     initial={{ y: '105%', opacity: 0 }}
                     animate={{ y: '0%', opacity: 1 }}
                     transition={{ delay: 0.2 + i * 0.14, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                    className="hero-gradient-text inline-block"
+                    className="text-clay-700 dark:text-clay-400 inline-block"
                   >
                     {word}
                   </motion.span>
@@ -163,7 +163,7 @@ export default function HomePage() {
               <motion.button
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
-                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30 transition-shadow"
+                className="flex items-center gap-2 rounded-xl bg-purple-600 px-8 py-4 text-base font-semibold text-white shadow-lg shadow-purple-500/25 hover:shadow-xl hover:shadow-purple-500/30 transition-shadow"
               >
                 <CheckCircle className="h-5 w-5" />
                 Start Preparing
@@ -278,7 +278,7 @@ export default function HomePage() {
                   </div>
                   <div className="text-center">
                     <p className="text-sm font-bold text-gray-900 dark:text-white">{company.name}</p>
-                    <p className="text-xs text-gray-400 dark:text-gray-500">{company.rounds}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-500">{company.rounds}</p>
                   </div>
                 </motion.div>
               </Link>

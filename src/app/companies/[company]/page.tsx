@@ -22,7 +22,7 @@ type CompanyData = {
 const companyData: Record<string, CompanyData> = {
   amazon: {
     name: 'Amazon',
-    gradient: 'from-orange-500 to-orange-600',
+    gradient: 'orange-500',
     textColor: 'text-orange-600',
     tagline: 'Leadership Principles are the entire rubric. Every answer must map to an LP.',
     rounds: [
@@ -75,7 +75,7 @@ const companyData: Record<string, CompanyData> = {
 
   meta: {
     name: 'Meta',
-    gradient: 'from-blue-500 to-blue-700',
+    gradient: 'blue-500',
     textColor: 'text-blue-600',
     tagline: 'Impact at scale + speed of execution. Show boldness and cross-functional influence.',
     rounds: [
@@ -124,7 +124,7 @@ const companyData: Record<string, CompanyData> = {
 
   google: {
     name: 'Google',
-    gradient: 'from-green-500 to-green-600',
+    gradient: 'green-500',
     textColor: 'text-green-600',
     tagline: 'Data-driven, 10x thinking, psychological safety. Intellectual humility is valued.',
     rounds: [
@@ -175,7 +175,7 @@ const companyData: Record<string, CompanyData> = {
 
   apple: {
     name: 'Apple',
-    gradient: 'from-gray-600 to-gray-900',
+    gradient: 'gray-600',
     textColor: 'text-gray-700 dark:text-gray-300',
     tagline: 'Craft, taste, and deep collaboration. Apple is secretive and process-heavy.',
     rounds: [
@@ -224,7 +224,7 @@ const companyData: Record<string, CompanyData> = {
 
   netflix: {
     name: 'Netflix',
-    gradient: 'from-red-600 to-red-700',
+    gradient: 'red-600',
     textColor: 'text-red-600',
     tagline: '"Stunning colleagues in a dream team." High freedom, high responsibility, no brilliant jerks.',
     rounds: [
@@ -273,7 +273,7 @@ const companyData: Record<string, CompanyData> = {
 
   microsoft: {
     name: 'Microsoft',
-    gradient: 'from-blue-700 to-blue-900',
+    gradient: 'blue-700',
     textColor: 'text-blue-700',
     tagline: 'Growth mindset + inclusive leadership. The world\'s largest software company — impact at scale.',
     rounds: [
@@ -327,7 +327,7 @@ export default function CompanyPage({ params }: { params: { company: string } })
   if (!data) notFound()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
       <div className="mx-auto max-w-5xl">
         {/* Back */}
         <Link href="/" className="mb-6 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400">
@@ -336,7 +336,7 @@ export default function CompanyPage({ params }: { params: { company: string } })
 
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-          <div className={`rounded-2xl bg-gradient-to-r ${data.gradient} p-8 text-white shadow-2xl`}>
+          <div className={`rounded-2xl ${data.gradient} p-8 text-white shadow-2xl`}>
             <div className="flex items-center gap-4">
               <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur">
                 <Building className="h-8 w-8 text-white" />

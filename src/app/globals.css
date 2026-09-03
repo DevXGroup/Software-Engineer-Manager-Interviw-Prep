@@ -4,73 +4,152 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Evening Desk tokens. Light: cool paper, not cream. */
+    --background: 210 30% 98%;
+    --foreground: 220 9% 10%;
+    --surface: 0 0% 100%;
+    --surface-sunken: 210 20% 96%;
+    --border: 214 14% 90%;
+    --border-strong: 213 10% 80%;
+    --ink-muted: 213 4% 44%;
+    --accent: 24 56% 41%;
+    --accent-contrast: 0 0% 100%;
+    --ring: 24 56% 41%;
+
+    --z-dropdown: 30;
+    --z-sticky: 40;
+    --z-backdrop: 50;
+    --z-modal: 60;
+    --z-toast: 70;
+  }
+
+  .dark {
+    --background: 220 10% 10%;
+    --foreground: 213 14% 91%;
+    --surface: 220 9% 14%;
+    --surface-sunken: 220 10% 7%;
+    --border: 220 7% 22%;
+    --border-strong: 218 6% 32%;
+    --ink-muted: 213 5% 65%;
+    --accent: 24 55% 60%;
+    --accent-contrast: 220 10% 8%;
+    --ring: 24 55% 60%;
   }
 
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
-  
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-feature-settings: 'cv05' 1, 'ss01' 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: hsl(var(--accent) / 0.22);
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  code,
+  pre,
+  kbd {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+    font-variant-ligatures: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* One card vocabulary for the whole app. */
+  .surface-card {
+    @apply rounded-xl border border-ink-200 bg-white shadow-sm dark:border-ink-800 dark:bg-ink-900;
+  }
+
+  .surface-sunken {
+    @apply rounded-lg border border-ink-200 bg-ink-100/70 dark:border-ink-800 dark:bg-ink-950/60;
+  }
+
+  /* Reading column for long-form study material. */
+  .prose-column {
+    @apply max-w-prose text-base leading-relaxed text-ink-700 dark:text-ink-200;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-md border border-ink-200 bg-ink-50 px-2 py-0.5 text-xs font-medium text-ink-600 dark:border-ink-800 dark:bg-ink-950/60 dark:text-ink-300;
+  }
+
+  .btn-primary {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-clay-600 px-5 text-base font-semibold text-white transition-colors duration-150 ease-out hover:bg-clay-700 active:bg-clay-800 disabled:opacity-50 dark:bg-clay-500 dark:text-ink-950 dark:hover:bg-clay-400;
+  }
+
+  .btn-secondary {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-ink-300 bg-white px-5 text-base font-semibold text-ink-700 transition-colors duration-150 ease-out hover:border-ink-400 hover:bg-ink-50 dark:border-ink-700 dark:bg-ink-900 dark:text-ink-100 dark:hover:border-ink-600 dark:hover:bg-ink-800;
+  }
+
+  /* Section shell used by every topic page. */
+  .page-shell {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .rule {
+    @apply border-t border-ink-200 dark:border-ink-800;
   }
 }
 
 @layer utilities {
-  .animate-gradient {
-    background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
-  }
-
-  @keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  .glass-effect {
-    @apply bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg;
-  }
-
   .card-hover {
-    @apply transition-all duration-300 hover:scale-105 hover:shadow-2xl;
+    @apply transition-[border-color,box-shadow] duration-150 ease-out hover:border-ink-300 hover:shadow-md dark:hover:border-ink-700;
   }
 
-  /* Hero title animated gradient */
-  .hero-gradient-text {
-    background: linear-gradient(
-      90deg,
-      #9333ea 0%,
-      #7c3aed 20%,
-      #4f46e5 40%,
-      #2563eb 60%,
-      #06b6d4 80%,
-      #9333ea 100%
-    );
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    animation: heroGradientFlow 5s ease-in-out infinite;
-    padding-bottom: 0.2em;
-  }
-
-  @keyframes heroGradientFlow {
-    0%   { background-position: 0% center; }
-    50%  { background-position: 100% center; }
-    100% { background-position: 0% center; }
-  }
-
-  /* Hide scrollbar but keep functionality */
   .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
   .scrollbar-hide::-webkit-scrollbar {
-    display: none;  /* Chrome, Safari and Opera */
+    display: none;
+  }
+
+  .text-muted {
+    @apply text-ink-600 dark:text-ink-300;
   }
 }

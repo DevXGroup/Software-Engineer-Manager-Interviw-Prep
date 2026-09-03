@@ -9,31 +9,31 @@ const slides = [
     icon: Brain,
     title: 'Behavioral Mastery',
     description: '12 full STAR answers with company-specific leadership principles',
-    gradient: 'from-blue-500 to-purple-600',
+    gradient: 'blue-500',
   },
   {
     icon: Layers,
     title: 'System Design',
     description: 'Step-by-step architecture breakdowns for URL shorteners, feeds & more',
-    gradient: 'from-green-500 to-teal-600',
+    gradient: 'green-500',
   },
   {
     icon: Code,
     title: 'Coding Patterns',
     description: '10 essential DSA patterns with interactive algorithm visualizer',
-    gradient: 'from-orange-500 to-red-600',
+    gradient: 'orange-500',
   },
   {
     icon: Target,
     title: 'Technical Leadership',
     description: 'Tech debt frameworks, ADR templates, make-vs-buy, on-call best practices',
-    gradient: 'from-purple-500 to-pink-600',
+    gradient: 'purple-500',
   },
   {
     icon: CheckSquare,
     title: 'Knowledge Quizzes',
     description: 'Test your readiness with section quizzes and track your progress',
-    gradient: 'from-cyan-500 to-blue-600',
+    gradient: 'cyan-500',
   },
 ]
 
@@ -65,7 +65,7 @@ export function HeroCarousel() {
             className="flex items-center gap-5"
           >
             <div
-              className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-r ${slide.gradient}`}
+              className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl ${slide.gradient}`}
             >
               <Icon className="h-7 w-7 text-white" />
             </div>

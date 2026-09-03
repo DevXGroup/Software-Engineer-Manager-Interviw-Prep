@@ -37,7 +37,7 @@ export function ProgressTracker() {
             initial={{ width: 0 }}
             animate={{ width: `${totalProgress}%` }}
             transition={{ duration: 1, ease: 'easeOut' }}
-            className="h-full rounded-full bg-gradient-to-r from-purple-600 to-blue-600"
+            className="h-full rounded-full bg-purple-600"
           />
         </div>
       </div>
@@ -54,7 +54,7 @@ export function ProgressTracker() {
                 {percentage === 100 ? (
                   <CheckCircle className="h-5 w-5 text-green-500" />
                 ) : (
-                  <Circle className="h-5 w-5 text-gray-400" />
+                  <Circle className="h-5 w-5 text-gray-500" />
                 )}
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   {module.name}
@@ -77,7 +77,7 @@ export function ProgressTracker() {
                     initial={{ width: 0 }}
                     animate={{ width: `${percentage}%` }}
                     transition={{ duration: 0.5, delay: 0.1 }}
-                    className="h-full bg-gradient-to-r from-purple-600 to-blue-600"
+                    className="h-full bg-purple-600"
                   />
                 </div>
                 <span className="text-xs text-gray-500 dark:text-gray-400">

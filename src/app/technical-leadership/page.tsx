@@ -25,7 +25,7 @@ const TechDebt = () => {
           <button onClick={() => setExpanded(expanded === item.id ? null : item.id)}
             className="flex w-full items-center justify-between p-4 text-left">
             <span className="font-semibold text-gray-900 dark:text-white">{item.label}</span>
-            {expanded === item.id ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
+            {expanded === item.id ? <ChevronUp className="h-4 w-4 text-gray-500" /> : <ChevronDown className="h-4 w-4 text-gray-500" />}
           </button>
           <AnimatePresence>
             {expanded === item.id && (
@@ -106,8 +106,8 @@ const MakeBuy = () => {
           {criteria.map((row, i) => (
             <tr key={i} className="hover:bg-gray-50 dark:hover:bg-gray-700/30">
               <td className="py-3 text-gray-700 dark:text-gray-300">{row.criterion}</td>
-              <td className="py-3 text-center">{row.build === true ? <CheckCircle className="inline h-5 w-5 text-green-500" /> : row.build === false ? <span className="text-gray-300">—</span> : <span className="text-yellow-500 text-xs">depends</span>}</td>
-              <td className="py-3 text-center">{row.buy === true ? <CheckCircle className="inline h-5 w-5 text-blue-500" /> : row.buy === false ? <span className="text-gray-300">—</span> : <span className="text-yellow-500 text-xs">depends</span>}</td>
+              <td className="py-3 text-center">{row.build === true ? <CheckCircle className="inline h-5 w-5 text-green-500" /> : row.build === false ? <span className="text-gray-500">—</span> : <span className="text-yellow-500 text-xs">depends</span>}</td>
+              <td className="py-3 text-center">{row.buy === true ? <CheckCircle className="inline h-5 w-5 text-blue-500" /> : row.buy === false ? <span className="text-gray-500">—</span> : <span className="text-yellow-500 text-xs">depends</span>}</td>
               <td className="py-3 text-xs text-gray-500 dark:text-gray-400 hidden md:table-cell">{row.note}</td>
             </tr>
           ))}
@@ -223,7 +223,7 @@ export default function TechnicalLeadershipPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
@@ -237,7 +237,7 @@ export default function TechnicalLeadershipPage() {
         <div className="mb-8 flex flex-wrap gap-2">
           {tabs.map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => setActiveTab(id)}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${activeTab === id ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg' : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}>
+              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${activeTab === id ? 'bg-purple-600 text-white shadow-lg' : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
@@ -329,7 +329,7 @@ export default function TechnicalLeadershipPage() {
                     { step: '5', title: 'Communicate with Two Audiences', content: 'Technical roadmap has two versions: (1) For engineers: detailed, system-level, shows the "how." (2) For executives/stakeholders: outcome-focused, shows what becomes possible, links to product milestones. The mistake: showing engineers the exec version (too vague) or showing execs the technical version (too detailed, triggers micromanagement).' },
                   ].map(item => (
                     <div key={item.step} className="flex gap-4 rounded-xl bg-gray-50 p-4 dark:bg-gray-900">
-                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-sm font-bold text-white">{item.step}</div>
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-600 text-sm font-bold text-white">{item.step}</div>
                       <div>
                         <h4 className="font-bold text-gray-900 dark:text-white">{item.title}</h4>
                         <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{item.content}</p>
@@ -437,16 +437,16 @@ export default function TechnicalLeadershipPage() {
                 <p className="mb-6 text-gray-500 dark:text-gray-400">Scoping is how you convert ambiguous stakeholder asks into executable engineering plans. A well-scoped project has clear boundaries, realistic timelines, and explicit risk plans before a single line of code is written.</p>
                 <div className="space-y-4">
                   {[
-                    { step: '1', title: 'Understand Requirements', color: 'from-blue-600 to-blue-700', content: 'Gather and analyze stakeholder requirements. Identify the project\'s main objectives and expected outcomes. Clarify all ambiguities before proceeding. The most expensive scoping mistake is solving the wrong problem with precision.' },
-                    { step: '2', title: 'Define Project Boundaries', color: 'from-indigo-600 to-purple-600', content: 'Explicitly document what is in-scope and out-of-scope. Identify constraints (time, budget, team size). Set clear project milestones. A scope without explicit exclusions will expand — what you don\'t say no to becomes implied yes.' },
-                    { step: '3', title: 'Break Down the Work', color: 'from-purple-600 to-pink-600', content: 'Use Work Breakdown Structure (WBS). Identify major components and features. Estimate effort for each component. Never estimate the whole project as one number — break it into pieces. Estimation accuracy is inversely proportional to the size of the unit you\'re estimating.' },
-                    { step: '4', title: 'Assess Risks & Dependencies', color: 'from-orange-600 to-red-600', content: 'Identify potential risks and their likelihood/impact. Determine inter-team dependencies — these are your highest schedule risk. Plan contingencies for your top 3 risks before they happen, not after. "We didn\'t know about X" is not acceptable when X was knowable.' },
-                    { step: '5', title: 'Allocate Resources', color: 'from-yellow-600 to-orange-600', content: 'Determine required skills and headcount. Identify tools and external dependencies. Remember: adding engineers to a late project makes it later (Brooks\'s Law). Scope to fit the team, not the other way around.' },
-                    { step: '6', title: 'Create a Realistic Timeline', color: 'from-green-600 to-teal-600', content: 'Build a high-level schedule with major milestones. Add buffer: 20-30% for unexpected complexity. The schedule should survive first contact with reality. If your plan has no slack, you don\'t have a plan — you have a wish.' },
-                    { step: '7', title: 'Document & Communicate', color: 'from-teal-600 to-cyan-600', content: 'Create a formal scope document. Ensure all stakeholders agree in writing before execution begins. Establish a scope-change process — any change requires a documented trade-off (add scope = add time or remove scope elsewhere). Verbal agreements are not agreements.' },
+                    { step: '1', title: 'Understand Requirements', color: 'blue-600', content: 'Gather and analyze stakeholder requirements. Identify the project\'s main objectives and expected outcomes. Clarify all ambiguities before proceeding. The most expensive scoping mistake is solving the wrong problem with precision.' },
+                    { step: '2', title: 'Define Project Boundaries', color: 'indigo-600', content: 'Explicitly document what is in-scope and out-of-scope. Identify constraints (time, budget, team size). Set clear project milestones. A scope without explicit exclusions will expand — what you don\'t say no to becomes implied yes.' },
+                    { step: '3', title: 'Break Down the Work', color: 'purple-600', content: 'Use Work Breakdown Structure (WBS). Identify major components and features. Estimate effort for each component. Never estimate the whole project as one number — break it into pieces. Estimation accuracy is inversely proportional to the size of the unit you\'re estimating.' },
+                    { step: '4', title: 'Assess Risks & Dependencies', color: 'orange-600', content: 'Identify potential risks and their likelihood/impact. Determine inter-team dependencies — these are your highest schedule risk. Plan contingencies for your top 3 risks before they happen, not after. "We didn\'t know about X" is not acceptable when X was knowable.' },
+                    { step: '5', title: 'Allocate Resources', color: 'yellow-600', content: 'Determine required skills and headcount. Identify tools and external dependencies. Remember: adding engineers to a late project makes it later (Brooks\'s Law). Scope to fit the team, not the other way around.' },
+                    { step: '6', title: 'Create a Realistic Timeline', color: 'green-600', content: 'Build a high-level schedule with major milestones. Add buffer: 20-30% for unexpected complexity. The schedule should survive first contact with reality. If your plan has no slack, you don\'t have a plan — you have a wish.' },
+                    { step: '7', title: 'Document & Communicate', color: 'teal-600', content: 'Create a formal scope document. Ensure all stakeholders agree in writing before execution begins. Establish a scope-change process — any change requires a documented trade-off (add scope = add time or remove scope elsewhere). Verbal agreements are not agreements.' },
                   ].map(item => (
                     <div key={item.step} className="flex gap-4 rounded-xl bg-gray-50 p-4 dark:bg-gray-900">
-                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-r ${item.color} text-sm font-bold text-white`}>{item.step}</div>
+                      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${item.color} text-sm font-bold text-white`}>{item.step}</div>
                       <div>
                         <h4 className="font-bold text-gray-900 dark:text-white">{item.title}</h4>
                         <p className="mt-1 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{item.content}</p>

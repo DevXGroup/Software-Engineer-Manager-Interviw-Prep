@@ -54,7 +54,7 @@ export default function TeamManagementPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
@@ -67,7 +67,7 @@ export default function TeamManagementPage() {
         <div className="mb-8 flex flex-wrap gap-2">
           {tabs.map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => setTab(id)}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${tab === id ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg' : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}>
+              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${tab === id ? 'bg-cyan-500 text-white shadow-lg' : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
@@ -90,7 +90,7 @@ export default function TeamManagementPage() {
                     <div key={item.id} className="rounded-xl border border-gray-100 dark:border-gray-700">
                       <button onClick={() => toggle(item.id)} className="flex w-full items-center justify-between p-4 text-left">
                         <span className="font-semibold text-gray-900 dark:text-white">{item.title}</span>
-                        {expanded === item.id ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
+                        {expanded === item.id ? <ChevronUp className="h-4 w-4 text-gray-500" /> : <ChevronDown className="h-4 w-4 text-gray-500" />}
                       </button>
                       <AnimatePresence>
                         {expanded === item.id && (
@@ -137,7 +137,7 @@ export default function TeamManagementPage() {
                     <div key={item.id} className="rounded-xl border border-gray-100 dark:border-gray-700">
                       <button onClick={() => toggle(item.id)} className="flex w-full items-center justify-between p-4 text-left">
                         <span className="font-semibold text-gray-900 dark:text-white">{item.title}</span>
-                        {expanded === item.id ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
+                        {expanded === item.id ? <ChevronUp className="h-4 w-4 text-gray-500" /> : <ChevronDown className="h-4 w-4 text-gray-500" />}
                       </button>
                       <AnimatePresence>
                         {expanded === item.id && (
@@ -210,7 +210,7 @@ export default function TeamManagementPage() {
               <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
                 <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Career Development</h2>
                 <div className="mb-6 grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-xl bg-gradient-to-br from-blue-50 to-purple-50 p-5 dark:from-blue-900/20 dark:to-purple-900/20">
+                  <div className="rounded-xl bg-blue-50 p-5/20/20">
                     <h3 className="mb-3 font-bold text-gray-900 dark:text-white">Engineering Career Ladder (Typical)</h3>
                     <div className="space-y-3">
                       {[
@@ -334,21 +334,21 @@ export default function TeamManagementPage() {
             {tab === 'culture' && (
               <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
                 <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Building Team Culture</h2>
-                <div className="mb-6 rounded-xl bg-gradient-to-r from-cyan-50 to-blue-50 p-5 dark:from-cyan-900/20 dark:to-blue-900/20">
+                <div className="mb-6 rounded-xl bg-cyan-50 p-5/20/20">
                   <p className="text-sm text-gray-700 dark:text-gray-300 italic">"Culture is what happens when you\'re not in the room." — The decisions your team makes, the conversations they have, and how they treat each other when no manager is watching — that is your real culture. Everything else is aspirational.</p>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {[
-                    { title: 'Psychological Safety', desc: 'The belief that one will not be punished or humiliated for speaking up. The #1 factor in high-performing teams (Google Project Aristotle). Build it by: modeling vulnerability yourself, thanking people who raise problems, never shooting the messenger, and addressing dismissive behavior immediately.', color: 'from-blue-500 to-blue-600' },
-                    { title: 'Blameless Post-Mortems', desc: 'When things go wrong, the question is "what allowed this to happen?" not "who caused this?" Blame creates cover-up culture; systems thinking creates learning culture. Engineers who feel safe surfacing problems early prevent far more damage than those who hide them.', color: 'from-green-500 to-green-600' },
-                    { title: 'Team Rituals That Work', desc: 'Sprint retrospectives (what worked, what to improve — do not skip when busy), weekly wins channel (celebrate small and large wins publicly), team lunch or async social time, quarterly team offsites for alignment and connection. Rituals create identity. Teams with shared rituals have lower attrition.', color: 'from-purple-500 to-purple-600' },
-                    { title: 'Inclusion & Belonging', desc: 'Inclusion is active, not passive. In meetings: solicit quieter voices explicitly, never let dominant voices steamroll. In code review: never dismiss ideas without engaging with the substance. Measure it: "Do you feel your ideas are heard and valued?" in quarterly team pulse. Inclusion drives innovation — diverse ideas need inclusive environments to surface.', color: 'from-orange-500 to-orange-600' },
-                    { title: 'Anti-patterns to Eliminate', desc: '"Brilliant jerks" — high performers who damage team culture. The research is clear: the performance gain from a brilliant jerk is more than offset by the attrition, silence, and reduced collaboration they cause. Address toxic behavior regardless of technical output. Set the expectation: "Being difficult to work with is a performance issue at this team."', color: 'from-red-500 to-red-600' },
-                    { title: 'Measuring Culture Health', desc: 'Team pulse surveys (quarterly, anonymous, 5-7 questions): psychological safety, manager effectiveness, clarity of goals, growth opportunity, work-life sustainability. Track trends not just snapshot. An eNPS (employee Net Promoter Score) below 20 is a warning; below 0 is a crisis. Act on the results publicly — if you ask and don\'t respond, trust drops more than if you had not asked.', color: 'from-indigo-500 to-indigo-600' },
+                    { title: 'Psychological Safety', desc: 'The belief that one will not be punished or humiliated for speaking up. The #1 factor in high-performing teams (Google Project Aristotle). Build it by: modeling vulnerability yourself, thanking people who raise problems, never shooting the messenger, and addressing dismissive behavior immediately.', color: 'blue-500' },
+                    { title: 'Blameless Post-Mortems', desc: 'When things go wrong, the question is "what allowed this to happen?" not "who caused this?" Blame creates cover-up culture; systems thinking creates learning culture. Engineers who feel safe surfacing problems early prevent far more damage than those who hide them.', color: 'green-500' },
+                    { title: 'Team Rituals That Work', desc: 'Sprint retrospectives (what worked, what to improve — do not skip when busy), weekly wins channel (celebrate small and large wins publicly), team lunch or async social time, quarterly team offsites for alignment and connection. Rituals create identity. Teams with shared rituals have lower attrition.', color: 'purple-500' },
+                    { title: 'Inclusion & Belonging', desc: 'Inclusion is active, not passive. In meetings: solicit quieter voices explicitly, never let dominant voices steamroll. In code review: never dismiss ideas without engaging with the substance. Measure it: "Do you feel your ideas are heard and valued?" in quarterly team pulse. Inclusion drives innovation — diverse ideas need inclusive environments to surface.', color: 'orange-500' },
+                    { title: 'Anti-patterns to Eliminate', desc: '"Brilliant jerks" — high performers who damage team culture. The research is clear: the performance gain from a brilliant jerk is more than offset by the attrition, silence, and reduced collaboration they cause. Address toxic behavior regardless of technical output. Set the expectation: "Being difficult to work with is a performance issue at this team."', color: 'red-500' },
+                    { title: 'Measuring Culture Health', desc: 'Team pulse surveys (quarterly, anonymous, 5-7 questions): psychological safety, manager effectiveness, clarity of goals, growth opportunity, work-life sustainability. Track trends not just snapshot. An eNPS (employee Net Promoter Score) below 20 is a warning; below 0 is a crisis. Act on the results publicly — if you ask and don\'t respond, trust drops more than if you had not asked.', color: 'indigo-500' },
                   ].map((item, i) => (
                     <motion.div key={item.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
                       className="rounded-xl overflow-hidden shadow">
-                      <div className={`bg-gradient-to-r ${item.color} px-4 py-2.5`}>
+                      <div className={`${item.color} px-4 py-2.5`}>
                         <p className="font-bold text-white text-sm">{item.title}</p>
                       </div>
                       <div className="bg-gray-50 dark:bg-gray-900 p-4">
@@ -475,14 +475,14 @@ export default function TeamManagementPage() {
                   <h3 className="mb-4 font-bold text-gray-900 dark:text-white">{"Aristotle's Rhetoric for Engineering Leaders"}</h3>
                   <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {[
-                      { label: 'Ethos', subtitle: 'Credibility', color: 'from-blue-500 to-blue-600', content: 'Establish credibility through your actions and demonstrated commitment to your team\'s welfare. Engineers follow leaders whose technical judgment they trust. Show up for code reviews, make sound architectural decisions, and follow through on commitments. Credibility is earned through consistency — one broken commitment erodes months of trust.' },
-                      { label: 'Logos', subtitle: 'Logic & Data', color: 'from-green-500 to-emerald-600', content: 'Use data and logical arguments to support decisions. "The p99 latency is 1.2s, our SLO is 500ms, this is why we need to address the database indexing this sprint" beats "the system feels slow." Quantify the cost of inaction. Show trade-offs with numbers. Engineers respond to data-backed reasoning.' },
-                      { label: 'Pathos', subtitle: 'Emotional Connection', color: 'from-purple-500 to-purple-600', content: 'Use storytelling to connect emotionally and motivate. Tell the story of the customer being helped, the engineer who grew through a challenging project, the team\'s impact on the product. People work harder for meaning than metrics. Pair the data (Logos) with the human story (Pathos) for maximum impact.' },
-                      { label: 'Metaphor', subtitle: 'Clarity', color: 'from-orange-500 to-red-500', content: 'Use analogies to make complex technical concepts accessible and memorable. "Technical debt is like credit card debt — sometimes it\'s worth taking on, but the interest compounds." Good metaphors stick in stakeholder minds long after the meeting ends. Design metaphors that will be repeated in the conversations you\'re not in.' },
-                      { label: 'Brevity', subtitle: 'Conciseness', color: 'from-teal-500 to-cyan-600', content: 'Convey information concisely, especially at the start. Lead with the bottom line — executives hear dozens of updates daily. BLUF (Bottom Line Up Front): state your conclusion first, then your evidence. A status update that starts with context before the conclusion loses the audience before the point.' },
+                      { label: 'Ethos', subtitle: 'Credibility', color: 'blue-500', content: 'Establish credibility through your actions and demonstrated commitment to your team\'s welfare. Engineers follow leaders whose technical judgment they trust. Show up for code reviews, make sound architectural decisions, and follow through on commitments. Credibility is earned through consistency — one broken commitment erodes months of trust.' },
+                      { label: 'Logos', subtitle: 'Logic & Data', color: 'green-500', content: 'Use data and logical arguments to support decisions. "The p99 latency is 1.2s, our SLO is 500ms, this is why we need to address the database indexing this sprint" beats "the system feels slow." Quantify the cost of inaction. Show trade-offs with numbers. Engineers respond to data-backed reasoning.' },
+                      { label: 'Pathos', subtitle: 'Emotional Connection', color: 'purple-500', content: 'Use storytelling to connect emotionally and motivate. Tell the story of the customer being helped, the engineer who grew through a challenging project, the team\'s impact on the product. People work harder for meaning than metrics. Pair the data (Logos) with the human story (Pathos) for maximum impact.' },
+                      { label: 'Metaphor', subtitle: 'Clarity', color: 'orange-500', content: 'Use analogies to make complex technical concepts accessible and memorable. "Technical debt is like credit card debt — sometimes it\'s worth taking on, but the interest compounds." Good metaphors stick in stakeholder minds long after the meeting ends. Design metaphors that will be repeated in the conversations you\'re not in.' },
+                      { label: 'Brevity', subtitle: 'Conciseness', color: 'teal-500', content: 'Convey information concisely, especially at the start. Lead with the bottom line — executives hear dozens of updates daily. BLUF (Bottom Line Up Front): state your conclusion first, then your evidence. A status update that starts with context before the conclusion loses the audience before the point.' },
                     ].map((item, i) => (
                       <div key={i} className="rounded-xl overflow-hidden shadow">
-                        <div className={`bg-gradient-to-r ${item.color} px-4 py-2.5`}>
+                        <div className={`${item.color} px-4 py-2.5`}>
                           <p className="font-bold text-white">{item.label}</p>
                           <p className="text-xs text-white/80">{item.subtitle}</p>
                         </div>

@@ -246,7 +246,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
             <div className="flex max-h-[calc(100dvh-6rem)] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800 sm:max-h-[calc(100dvh-8rem)]">
               {/* Search Input */}
               <div className="flex items-center gap-3 border-b border-gray-200 p-4 dark:border-gray-700">
-                <Search className="h-5 w-5 shrink-0 text-gray-400" />
+                <Search className="h-5 w-5 shrink-0 text-gray-500" />
                 <input
                   ref={inputRef}
                   type="text"
@@ -256,12 +256,12 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   className="min-w-0 flex-1 bg-transparent text-base text-gray-900 placeholder-gray-400 focus:outline-none dark:text-white sm:text-lg"
                 />
                 <div className="hidden items-center gap-1 rounded-lg bg-gray-100 px-2 py-1 dark:bg-gray-700 sm:flex">
-                  <Command className="h-3.5 w-3.5 text-gray-400" />
-                  <span className="text-xs text-gray-400">K</span>
+                  <Command className="h-3.5 w-3.5 text-gray-500" />
+                  <span className="text-xs text-gray-500">K</span>
                 </div>
                 <button
                   onClick={onClose}
-                  className="shrink-0 rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700"
+                  className="shrink-0 rounded-lg p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -302,21 +302,21 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 {filteredResults.length === 0 ? (
                   query.trim() ? (
                     <div className="py-12 text-center">
-                      <Search className="mx-auto h-12 w-12 text-gray-300 dark:text-gray-600" />
+                      <Search className="mx-auto h-12 w-12 text-gray-500 dark:text-gray-600" />
                       <p className="mt-4 text-gray-500 dark:text-gray-400">
                         No results found for &quot;{query}&quot;
                       </p>
-                      <p className="mt-2 text-sm text-gray-400 dark:text-gray-500">
+                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-500">
                         Try different keywords or browse all topics
                       </p>
                     </div>
                   ) : (
                     <div className="py-12 text-center">
-                      <BookOpen className="mx-auto h-12 w-12 text-gray-300 dark:text-gray-600" />
+                      <BookOpen className="mx-auto h-12 w-12 text-gray-500 dark:text-gray-600" />
                       <p className="mt-4 text-gray-500 dark:text-gray-400">
                         Start typing to search
                       </p>
-                      <p className="mt-2 text-sm text-gray-400 dark:text-gray-500">
+                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-500">
                         Find topics, patterns, questions, and more
                       </p>
                     </div>
@@ -370,7 +370,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               </div>
                             )}
                           </div>
-                          <ChevronRight className="mt-0.5 h-4 w-4 text-gray-400" />
+                          <ChevronRight className="mt-0.5 h-4 w-4 text-gray-500" />
                         </button>
                       )
                     })}

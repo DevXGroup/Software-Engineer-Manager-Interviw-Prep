@@ -104,7 +104,7 @@ export function Quiz({
 
         <button
           onClick={() => setState('in-progress')}
-          className="w-full rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 py-3 font-semibold text-white shadow-lg hover:opacity-90"
+          className="w-full rounded-xl bg-purple-600 py-3 font-semibold text-white shadow-lg hover:opacity-90"
         >
           Start Quiz ({filtered.length} questions)
         </button>
@@ -154,7 +154,7 @@ export function Quiz({
           </button>
           <button
             onClick={onClose}
-            className="flex-1 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 py-3 font-medium text-white hover:opacity-90"
+            className="flex-1 rounded-xl bg-purple-600 py-3 font-medium text-white hover:opacity-90"
           >
             Done
           </button>
@@ -176,7 +176,7 @@ export function Quiz({
         </div>
         <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
           <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-purple-600 to-blue-600"
+            className="h-full rounded-full bg-purple-600"
             animate={{ width: `${((currentIndex + 1) / filtered.length) * 100}%` }}
           />
         </div>
@@ -263,14 +263,14 @@ export function Quiz({
           <button
             onClick={handleConfirm}
             disabled={selected === null}
-            className="w-full rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 py-3 font-medium text-white shadow disabled:opacity-50"
+            className="w-full rounded-xl bg-purple-600 py-3 font-medium text-white shadow disabled:opacity-50"
           >
             Confirm Answer
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="w-full rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 py-3 font-medium text-white shadow"
+            className="w-full rounded-xl bg-purple-600 py-3 font-medium text-white shadow"
           >
             {currentIndex < filtered.length - 1 ? 'Next Question' : 'See Results'}
           </button>

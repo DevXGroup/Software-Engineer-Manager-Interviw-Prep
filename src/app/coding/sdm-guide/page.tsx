@@ -8,7 +8,7 @@ const sections = [
   {
     icon: Target,
     title: 'Why FAANG Asks SDMs to Code',
-    color: 'from-purple-500 to-blue-600',
+    color: 'purple-500',
     content: [
       {
         heading: 'Technical credibility, not IC replication',
@@ -23,7 +23,7 @@ const sections = [
   {
     icon: BarChart3,
     title: 'What Level of Coding Is Expected',
-    color: 'from-green-500 to-teal-600',
+    color: 'green-500',
     content: [
       {
         heading: 'The realistic bar',
@@ -38,7 +38,7 @@ const sections = [
   {
     icon: Clock,
     title: 'Interview Format (45 Minutes)',
-    color: 'from-orange-500 to-red-600',
+    color: 'orange-500',
     content: [
       {
         heading: 'The typical 45-minute breakdown',
@@ -53,7 +53,7 @@ const sections = [
   {
     icon: Code,
     title: 'Top 5 SDM-Specific Patterns',
-    color: 'from-blue-500 to-indigo-600',
+    color: 'blue-500',
     content: [
       {
         heading: '1. HashMap/Set — O(1) lookup everywhere',
@@ -80,7 +80,7 @@ const sections = [
   {
     icon: MessageSquare,
     title: 'Language to Use When Stuck',
-    color: 'from-pink-500 to-red-600',
+    color: 'pink-500',
     content: [
       {
         heading: 'Recovering when you\'re stuck',
@@ -99,7 +99,7 @@ const sections = [
   {
     icon: CheckCircle,
     title: 'SDM Evaluation Rubric',
-    color: 'from-emerald-500 to-teal-600',
+    color: 'emerald-500',
     content: [
       {
         heading: 'Problem Understanding (20%)',
@@ -123,7 +123,7 @@ const sections = [
 
 export default function SDMGuidePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
       <div className="mx-auto max-w-4xl">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
@@ -149,7 +149,7 @@ export default function SDMGuidePage() {
             <div key={s.label} className="rounded-2xl bg-white p-5 text-center shadow dark:bg-gray-800">
               <p className="text-2xl font-bold text-gray-900 dark:text-white">{s.value}</p>
               <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{s.label}</p>
-              <p className="text-xs text-gray-400">{s.note}</p>
+              <p className="text-xs text-gray-500">{s.note}</p>
             </div>
           ))}
         </motion.div>
@@ -161,7 +161,7 @@ export default function SDMGuidePage() {
             return (
               <motion.div key={section.title} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.08 }}
                 className="overflow-hidden rounded-2xl bg-white shadow-lg dark:bg-gray-800">
-                <div className={`flex items-center gap-3 bg-gradient-to-r ${section.color} p-5 text-white`}>
+                <div className={`flex items-center gap-3 ${section.color} p-5 text-white`}>
                   <Icon className="h-6 w-6" />
                   <h2 className="text-lg font-bold">{section.title}</h2>
                 </div>
@@ -182,14 +182,14 @@ export default function SDMGuidePage() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
           className="mt-10 grid gap-4 sm:grid-cols-2">
           <Link href="/coding/challenges">
-            <div className="cursor-pointer rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 p-6 text-white shadow-xl hover:opacity-90">
+            <div className="cursor-pointer rounded-2xl bg-orange-500 p-6 text-white shadow-xl hover:opacity-90">
               <Code className="mb-3 h-8 w-8" />
               <h3 className="text-lg font-bold">Practice Coding Challenges</h3>
               <p className="mt-1 text-orange-100 text-sm">16 curated problems with full TypeScript solutions</p>
             </div>
           </Link>
           <Link href="/coding">
-            <div className="cursor-pointer rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white shadow-xl hover:opacity-90">
+            <div className="cursor-pointer rounded-2xl bg-blue-500 p-6 text-white shadow-xl hover:opacity-90">
               <AlertTriangle className="mb-3 h-8 w-8" />
               <h3 className="text-lg font-bold">DSA Patterns Library</h3>
               <p className="mt-1 text-blue-100 text-sm">10 essential patterns with code templates</p>

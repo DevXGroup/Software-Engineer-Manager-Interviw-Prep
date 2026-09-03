@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <footer className="relative">
       {/* Developer Attribution Section - Premium Banner */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-900 dark:via-indigo-900 dark:to-purple-900">
+      <div className="relative overflow-hidden bg-blue-600 dark:bg-blue-900">
         {/* Animated background pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-white blur-3xl"></div>
@@ -71,7 +71,7 @@ export function Footer() {
               <span className="flex items-center justify-center gap-1.5">
                 Made with <Heart className="h-4 w-4 fill-red-500 text-red-500" /> for engineers
               </span>
-              <span className="hidden text-gray-300 dark:text-gray-700 sm:block">•</span>
+              <span className="hidden text-gray-500 dark:text-gray-700 sm:block">•</span>
               <span className="hidden sm:inline">Free forever, open source</span>
             </div>
 
@@ -81,7 +81,7 @@ export function Footer() {
                 href="https://buymeacoffee.com/max.sheikhizadeh"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg hover:scale-105"
+                className="group flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:shadow-lg hover:scale-105"
               >
                 <Coffee className="h-4 w-4" />
                 <span>Support this project</span>

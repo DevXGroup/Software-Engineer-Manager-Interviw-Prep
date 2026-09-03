@@ -991,7 +991,7 @@ export default function CodingChallengesPage() {
     setShowSolution(prev => ({ ...prev, [id]: !prev[id] }))
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4 py-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
       <div className="mx-auto max-w-5xl">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
@@ -1000,7 +1000,7 @@ export default function CodingChallengesPage() {
           </Link>
           <div className="text-center">
             <div className="mb-4 flex justify-center">
-              <span className="rounded-2xl bg-gradient-to-r from-orange-500 to-red-600 p-3 shadow-lg">
+              <span className="rounded-2xl bg-orange-500 p-3 shadow-lg">
                 <Trophy className="h-8 w-8 text-white" />
               </span>
             </div>
@@ -1042,7 +1042,7 @@ export default function CodingChallengesPage() {
             ))}
           </div>
           <div className="flex flex-wrap gap-2">
-            <Tag className="h-4 w-4 mt-1 text-gray-400 shrink-0" />
+            <Tag className="h-4 w-4 mt-1 text-gray-500 shrink-0" />
             {['All', ...ALL_PATTERNS].map(p => (
               <button key={p} onClick={() => setPattern(p)}
                 className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${
@@ -1092,8 +1092,8 @@ export default function CodingChallengesPage() {
                     <p className="mt-1 line-clamp-2 text-sm text-gray-500 dark:text-gray-400">{challenge.description}</p>
                   </div>
                   {expanded === challenge.id
-                    ? <ChevronUp className="h-5 w-5 shrink-0 text-gray-400" />
-                    : <ChevronDown className="h-5 w-5 shrink-0 text-gray-400" />
+                    ? <ChevronUp className="h-5 w-5 shrink-0 text-gray-500" />
+                    : <ChevronDown className="h-5 w-5 shrink-0 text-gray-500" />
                   }
                 </div>
               </button>
@@ -1205,7 +1205,7 @@ export default function CodingChallengesPage() {
                           </h4>
                           <button
                             onClick={() => toggleSolution(challenge.id)}
-                            className="rounded-lg bg-gradient-to-r from-orange-500 to-red-600 px-4 py-2 text-xs font-medium text-white hover:opacity-90"
+                            className="rounded-lg bg-orange-500 px-4 py-2 text-xs font-medium text-white hover:opacity-90"
                           >
                             {showSolution[challenge.id] ? 'Hide Solution' : 'Reveal Solution'}
                           </button>
