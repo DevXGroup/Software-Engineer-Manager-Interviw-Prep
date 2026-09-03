@@ -29,7 +29,7 @@ type Question = {
 const companies: Company[] = [
   {
     name: 'Amazon',
-    color: 'orange-500',
+    color: 'bg-orange-700',
     textColor: 'text-orange-600',
     principles: [
       { name: 'Customer Obsession', description: 'Leaders start with the customer and work backwards. They work vigorously to earn and keep customer trust.', example: 'Reversed a product decision because NPS dropped 12 points' },
@@ -63,7 +63,7 @@ const companies: Company[] = [
   },
   {
     name: 'Meta',
-    color: 'blue-500',
+    color: 'bg-blue-700',
     textColor: 'text-blue-600',
     principles: [
       { name: 'Move Fast', description: 'Speed enables learning. Move fast and iterate rather than waiting for perfection.', example: 'Launched beta in 3 weeks, learned more than 3 months of planning' },
@@ -87,7 +87,7 @@ const companies: Company[] = [
   },
   {
     name: 'Google',
-    color: 'green-500',
+    color: 'bg-green-700',
     textColor: 'text-green-600',
     principles: [
       { name: 'Focus on the User', description: 'All else will follow. Great user experiences drive long-term success.', example: 'Redesigned API based on developer feedback, reduced friction 60%' },
@@ -111,7 +111,7 @@ const companies: Company[] = [
   },
   {
     name: 'Apple',
-    color: 'gray-600',
+    color: 'bg-gray-700',
     textColor: 'text-gray-700 dark:text-gray-300',
     principles: [
       { name: 'Radical Simplicity', description: "The hardest thing is making things simple. Cut everything that doesn't belong.", example: 'Reduced feature set by 50% to deliver a product that just works' },
@@ -135,7 +135,7 @@ const companies: Company[] = [
   },
   {
     name: 'Netflix',
-    color: 'red-600',
+    color: 'bg-red-700',
     textColor: 'text-red-600',
     principles: [
       { name: 'Judgment', description: 'You make wise decisions despite ambiguity. You identify root causes, not symptoms.', example: 'Identified pattern in data that predicted churn 30 days in advance' },
@@ -162,7 +162,7 @@ const companies: Company[] = [
   },
   {
     name: 'Microsoft',
-    color: 'blue-700',
+    color: 'bg-blue-700',
     textColor: 'text-blue-700',
     principles: [
       { name: 'Growth Mindset', description: 'Embrace challenges, learn from failure, and believe abilities can be developed.', example: 'Treated product failure as research, pivoted to successful adjacent market' },
@@ -627,12 +627,12 @@ export default function BehavioralPage() {
         <QuizLauncher sectionId="behavioral" title="Behavioral" questions={quizQuestions} />
 
         {/* Tabs */}
-        <div className="mb-8 flex gap-1 rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900">
+        <div className="mb-8 flex gap-1 overflow-x-auto scrollbar-hide rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900">
           {([['principles', BookOpen, 'Company Principles'], ['questions', Star, 'STAR Questions'], ['practice', Brain, 'Practice Mode']] as const).map(([t, Icon, label]) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`flex min-h-[44px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium transition-colors duration-150 ease-out ${tab === t ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}
+              className={`flex min-h-[44px] flex-none shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium sm:flex-1 transition-colors duration-150 ease-out ${tab === t ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}
             >
               <Icon className="h-4 w-4" />
               {label}
@@ -740,14 +740,14 @@ export default function BehavioralPage() {
                   <Filter className="h-4 w-4 mt-1.5 text-gray-500 shrink-0" />
                   {DIFFICULTIES.map(d => (
                     <button key={d} onClick={() => setDifficultyFilter(d)}
-                      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 ease-out ${difficultyFilter === d ? 'bg-purple-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
+                      className={`inline-flex min-h-[44px] items-center rounded-lg px-3 text-xs font-medium transition-colors duration-150 ease-out ${difficultyFilter === d ? 'bg-purple-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
                       {d}
                     </button>
                   ))}
                   <span className="h-4 w-px bg-gray-200 dark:bg-gray-700 mt-1.5" />
                   {COMPANY_NAMES.map(c => (
                     <button key={c} onClick={() => setCompanyFilter(c)}
-                      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 ease-out ${companyFilter === c ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
+                      className={`inline-flex min-h-[44px] items-center rounded-lg px-3 text-xs font-medium transition-colors duration-150 ease-out ${companyFilter === c ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
                       {c}
                     </button>
                   ))}

@@ -22,7 +22,7 @@ type CompanyData = {
 const companyData: Record<string, CompanyData> = {
   amazon: {
     name: 'Amazon',
-    gradient: 'orange-500',
+    gradient: 'bg-orange-700',
     textColor: 'text-orange-600',
     tagline: 'Leadership Principles are the entire rubric. Every answer must map to an LP.',
     rounds: [
@@ -75,7 +75,7 @@ const companyData: Record<string, CompanyData> = {
 
   meta: {
     name: 'Meta',
-    gradient: 'blue-500',
+    gradient: 'bg-blue-700',
     textColor: 'text-blue-600',
     tagline: 'Impact at scale + speed of execution. Show boldness and cross-functional influence.',
     rounds: [
@@ -124,7 +124,7 @@ const companyData: Record<string, CompanyData> = {
 
   google: {
     name: 'Google',
-    gradient: 'green-500',
+    gradient: 'bg-green-700',
     textColor: 'text-green-600',
     tagline: 'Data-driven, 10x thinking, psychological safety. Intellectual humility is valued.',
     rounds: [
@@ -175,7 +175,7 @@ const companyData: Record<string, CompanyData> = {
 
   apple: {
     name: 'Apple',
-    gradient: 'gray-600',
+    gradient: 'bg-gray-700',
     textColor: 'text-gray-700 dark:text-gray-300',
     tagline: 'Craft, taste, and deep collaboration. Apple is secretive and process-heavy.',
     rounds: [
@@ -224,7 +224,7 @@ const companyData: Record<string, CompanyData> = {
 
   netflix: {
     name: 'Netflix',
-    gradient: 'red-600',
+    gradient: 'bg-red-700',
     textColor: 'text-red-600',
     tagline: '"Stunning colleagues in a dream team." High freedom, high responsibility, no brilliant jerks.',
     rounds: [
@@ -273,7 +273,7 @@ const companyData: Record<string, CompanyData> = {
 
   microsoft: {
     name: 'Microsoft',
-    gradient: 'blue-700',
+    gradient: 'bg-blue-700',
     textColor: 'text-blue-700',
     tagline: 'Growth mindset + inclusive leadership. The world\'s largest software company — impact at scale.',
     rounds: [
@@ -330,7 +330,7 @@ export default function CompanyPage({ params }: { params: { company: string } })
     <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
         {/* Back */}
-        <Link href="/" className="mb-6 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400">
+        <Link href="/" className="mb-6 -ml-2 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-2 text-sm text-ink-600 transition-colors duration-150 ease-out hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50">
           <ArrowLeft className="h-4 w-4" /> All Companies
         </Link>
 

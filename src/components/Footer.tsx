@@ -76,7 +76,7 @@ export function Footer() {
                 href="https://buymeacoffee.com/max.sheikhizadeh"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-colors duration-150 ease-out hover:shadow-lg "
+                className="group flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-clay-600 px-4 text-sm font-semibold text-white transition-colors duration-150 ease-out hover:bg-clay-700"
               >
                 <Coffee className="h-4 w-4" />
                 <span>Support this project</span>
@@ -85,7 +85,7 @@ export function Footer() {
                 href="https://github.com/DevXGroup/Software-Engineer-Manager-Interviw-Prep"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-colors duration-150 ease-out hover:bg-gray-800 hover:shadow-lg  dark:bg-gray-700 dark:hover:bg-gray-600"
+                className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-ink-300 px-4 text-sm font-semibold text-ink-800 transition-colors duration-150 ease-out hover:bg-ink-100 dark:border-ink-700 dark:text-ink-100 dark:hover:bg-ink-800"
               >
                 <Github className="h-4 w-4" />
                 <span className="hidden sm:inline">Star on GitHub</span>

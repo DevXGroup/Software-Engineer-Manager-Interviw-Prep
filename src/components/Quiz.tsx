@@ -89,7 +89,7 @@ export function Quiz({
             <button
               key={f}
               onClick={() => setPriorityFilter(f)}
-              className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-150 ease-out ${
+              className={`inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 text-xs font-medium transition-colors duration-150 ease-out ${
                 priorityFilter === f
                   ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950'
                   : 'border border-ink-200 text-ink-600 hover:bg-ink-100 dark:border-ink-700 dark:text-ink-300 dark:hover:bg-ink-800'

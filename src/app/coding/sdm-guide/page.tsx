@@ -8,7 +8,7 @@ const sections = [
   {
     icon: Target,
     title: 'Why FAANG Asks SDMs to Code',
-    color: 'purple-500',
+    color: 'bg-purple-700',
     content: [
       {
         heading: 'Technical credibility, not IC replication',
@@ -23,7 +23,7 @@ const sections = [
   {
     icon: BarChart3,
     title: 'What Level of Coding Is Expected',
-    color: 'green-500',
+    color: 'bg-green-700',
     content: [
       {
         heading: 'The realistic bar',
@@ -38,7 +38,7 @@ const sections = [
   {
     icon: Clock,
     title: 'Interview Format (45 Minutes)',
-    color: 'orange-500',
+    color: 'bg-orange-700',
     content: [
       {
         heading: 'The typical 45-minute breakdown',
@@ -53,7 +53,7 @@ const sections = [
   {
     icon: Code,
     title: 'Top 5 SDM-Specific Patterns',
-    color: 'blue-500',
+    color: 'bg-blue-700',
     content: [
       {
         heading: '1. HashMap/Set — O(1) lookup everywhere',
@@ -80,7 +80,7 @@ const sections = [
   {
     icon: MessageSquare,
     title: 'Language to Use When Stuck',
-    color: 'pink-500',
+    color: 'bg-pink-700',
     content: [
       {
         heading: 'Recovering when you\'re stuck',
@@ -99,7 +99,7 @@ const sections = [
   {
     icon: CheckCircle,
     title: 'SDM Evaluation Rubric',
-    color: 'emerald-500',
+    color: 'bg-emerald-700',
     content: [
       {
         heading: 'Problem Understanding (20%)',
@@ -127,7 +127,7 @@ export default function SDMGuidePage() {
       <div className="mx-auto max-w-4xl">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <Link href="/coding" className="mb-6 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400">
+          <Link href="/coding" className="mb-6 -ml-2 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-2 text-sm text-ink-600 transition-colors duration-150 ease-out hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50">
             <ArrowLeft className="h-4 w-4" /> Back to Coding Practice
           </Link>
           <div className="text-center">

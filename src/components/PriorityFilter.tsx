@@ -24,7 +24,7 @@ export function PriorityFilter({
         <button
           key={val}
           onClick={() => onChange(val)}
-          className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-150 ease-out ${
+          className={`inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-3 text-xs font-medium transition-colors duration-150 ease-out ${
             value === val
               ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950'
               : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'

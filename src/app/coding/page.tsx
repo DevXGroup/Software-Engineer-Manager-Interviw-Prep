@@ -900,10 +900,10 @@ export default function CodingPage() {
         <QuizLauncher sectionId="coding" title="Coding" questions={codingQuestions} />
 
         {/* Main Tabs */}
-        <div className="mb-8 flex gap-1 rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900 overflow-x-auto">
+        <div className="mb-8 flex gap-1 overflow-x-auto scrollbar-hide rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900 overflow-x-auto">
           {([['visualizer', Zap, 'Algorithm Visualizer'], ['patterns', GitBranch, 'DSA Patterns'], ['complexity', Layers, 'Big O Reference'], ['datastructs', BookOpen, 'Data Structures'], ['challenges', Trophy, 'Challenges'], ['frontend', Code, 'JS/TS/React']] as const).map(([t, Icon, label]) => (
             <button key={t} onClick={() => setMainTab(t)}
-              className={`flex min-h-[44px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium transition-colors duration-150 ease-out ${mainTab === t ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}>
+              className={`flex min-h-[44px] flex-none shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium sm:flex-1 transition-colors duration-150 ease-out ${mainTab === t ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
@@ -1280,9 +1280,9 @@ export default function CodingPage() {
               {/* Difficulty cards */}
               <div className="mb-6 grid gap-4 sm:grid-cols-3">
                 {[
-                  { label: 'Easy', count: 5, color: 'green-500', bg: 'bg-green-50 dark:bg-green-900/20', problems: ['Two Sum', 'Valid Parentheses', 'Max Subarray', 'Buy/Sell Stock', 'Climbing Stairs'], slug: 'Easy' },
-                  { label: 'Medium', count: 7, color: 'yellow-500', bg: 'bg-yellow-50 dark:bg-yellow-900/20', problems: ['Longest Substring', '3Sum', 'Coin Change', 'Number of Islands', 'LRU Cache', '+2 more'], slug: 'Medium' },
-                  { label: 'Hard', count: 4, color: 'red-500', bg: 'bg-red-50 dark:bg-red-900/20', problems: ['Trapping Rain Water', 'Merge K Sorted Lists', 'Min Window Substr', 'Word Ladder'], slug: 'Hard' },
+                  { label: 'Easy', count: 5, color: 'bg-green-700', bg: 'bg-green-50 dark:bg-green-900/20', problems: ['Two Sum', 'Valid Parentheses', 'Max Subarray', 'Buy/Sell Stock', 'Climbing Stairs'], slug: 'Easy' },
+                  { label: 'Medium', count: 7, color: 'bg-yellow-700', bg: 'bg-yellow-50 dark:bg-yellow-900/20', problems: ['Longest Substring', '3Sum', 'Coin Change', 'Number of Islands', 'LRU Cache', '+2 more'], slug: 'Medium' },
+                  { label: 'Hard', count: 4, color: 'bg-red-700', bg: 'bg-red-50 dark:bg-red-900/20', problems: ['Trapping Rain Water', 'Merge K Sorted Lists', 'Min Window Substr', 'Word Ladder'], slug: 'Hard' },
                 ].map(card => (
                   <div key={card.label} className={`rounded-2xl ${card.bg} p-5 shadow`}>
                     <div className={`mb-3 inline-block rounded-xl ${card.color} px-3 py-1 text-sm font-bold text-white`}>

@@ -995,7 +995,7 @@ export default function CodingChallengesPage() {
       <div className="mx-auto max-w-5xl">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-          <Link href="/coding" className="mb-6 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+          <Link href="/coding" className="mb-6 -ml-2 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-2 text-sm text-ink-600 transition-colors duration-150 ease-out hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50 dark:hover:text-gray-200">
             <ArrowLeft className="h-4 w-4" /> Back to Coding Practice
           </Link>
           <div className="text-center">
@@ -1029,7 +1029,7 @@ export default function CodingChallengesPage() {
           <div className="flex flex-wrap gap-2">
             {(['All', 'Easy', 'Medium', 'Hard'] as const).map(d => (
               <button key={d} onClick={() => setDifficulty(d)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors duration-150 ease-out ${
+                className={`inline-flex min-h-[44px] items-center rounded-lg px-4 text-sm font-medium transition-colors duration-150 ease-out ${
                   difficulty === d
                     ? d === 'All' ? 'bg-gray-800 text-white dark:bg-white dark:text-gray-900'
                     : d === 'Easy' ? 'bg-green-500 text-white'
@@ -1045,7 +1045,7 @@ export default function CodingChallengesPage() {
             <Tag className="h-4 w-4 mt-1 text-gray-500 shrink-0" />
             {['All', ...ALL_PATTERNS].map(p => (
               <button key={p} onClick={() => setPattern(p)}
-                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 ease-out ${
+                className={`inline-flex min-h-[44px] items-center rounded-lg px-3 text-xs font-medium transition-colors duration-150 ease-out ${
                   pattern === p
                     ? 'bg-orange-500 text-white'
                     : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'

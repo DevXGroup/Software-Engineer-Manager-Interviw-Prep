@@ -25,7 +25,7 @@ const weeks: WeekPlan[] = [
     title: 'Behavioral Foundations',
     theme: 'STAR Method + Company Principles',
     icon: Brain,
-    color: 'purple-500',
+    color: 'bg-purple-700',
     bgColor: 'bg-purple-50 dark:bg-purple-900/20',
     goal: 'Master the STAR format and understand Amazon\'s 16 LPs inside out',
     dailyTasks: [
@@ -43,7 +43,7 @@ const weeks: WeekPlan[] = [
     title: 'Company Deep-Dives',
     theme: 'Meta, Google, Netflix, Apple, Microsoft',
     icon: Target,
-    color: 'blue-500',
+    color: 'bg-blue-700',
     bgColor: 'bg-blue-50 dark:bg-blue-900/20',
     goal: 'Know each company\'s unique values, interview style, and top questions',
     dailyTasks: [
@@ -61,7 +61,7 @@ const weeks: WeekPlan[] = [
     title: 'System Design Basics',
     theme: 'Scalability Fundamentals',
     icon: Layers,
-    color: 'green-500',
+    color: 'bg-green-700',
     bgColor: 'bg-green-50 dark:bg-green-900/20',
     goal: 'Understand horizontal scaling, databases, caching, and load balancing',
     dailyTasks: [
@@ -79,7 +79,7 @@ const weeks: WeekPlan[] = [
     title: 'System Design Advanced',
     theme: 'Distributed Systems at FAANG Scale',
     icon: Layers,
-    color: 'teal-500',
+    color: 'bg-teal-700',
     bgColor: 'bg-teal-50 dark:bg-teal-900/20',
     goal: 'Design complex systems: Twitter feed, notification system, rate limiter',
     dailyTasks: [
@@ -97,7 +97,7 @@ const weeks: WeekPlan[] = [
     title: 'Coding Patterns',
     theme: 'TypeScript DSA Core Patterns',
     icon: Code,
-    color: 'orange-500',
+    color: 'bg-orange-700',
     bgColor: 'bg-orange-50 dark:bg-orange-900/20',
     goal: 'Internalize Sliding Window, Two Pointers, Binary Search, BFS/DFS',
     dailyTasks: [
@@ -115,7 +115,7 @@ const weeks: WeekPlan[] = [
     title: 'Coding — Hard Problems',
     theme: 'DP, Heaps, Advanced Graph',
     icon: Code,
-    color: 'red-500',
+    color: 'bg-red-700',
     bgColor: 'bg-red-50 dark:bg-red-900/20',
     goal: 'Tackle Medium-Hard problems and practice explaining complexity trade-offs',
     dailyTasks: [
@@ -133,7 +133,7 @@ const weeks: WeekPlan[] = [
     title: 'Technical Leadership',
     theme: 'Architecture, Tech Debt, On-Call',
     icon: Target,
-    color: 'purple-500',
+    color: 'bg-purple-700',
     bgColor: 'bg-purple-50 dark:bg-purple-900/20',
     goal: 'Articulate make vs buy decisions, tech debt frameworks, and incident management',
     dailyTasks: [
@@ -151,7 +151,7 @@ const weeks: WeekPlan[] = [
     title: 'Mock Interviews & Polish',
     theme: 'Full Simulation Week',
     icon: TrendingUp,
-    color: 'violet-500',
+    color: 'bg-violet-700',
     bgColor: 'bg-violet-50 dark:bg-violet-900/20',
     goal: 'Run full-length mock interviews across all categories and sharpen weak spots',
     dailyTasks: [

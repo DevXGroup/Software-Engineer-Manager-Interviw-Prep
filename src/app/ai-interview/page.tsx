@@ -439,10 +439,10 @@ export default function AIInterviewPage() {
         <QuizLauncher sectionId="ai-interview" title="AI Interview" questions={aiInterviewQuestions} />
 
         {/* Tabs */}
-        <div className="mb-8 flex gap-1 rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900">
+        <div className="mb-8 flex gap-1 overflow-x-auto scrollbar-hide rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900">
           {([['qa', Brain, 'AI Q&A Bank'], ['practice', Eye, 'Practice Mode'], ['concepts', Cpu, 'Key Concepts']] as const).map(([t, Icon, label]) => (
             <button key={t} onClick={() => setTab(t)}
-              className={`flex min-h-[44px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium transition-colors duration-150 ease-out ${tab === t ? 'bg-violet-600 text-white shadow' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}>
+              className={`flex min-h-[44px] flex-none shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium sm:flex-1 transition-colors duration-150 ease-out ${tab === t ? 'bg-violet-600 text-white shadow' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
@@ -462,14 +462,14 @@ export default function AIInterviewPage() {
                 <div className="flex flex-wrap gap-2">
                   {levels.map(l => (
                     <button key={l} onClick={() => setLevelFilter(l)}
-                      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 ease-out ${levelFilter === l ? 'bg-violet-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
+                      className={`inline-flex min-h-[44px] items-center rounded-lg px-3 text-xs font-medium transition-colors duration-150 ease-out ${levelFilter === l ? 'bg-violet-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
                       {l}
                     </button>
                   ))}
                   <span className="h-4 w-px bg-gray-200 dark:bg-gray-700 mt-1" />
                   {categories.slice(1).map(c => (
                     <button key={c} onClick={() => setCategoryFilter(prev => prev === c ? 'All' : c)}
-                      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 ease-out ${categoryFilter === c ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
+                      className={`inline-flex min-h-[44px] items-center rounded-lg px-3 text-xs font-medium transition-colors duration-150 ease-out ${categoryFilter === c ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
                       {c}
                     </button>
                   ))}

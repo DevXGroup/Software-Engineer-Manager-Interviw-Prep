@@ -38,7 +38,7 @@ const scenarios: Scenario[] = [
     id: 'url',
     title: 'URL Shortener (Bit.ly)',
     icon: Globe,
-    color: 'blue-500',
+    color: 'bg-blue-700',
     difficulty: 'Medium',
     timeEstimate: '35-40 min',
     functionalReqs: ['Given a long URL, generate a short URL (6-7 chars)', 'Given a short URL, redirect to the original URL', 'Support custom short URLs (optional)', 'Track analytics: clicks, geolocation, device'],
@@ -67,7 +67,7 @@ const scenarios: Scenario[] = [
     id: 'twitter',
     title: 'Twitter / X Feed',
     icon: MessageSquare,
-    color: 'sky-500',
+    color: 'bg-sky-700',
     difficulty: 'Hard',
     timeEstimate: '45-50 min',
     functionalReqs: ['Post tweets (text, images, video)', 'Follow other users', 'View home timeline (tweets from followed users)', 'Like, retweet, reply', 'Search tweets and users'],
@@ -96,7 +96,7 @@ const scenarios: Scenario[] = [
     id: 'ratelimiter',
     title: 'Rate Limiter',
     icon: Shield,
-    color: 'red-500',
+    color: 'bg-red-700',
     difficulty: 'Medium',
     timeEstimate: '30-35 min',
     functionalReqs: ['Limit requests per user/IP per time window', 'Multiple rules: 100 req/min for free tier, 1000 req/min for paid', 'Return 429 Too Many Requests when limit exceeded', 'Distributed — work across multiple servers'],
@@ -121,7 +121,7 @@ const scenarios: Scenario[] = [
     id: 'notifications',
     title: 'Notification System',
     icon: Zap,
-    color: 'yellow-500',
+    color: 'bg-yellow-700',
     difficulty: 'Medium',
     timeEstimate: '35-40 min',
     functionalReqs: ['Send notifications via email, SMS, push (iOS/Android)', 'Support immediate and scheduled notifications', 'User preference management (opt-out per channel/type)', 'Notification history and delivery tracking'],
@@ -309,10 +309,10 @@ export default function SystemDesignPage() {
         <QuizLauncher sectionId="system-design" title="System Design" questions={systemDesignQuestions} />
 
         {/* Tabs */}
-        <div className="mb-8 flex gap-1 rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900">
+        <div className="mb-8 flex gap-1 overflow-x-auto scrollbar-hide rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900">
           {([['scenarios', Server, 'Design Scenarios'], ['patterns', GitBranch, 'Architecture Patterns'], ['concepts', Database, 'Key Concepts']] as const).map(([t, Icon, label]) => (
             <button key={t} onClick={() => setMainTab(t)}
-              className={`flex min-h-[44px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium transition-colors duration-150 ease-out ${mainTab === t ? 'bg-green-500 text-white shadow' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}>
+              className={`flex min-h-[44px] flex-none shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium sm:flex-1 transition-colors duration-150 ease-out ${mainTab === t ? 'bg-green-500 text-white shadow' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
@@ -823,10 +823,10 @@ export default function SystemDesignPage() {
                   {/* ACID Acronym Visualization */}
                   <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {[
-                      { letter: 'A', word: 'Atomicity', desc: 'All-or-nothing', icon: '⚛️', color: 'red-500' },
-                      { letter: 'C', word: 'Consistency', desc: 'Valid state → Valid state', icon: '✓', color: 'green-500' },
-                      { letter: 'I', word: 'Isolation', desc: 'Concurrent = Serial', icon: '🔒', color: 'blue-500' },
-                      { letter: 'D', word: 'Durability', desc: 'Committed = Survives crash', icon: '💾', color: 'purple-500' },
+                      { letter: 'A', word: 'Atomicity', desc: 'All-or-nothing', icon: '⚛️', color: 'bg-red-700' },
+                      { letter: 'C', word: 'Consistency', desc: 'Valid state → Valid state', icon: '✓', color: 'bg-green-700' },
+                      { letter: 'I', word: 'Isolation', desc: 'Concurrent = Serial', icon: '🔒', color: 'bg-blue-700' },
+                      { letter: 'D', word: 'Durability', desc: 'Committed = Survives crash', icon: '💾', color: 'bg-purple-700' },
                     ].map((item) => (
                       <div key={item.letter} className={`rounded-xl ${item.color} p-4 text-white shadow-lg`}>
                         <div className="mb-2 flex items-center justify-between">
@@ -925,9 +925,9 @@ export default function SystemDesignPage() {
                     </div>
                     <div className="grid gap-4 sm:grid-cols-3">
                       {[
-                        { shard: 'Shard 1', range: 'A-F', color: 'blue-500' },
-                        { shard: 'Shard 2', range: 'G-M', color: 'green-500' },
-                        { shard: 'Shard 3', range: 'N-Z', color: 'purple-500' },
+                        { shard: 'Shard 1', range: 'A-F', color: 'bg-blue-700' },
+                        { shard: 'Shard 2', range: 'G-M', color: 'bg-green-700' },
+                        { shard: 'Shard 3', range: 'N-Z', color: 'bg-purple-700' },
                       ].map((s) => (
                         <div key={s.shard} className={`rounded-xl ${s.color} p-4 text-center text-white shadow-lg`}>
                           <div className="text-lg font-bold">{s.shard}</div>
@@ -1089,9 +1089,9 @@ export default function SystemDesignPage() {
                   {/* Index Types Comparison */}
                   <div className="mb-6 grid gap-4 md:grid-cols-3">
                     {[
-                      { name: 'B-Tree', icon: '🌳', lookup: 'O(log n)', range: '✓ Yes', equality: '✓ Yes', color: 'teal-500' },
-                      { name: 'Hash', icon: '🔑', lookup: 'O(1)', range: '✗ No', equality: '✓ Yes', color: 'blue-500' },
-                      { name: 'LSM Tree', icon: '📝', lookup: 'O(log n)', range: '✓ Yes', equality: '✓ Yes', color: 'purple-500' },
+                      { name: 'B-Tree', icon: '🌳', lookup: 'O(log n)', range: '✓ Yes', equality: '✓ Yes', color: 'bg-teal-700' },
+                      { name: 'Hash', icon: '🔑', lookup: 'O(1)', range: '✗ No', equality: '✓ Yes', color: 'bg-blue-700' },
+                      { name: 'LSM Tree', icon: '📝', lookup: 'O(log n)', range: '✓ Yes', equality: '✓ Yes', color: 'bg-purple-700' },
                     ].map((idx) => (
                       <div key={idx.name} className={`rounded-xl ${idx.color} p-5 text-white shadow-lg`}>
                         <div className="mb-3 flex items-center justify-between">
