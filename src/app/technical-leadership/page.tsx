@@ -21,7 +21,7 @@ const TechDebt = () => {
   return (
     <div className="space-y-3">
       {items.map(item => (
-        <div key={item.id} className={`rounded-xl border-l-4 ${item.color} bg-gray-50 dark:bg-gray-900`}>
+        <div key={item.id} className={`rounded-xl border border-ink-200 bg-white dark:border-ink-800 dark:bg-ink-900`}>
           <button onClick={() => setExpanded(expanded === item.id ? null : item.id)}
             className="flex w-full items-center justify-between p-4 text-left">
             <span className="font-semibold text-gray-900 dark:text-white">{item.label}</span>
@@ -131,7 +131,7 @@ const OnCallBestPractices = () => {
       {practices.map((p, i) => {
         const Icon = p.icon
         return (
-          <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
+          <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
             className="rounded-xl bg-gray-50 p-4 dark:bg-gray-900">
             <div className="mb-2 flex items-center gap-2">
               <Icon className="h-4 w-4 text-purple-500" />
@@ -223,12 +223,12 @@ export default function TechnicalLeadershipPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
+    <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
-          <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">Technical Leadership</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">Tech debt · Architecture decisions · Make vs Buy · Code review culture · On-call</p>
+        <motion.div initial={false} className="mb-8 border-b border-ink-200 pb-8 dark:border-ink-800">
+          <h1 className="text-4xl text-ink-900 dark:text-ink-50">Technical Leadership</h1>
+          <p className="mt-3 max-w-prose text-lg leading-relaxed text-ink-700 dark:text-ink-200">Tech debt · Architecture decisions · Make vs Buy · Code review culture · On-call</p>
         </motion.div>
 
         <QuizLauncher sectionId="leadership" title="Technical Leadership" questions={technicalLeadershipQuestions} />
@@ -237,15 +237,15 @@ export default function TechnicalLeadershipPage() {
         <div className="mb-8 flex flex-wrap gap-2">
           {tabs.map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => setActiveTab(id)}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${activeTab === id ? 'bg-purple-600 text-white shadow-lg' : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}>
+              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 ease-out ${activeTab === id ? 'bg-purple-600 text-white shadow-lg' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-300'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
         </div>
 
         <AnimatePresence mode="wait">
-          <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-            className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800"
+          <motion.div key={activeTab} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="surface-card p-6"
             id={sectionIdByTab[activeTab]}>
             {activeTab === 'debt' && (
               <>
@@ -354,7 +354,7 @@ export default function TechnicalLeadershipPage() {
                         { step: '4', title: 'Monitoring & Controlling', color: 'border-orange-400', content: 'Track project performance against the plan. Ensure SDLC phases (coding, testing) complete on time and with desired quality. Take corrective action when milestones slip.' },
                         { step: '5', title: 'Closure', color: 'border-green-400', content: 'Finalize deliverables, close the project, document lessons learned. Note: SDLC continues into maintenance after PMLC closure.' },
                       ].map(item => (
-                        <div key={item.step} className={`rounded-xl border-l-4 ${item.color} bg-gray-50 dark:bg-gray-900 p-4`}>
+                        <div key={item.step} className={`rounded-xl border border-ink-200 bg-white dark:border-ink-800 dark:bg-ink-900 p-4`}>
                           <p className="font-semibold text-sm text-gray-900 dark:text-white">Phase {item.step}: {item.title}</p>
                           <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">{item.content}</p>
                         </div>
@@ -372,7 +372,7 @@ export default function TechnicalLeadershipPage() {
                         { step: '5', title: 'Deployment', color: 'border-orange-400', content: 'Deploy the software to production. Release to the app store for customer download.' },
                         { step: '6', title: 'Maintenance', color: 'border-red-400', content: 'Ongoing support after deployment. Fix bugs, update for new OS versions, add new features. This phase continues after the PMLC closes.' },
                       ].map(item => (
-                        <div key={item.step} className={`rounded-xl border-l-4 ${item.color} bg-gray-50 dark:bg-gray-900 p-4`}>
+                        <div key={item.step} className={`rounded-xl border border-ink-200 bg-white dark:border-ink-800 dark:bg-ink-900 p-4`}>
                           <p className="font-semibold text-sm text-gray-900 dark:text-white">Phase {item.step}: {item.title}</p>
                           <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 leading-relaxed">{item.content}</p>
                         </div>

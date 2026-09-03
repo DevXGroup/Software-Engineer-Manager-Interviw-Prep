@@ -889,21 +889,21 @@ export default function CodingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
+    <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
-          <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">Coding Interview Mastery</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">Interactive visualizer · 10 essential patterns · Big O reference</p>
+        <motion.div initial={false} className="mb-8 border-b border-ink-200 pb-8 dark:border-ink-800">
+          <h1 className="text-4xl text-ink-900 dark:text-ink-50">Coding Interview Mastery</h1>
+          <p className="mt-3 max-w-prose text-lg leading-relaxed text-ink-700 dark:text-ink-200">Interactive visualizer · 10 essential patterns · Big O reference</p>
         </motion.div>
 
         <QuizLauncher sectionId="coding" title="Coding" questions={codingQuestions} />
 
         {/* Main Tabs */}
-        <div className="mb-8 flex gap-2 rounded-xl bg-white p-1 shadow dark:bg-gray-800 overflow-x-auto">
+        <div className="mb-8 flex gap-1 rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900 overflow-x-auto">
           {([['visualizer', Zap, 'Algorithm Visualizer'], ['patterns', GitBranch, 'DSA Patterns'], ['complexity', Layers, 'Big O Reference'], ['datastructs', BookOpen, 'Data Structures'], ['challenges', Trophy, 'Challenges'], ['frontend', Code, 'JS/TS/React']] as const).map(([t, Icon, label]) => (
             <button key={t} onClick={() => setMainTab(t)}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${mainTab === t ? 'bg-orange-500 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}>
+              className={`flex min-h-[44px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium transition-colors duration-150 ease-out ${mainTab === t ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
@@ -912,14 +912,14 @@ export default function CodingPage() {
         <AnimatePresence mode="wait">
           {/* ── Sorting Visualizer ── */}
           {mainTab === 'visualizer' && (
-            <motion.div key="vis" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+            <motion.div key="vis" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
               id="sorting-algorithms">
-              <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+              <div className="surface-card p-6">
                 {/* Algorithm selector */}
                 <div className="mb-6 flex flex-wrap gap-3">
                   {ALGOS.map(a => (
                     <button key={a} onClick={() => setAlgo(a)}
-                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${algo === a ? 'bg-orange-500 text-white shadow' : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'}`}>
+                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-150 ease-out ${algo === a ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950' : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'}`}>
                       {a}
                     </button>
                   ))}
@@ -1010,13 +1010,13 @@ export default function CodingPage() {
 
           {/* ── DSA Patterns ── */}
           {mainTab === 'patterns' && (
-            <motion.div key="patterns" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="patterns" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               <div className="grid gap-6 lg:grid-cols-3">
                 {/* Pattern list */}
                 <div className="space-y-2">
                   {patterns.map(p => (
                     <button key={p.slug} onClick={() => { setSelectedPattern(p); setExpandedPattern(p.slug) }}
-                      className={`w-full rounded-xl px-4 py-3 text-left transition-all ${selectedPattern.slug === p.slug ? 'bg-orange-500 text-white shadow-lg' : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}
+                      className={`w-full rounded-xl px-4 py-3 text-left transition-colors duration-150 ease-out ${selectedPattern.slug === p.slug ? 'bg-orange-500 text-white shadow-lg' : 'bg-white text-gray-700 card-hover dark:bg-gray-800 dark:text-gray-300'}`}
                       id={`${p.slug}-pattern`}>
                       <p className="font-bold">{p.name}</p>
                       <p className={`mt-0.5 text-xs ${selectedPattern.slug === p.slug ? 'text-orange-100' : 'text-gray-500'}`}>{p.complexity}</p>
@@ -1028,7 +1028,7 @@ export default function CodingPage() {
                 <div className="lg:col-span-2">
                   <AnimatePresence mode="wait">
                     <motion.div key={selectedPattern.slug} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
-                      className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800"
+                      className="surface-card p-6"
                       id={selectedPattern.slug}>
                       <h2 className="mb-1 text-2xl font-bold text-gray-900 dark:text-white">{selectedPattern.name}</h2>
                       <p className="mb-4 text-sm font-medium text-orange-500">{selectedPattern.complexity}</p>
@@ -1040,7 +1040,7 @@ export default function CodingPage() {
 
                       <div className="mb-4">
                         <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">Code Template</p>
-                        <pre className="overflow-x-auto rounded-xl bg-gray-900 p-4 text-xs text-green-300 leading-relaxed">
+                        <pre className="overflow-x-auto rounded-lg border border-ink-800 bg-ink-950 p-4 font-mono text-[13px] leading-[1.6] text-ink-100">
                           <code>{selectedPattern.template}</code>
                         </pre>
                       </div>
@@ -1067,9 +1067,9 @@ export default function CodingPage() {
 
           {/* ── Big O Reference ── */}
           {mainTab === 'complexity' && (
-            <motion.div key="complexity" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+            <motion.div key="complexity" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
               id="big-o">
-              <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+              <div className="surface-card p-6">
                 <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Big O Complexity Reference</h2>
 
                 {/* Visual scale */}
@@ -1082,7 +1082,7 @@ export default function CodingPage() {
                         <div key={c.notation} className="flex items-center gap-3">
                           <span className="w-24 text-right text-sm font-mono font-bold text-gray-700 dark:text-gray-300">{c.notation}</span>
                           <div className="flex-1 rounded-full bg-gray-100 dark:bg-gray-700 h-6 overflow-hidden">
-                            <motion.div initial={{ width: 0 }} animate={{ width: `${widths[i]}%` }} transition={{ delay: i * 0.08, duration: 0.6 }}
+                            <motion.div initial={{ width: 0 }} animate={{ width: `${widths[i]}%` }}
                               className={`h-6 rounded-full ${c.color} flex items-center pl-3`}>
                               <span className="text-xs font-medium text-white whitespace-nowrap">{c.name}</span>
                             </motion.div>
@@ -1158,7 +1158,7 @@ export default function CodingPage() {
 
           {/* ── Data Structures ── */}
           {mainTab === 'datastructs' && (
-            <motion.div key="datastructs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="datastructs" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               <div className="grid gap-6 lg:grid-cols-3">
                 {/* Left: DS list grouped by category */}
                 <div className="space-y-5">
@@ -1168,7 +1168,7 @@ export default function CodingPage() {
                       <div className="space-y-1">
                         {dataStructures.filter(ds => ds.category === cat).map(ds => (
                           <button key={ds.slug} onClick={() => setSelectedDS(ds)}
-                            className={`w-full rounded-xl px-4 py-3 text-left transition-all ${selectedDS.slug === ds.slug ? 'bg-orange-500 text-white shadow-lg' : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}
+                            className={`w-full rounded-xl px-4 py-3 text-left transition-colors duration-150 ease-out ${selectedDS.slug === ds.slug ? 'bg-orange-500 text-white shadow-lg' : 'bg-white text-gray-700 card-hover dark:bg-gray-800 dark:text-gray-300'}`}
                             id={`${ds.slug}-ds`}>
                             <p className="font-bold text-sm">{ds.name}</p>
                           </button>
@@ -1182,7 +1182,7 @@ export default function CodingPage() {
                 <div className="lg:col-span-2">
                   <AnimatePresence mode="wait">
                     <motion.div key={selectedDS.slug} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
-                      className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800"
+                      className="surface-card p-6"
                       id={getDataStructureSearchId(selectedDS.slug)}>
 
                       <h2 className="mb-3 text-2xl font-bold text-gray-900 dark:text-white">{selectedDS.name}</h2>
@@ -1220,7 +1220,7 @@ export default function CodingPage() {
                       {/* Code Template */}
                       <div className="mb-4">
                         <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">Code Template</p>
-                        <pre className="overflow-x-auto rounded-xl bg-gray-900 p-4 text-xs text-green-300 leading-relaxed">
+                        <pre className="overflow-x-auto rounded-lg border border-ink-800 bg-ink-950 p-4 font-mono text-[13px] leading-[1.6] text-ink-100">
                           <code>{selectedDS.template}</code>
                         </pre>
                       </div>
@@ -1245,7 +1245,7 @@ export default function CodingPage() {
 
           {/* ── Challenges Tab ── */}
           {mainTab === 'challenges' && (
-            <motion.div key="challenges" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="challenges" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               {/* Hero */}
               <div className="mb-6 rounded-2xl bg-orange-500 p-8 text-white shadow-xl">
                 <div className="flex items-center gap-4">
@@ -1303,7 +1303,7 @@ export default function CodingPage() {
               </div>
 
               {/* Top patterns */}
-              <div className="rounded-2xl bg-white p-6 shadow-lg dark:bg-gray-800">
+              <div className="surface-card p-6">
                 <h3 className="mb-4 font-bold text-gray-900 dark:text-white">Top Patterns Asked at FAANG (SDM Level)</h3>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {[
@@ -1342,8 +1342,8 @@ export default function CodingPage() {
 
           {/* ── Frontend JS/TS/React ── */}
           {mainTab === 'frontend' && (
-            <motion.div key="frontend" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-              <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+            <motion.div key="frontend" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
+              <div className="surface-card p-6">
                 <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">Frontend Interview: JS / TypeScript / React</h2>
                 <p className="mb-6 text-gray-500 dark:text-gray-400">Core frontend concepts frequently tested in FAANG interviews for full-stack and frontend-leaning roles.</p>
 
@@ -1411,7 +1411,7 @@ console.log('1 - Sync end');
                         </div>
                         <div className="p-4">
                           <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">{item.explanation}</p>
-                          <pre className="overflow-x-auto rounded-xl bg-gray-900 p-4 text-xs text-green-300 leading-relaxed">
+                          <pre className="overflow-x-auto rounded-lg border border-ink-800 bg-ink-950 p-4 font-mono text-[13px] leading-[1.6] text-ink-100">
                             <code>{item.code}</code>
                           </pre>
                         </div>
@@ -1466,7 +1466,7 @@ const result = identity<string>('Hello');
                     ].map((item, i) => (
                       <div key={i} className="rounded-xl bg-gray-50 dark:bg-gray-900 p-4">
                         <h4 className="font-bold text-sm text-gray-900 dark:text-white mb-2">{item.title}</h4>
-                        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-3 text-xs text-green-300 leading-relaxed mb-2">
+                        <pre className="overflow-x-auto rounded-lg border border-ink-800 bg-ink-950 p-3 font-mono text-[13px] leading-[1.6] text-ink-100 mb-2">
                           <code>{item.code}</code>
                         </pre>
                         <p className="text-xs text-gray-500 dark:text-gray-400">{item.note}</p>
@@ -1548,7 +1548,7 @@ export async function getStaticProps() {
                     ].map((item, i) => (
                       <div key={i} className="rounded-xl bg-gray-50 dark:bg-gray-900 p-4">
                         <h4 className="font-bold text-sm text-gray-900 dark:text-white mb-2">{item.title}</h4>
-                        <pre className="overflow-x-auto rounded-lg bg-gray-800 p-3 text-xs text-green-300 leading-relaxed mb-2">
+                        <pre className="overflow-x-auto rounded-lg border border-ink-800 bg-ink-950 p-3 font-mono text-[13px] leading-[1.6] text-ink-100 mb-2">
                           <code>{item.code}</code>
                         </pre>
                         <p className="text-xs text-gray-500 dark:text-gray-400">{item.note}</p>

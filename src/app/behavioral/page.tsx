@@ -616,23 +616,23 @@ export default function BehavioralPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
+    <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
-          <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">Behavioral Interview Mastery</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">Company leadership frameworks, 12 full STAR answers, and practice mode</p>
+        <motion.div initial={false} className="mb-8 border-b border-ink-200 pb-8 dark:border-ink-800">
+          <h1 className="text-4xl text-ink-900 dark:text-ink-50">Behavioral Interview Mastery</h1>
+          <p className="mt-3 max-w-prose text-lg leading-relaxed text-ink-700 dark:text-ink-200">Company leadership frameworks, 12 full STAR answers, and practice mode</p>
         </motion.div>
 
         <QuizLauncher sectionId="behavioral" title="Behavioral" questions={quizQuestions} />
 
         {/* Tabs */}
-        <div className="mb-8 flex gap-2 rounded-xl bg-white p-1 shadow dark:bg-gray-800">
+        <div className="mb-8 flex gap-1 rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900">
           {([['principles', BookOpen, 'Company Principles'], ['questions', Star, 'STAR Questions'], ['practice', Brain, 'Practice Mode']] as const).map(([t, Icon, label]) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${tab === t ? 'bg-purple-600 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}
+              className={`flex min-h-[44px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium transition-colors duration-150 ease-out ${tab === t ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}
             >
               <Icon className="h-4 w-4" />
               {label}
@@ -643,12 +643,11 @@ export default function BehavioralPage() {
         <AnimatePresence mode="wait">
           {/* ── Company Principles Tab ── */}
           {tab === 'principles' && (
-            <motion.div key="principles" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="principles" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               <div className="mb-6 flex flex-wrap gap-3">
                 {companies.map(c => (
-                  <motion.button key={c.name} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                    onClick={() => setSelectedCompany(c)}
-                    className={`flex items-center gap-2 rounded-lg px-4 py-2 font-medium transition-all ${selectedCompany.name === c.name ? `${c.color} text-white shadow-lg` : 'bg-white text-gray-700 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}>
+                  <motion.button key={c.name} onClick={() => setSelectedCompany(c)}
+                    className={`flex items-center gap-2 rounded-lg px-4 py-2 font-medium transition-colors duration-150 ease-out ${selectedCompany.name === c.name ? `${c.color} text-white shadow-lg` : 'bg-white text-gray-700 card-hover dark:bg-gray-800 dark:text-gray-300'}`}>
                     <Building className="h-4 w-4" />
                     {c.name}
                   </motion.button>
@@ -656,8 +655,8 @@ export default function BehavioralPage() {
               </div>
 
               <AnimatePresence mode="wait">
-                <motion.div key={selectedCompany.name} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
-                  className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800"
+                <motion.div key={selectedCompany.name} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                  className="surface-card p-6"
                   id={`${selectedCompany.name.toLowerCase()}-principles`}>
                   <div className={`mb-6 rounded-xl ${selectedCompany.color} p-4 text-white`}>
                     <h2 className="text-2xl font-bold">{selectedCompany.name} Leadership Principles</h2>
@@ -666,8 +665,8 @@ export default function BehavioralPage() {
 
                   <div className="mb-6 grid gap-3 sm:grid-cols-2">
                     {selectedCompany.principles.map((p, i) => (
-                      <motion.div key={p.name} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
-                        className="cursor-pointer rounded-lg border border-gray-100 p-4 transition-all hover:border-purple-300 hover:shadow-md dark:border-gray-700"
+                      <motion.div key={p.name} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                        className="cursor-pointer rounded-lg border border-gray-100 p-4 transition-colors duration-150 ease-out hover:border-purple-300 hover:shadow-md dark:border-gray-700"
                         onClick={() => setExpandedPrinciple(expandedPrinciple === p.name ? null : p.name)}>
                         <div className="flex items-start justify-between gap-2">
                           <div className="flex items-center gap-2">
@@ -725,7 +724,7 @@ export default function BehavioralPage() {
 
           {/* ── STAR Questions Tab ── */}
           {tab === 'questions' && (
-            <motion.div key="questions" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="questions" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               {/* Filters */}
               <div className="mb-6 space-y-3">
                 <div className="relative">
@@ -741,14 +740,14 @@ export default function BehavioralPage() {
                   <Filter className="h-4 w-4 mt-1.5 text-gray-500 shrink-0" />
                   {DIFFICULTIES.map(d => (
                     <button key={d} onClick={() => setDifficultyFilter(d)}
-                      className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${difficultyFilter === d ? 'bg-purple-600 text-white' : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-400'}`}>
+                      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 ease-out ${difficultyFilter === d ? 'bg-purple-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
                       {d}
                     </button>
                   ))}
                   <span className="h-4 w-px bg-gray-200 dark:bg-gray-700 mt-1.5" />
                   {COMPANY_NAMES.map(c => (
                     <button key={c} onClick={() => setCompanyFilter(c)}
-                      className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${companyFilter === c ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-400'}`}>
+                      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 ease-out ${companyFilter === c ? 'bg-blue-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
                       {c}
                     </button>
                   ))}
@@ -759,8 +758,8 @@ export default function BehavioralPage() {
 
               <div className="space-y-4">
                 {filteredQuestions.map((q, i) => (
-                  <motion.div key={q.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                    className="rounded-2xl bg-white shadow-lg dark:bg-gray-800"
+                  <motion.div key={q.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+                    className="rounded-2xl surface-card"
                     id={`question-${q.id}`}>
                     <div className="cursor-pointer p-6" onClick={() => setExpandedQuestion(expandedQuestion === q.id ? null : q.id)}>
                       <div className="flex items-start justify-between gap-3">
@@ -823,15 +822,15 @@ export default function BehavioralPage() {
 
           {/* ── Practice Mode Tab ── */}
           {tab === 'practice' && (
-            <motion.div key="practice" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="practice" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               <div className="mb-6 rounded-2xl bg-purple-600 p-6 text-white">
                 <h2 className="text-xl font-bold">Practice Mode</h2>
                 <p className="mt-1 text-purple-100">Read each question. Think through your STAR answer. Then reveal to compare.</p>
               </div>
               <div className="space-y-6">
                 {questions.map((q, i) => (
-                  <motion.div key={q.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                    className="rounded-2xl bg-white shadow-lg dark:bg-gray-800">
+                  <motion.div key={q.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+                    className="rounded-2xl surface-card">
                     <div className="p-6">
                       <div className="mb-2 flex items-center gap-2">
                         <Award className="h-5 w-5 text-yellow-500" />
@@ -844,8 +843,7 @@ export default function BehavioralPage() {
 
                       <div className="mt-4">
                         {!practiceVisible[q.id] ? (
-                          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                            onClick={() => togglePracticeVisible(q.id)}
+                          <motion.button onClick={() => togglePracticeVisible(q.id)}
                             className="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700">
                             <Eye className="h-4 w-4" /> Reveal Model Answer
                           </motion.button>

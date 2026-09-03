@@ -14,7 +14,7 @@ interface ArchitecturePatternProps {
 
 export function ArchitecturePattern({ pattern }: ArchitecturePatternProps) {
   return (
-    <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+    <div className="surface-card p-6">
       <h3 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
         {pattern.name}
       </h3>
@@ -34,7 +34,6 @@ export function ArchitecturePattern({ pattern }: ArchitecturePatternProps) {
                 key={index}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
                 className="flex items-start gap-2"
               >
                 <span className="mt-1 block h-1.5 w-1.5 rounded-full bg-green-500"></span>
@@ -55,7 +54,6 @@ export function ArchitecturePattern({ pattern }: ArchitecturePatternProps) {
                 key={index}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
                 className="flex items-start gap-2"
               >
                 <span className="mt-1 block h-1.5 w-1.5 rounded-full bg-red-500"></span>

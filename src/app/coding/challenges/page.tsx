@@ -991,7 +991,7 @@ export default function CodingChallengesPage() {
     setShowSolution(prev => ({ ...prev, [id]: !prev[id] }))
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
+    <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
@@ -1004,7 +1004,7 @@ export default function CodingChallengesPage() {
                 <Trophy className="h-8 w-8 text-white" />
               </span>
             </div>
-            <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-4xl text-ink-900 dark:text-ink-50">
               TypeScript Coding Challenges
             </h1>
             <p className="mx-auto max-w-2xl text-lg text-gray-600 dark:text-gray-300">
@@ -1016,7 +1016,7 @@ export default function CodingChallengesPage() {
           <div className="mt-8 grid grid-cols-3 gap-4">
             {(['Easy', 'Medium', 'Hard'] as Difficulty[]).map(d => (
               <button key={d} onClick={() => setDifficulty(difficulty === d ? 'All' : d)}
-                className={`rounded-xl p-4 text-center transition-all shadow ${difficulty === d ? DIFFICULTY_COLORS[d] + ' ring-2 ring-offset-2 ring-current' : 'bg-white dark:bg-gray-800 hover:shadow-md'}`}>
+                className={`rounded-xl p-4 text-center transition-colors duration-150 ease-out shadow ${difficulty === d ? DIFFICULTY_COLORS[d] + ' ring-2 ring-offset-2 ring-current' : 'bg-white dark:bg-gray-800 hover:shadow-md'}`}>
                 <p className={`text-2xl font-bold ${difficulty === d ? '' : d === 'Easy' ? 'text-green-600' : d === 'Medium' ? 'text-yellow-600' : 'text-red-600'}`}>{counts[d]}</p>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">{d}</p>
               </button>
@@ -1029,13 +1029,13 @@ export default function CodingChallengesPage() {
           <div className="flex flex-wrap gap-2">
             {(['All', 'Easy', 'Medium', 'Hard'] as const).map(d => (
               <button key={d} onClick={() => setDifficulty(d)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
+                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors duration-150 ease-out ${
                   difficulty === d
                     ? d === 'All' ? 'bg-gray-800 text-white dark:bg-white dark:text-gray-900'
                     : d === 'Easy' ? 'bg-green-500 text-white'
                     : d === 'Medium' ? 'bg-yellow-500 text-white'
                     : 'bg-red-500 text-white'
-                    : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-400'
+                    : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'
                 }`}>
                 {d}
               </button>
@@ -1045,10 +1045,10 @@ export default function CodingChallengesPage() {
             <Tag className="h-4 w-4 mt-1 text-gray-500 shrink-0" />
             {['All', ...ALL_PATTERNS].map(p => (
               <button key={p} onClick={() => setPattern(p)}
-                className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${
+                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 ease-out ${
                   pattern === p
                     ? 'bg-orange-500 text-white'
-                    : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-400'
+                    : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'
                 }`}>
                 {p}
               </button>
@@ -1065,8 +1065,7 @@ export default function CodingChallengesPage() {
               key={challenge.id}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.04 }}
-              className="rounded-2xl bg-white shadow-lg dark:bg-gray-800"
+              className="rounded-2xl surface-card"
             >
               {/* Card header */}
               <button
@@ -1218,7 +1217,7 @@ export default function CodingChallengesPage() {
                               exit={{ height: 0, opacity: 0 }}
                               className="overflow-hidden"
                             >
-                              <pre className="overflow-x-auto rounded-xl bg-gray-900 p-5 text-xs leading-relaxed text-green-300">
+                              <pre className="overflow-x-auto rounded-lg border border-ink-800 bg-ink-950 p-5 font-mono text-[13px] leading-[1.6] text-ink-100">
                                 <code>{challenge.solution}</code>
                               </pre>
                             </motion.div>

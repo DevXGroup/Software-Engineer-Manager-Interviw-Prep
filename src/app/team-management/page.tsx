@@ -54,12 +54,12 @@ export default function TeamManagementPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
+    <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
-          <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">Team Management</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">Hiring · Performance · 1:1s · Career ladders · Feedback · Culture</p>
+        <motion.div initial={false} className="mb-8 border-b border-ink-200 pb-8 dark:border-ink-800">
+          <h1 className="text-4xl text-ink-900 dark:text-ink-50">Team Management</h1>
+          <p className="mt-3 max-w-prose text-lg leading-relaxed text-ink-700 dark:text-ink-200">Hiring · Performance · 1:1s · Career ladders · Feedback · Culture</p>
         </motion.div>
 
         <QuizLauncher sectionId="team" title="Team Management" questions={teamManagementQuestions} />
@@ -67,17 +67,17 @@ export default function TeamManagementPage() {
         <div className="mb-8 flex flex-wrap gap-2">
           {tabs.map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => setTab(id)}
-              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${tab === id ? 'bg-cyan-500 text-white shadow-lg' : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-300'}`}>
+              className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors duration-150 ease-out ${tab === id ? 'bg-cyan-500 text-white shadow-lg' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-300'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
         </div>
 
         <AnimatePresence mode="wait">
-          <motion.div key={tab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} id={sectionIdByTab[tab]}>
+          <motion.div key={tab} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }} id={sectionIdByTab[tab]}>
             {/* ── Hiring ── */}
             {tab === 'hiring' && (
-              <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+              <div className="surface-card p-6">
                 <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Hiring Process & Rubrics</h2>
                 <div className="space-y-4">
                   {[
@@ -107,7 +107,7 @@ export default function TeamManagementPage() {
 
             {/* ── Performance ── */}
             {tab === 'performance' && (
-              <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+              <div className="surface-card p-6">
                 <h2 className="mb-6 text-2xl font-bold text-gray-900 dark:text-white">Performance Management</h2>
 
                 <div className="mb-6 rounded-xl bg-blue-50 p-5 dark:bg-blue-900/20">
@@ -154,7 +154,7 @@ export default function TeamManagementPage() {
 
             {/* ── 1:1s ── */}
             {tab === 'oneones' && (
-              <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+              <div className="surface-card p-6">
                 <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Effective 1:1 Framework</h2>
                 <p className="mb-6 text-gray-500 dark:text-gray-400">The 1:1 is their meeting, not yours. Your job is to listen, coach, and remove blockers — not give a status update.</p>
                 <div className="grid gap-6 md:grid-cols-2">
@@ -207,7 +207,7 @@ export default function TeamManagementPage() {
 
             {/* ── Career Dev ── */}
             {tab === 'career' && (
-              <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+              <div className="surface-card p-6">
                 <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Career Development</h2>
                 <div className="mb-6 grid gap-4 sm:grid-cols-2">
                   <div className="rounded-xl bg-blue-50 p-5/20/20">
@@ -271,7 +271,7 @@ export default function TeamManagementPage() {
 
             {/* ── Feedback ── */}
             {tab === 'feedback' && (
-              <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+              <div className="surface-card p-6">
                 <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Feedback Models</h2>
                 <div className="grid gap-6 md:grid-cols-2">
                   <div>
@@ -332,7 +332,7 @@ export default function TeamManagementPage() {
 
             {/* ── Culture ── */}
             {tab === 'culture' && (
-              <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+              <div className="surface-card p-6">
                 <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Building Team Culture</h2>
                 <div className="mb-6 rounded-xl bg-cyan-50 p-5/20/20">
                   <p className="text-sm text-gray-700 dark:text-gray-300 italic">"Culture is what happens when you\'re not in the room." — The decisions your team makes, the conversations they have, and how they treat each other when no manager is watching — that is your real culture. Everything else is aspirational.</p>
@@ -346,7 +346,7 @@ export default function TeamManagementPage() {
                     { title: 'Anti-patterns to Eliminate', desc: '"Brilliant jerks" — high performers who damage team culture. The research is clear: the performance gain from a brilliant jerk is more than offset by the attrition, silence, and reduced collaboration they cause. Address toxic behavior regardless of technical output. Set the expectation: "Being difficult to work with is a performance issue at this team."', color: 'red-500' },
                     { title: 'Measuring Culture Health', desc: 'Team pulse surveys (quarterly, anonymous, 5-7 questions): psychological safety, manager effectiveness, clarity of goals, growth opportunity, work-life sustainability. Track trends not just snapshot. An eNPS (employee Net Promoter Score) below 20 is a warning; below 0 is a crisis. Act on the results publicly — if you ask and don\'t respond, trust drops more than if you had not asked.', color: 'indigo-500' },
                   ].map((item, i) => (
-                    <motion.div key={item.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
+                    <motion.div key={item.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                       className="rounded-xl overflow-hidden shadow">
                       <div className={`${item.color} px-4 py-2.5`}>
                         <p className="font-bold text-white text-sm">{item.title}</p>
@@ -362,7 +362,7 @@ export default function TeamManagementPage() {
 
             {/* ── Talent Review ── */}
             {tab === 'talent' && (
-              <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+              <div className="surface-card p-6">
                 <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">Amazon Forte: Talent Review</h2>
                 <p className="mb-6 text-gray-500 dark:text-gray-400">{"Amazon's annual evaluation process (Forte) helps employees reflect on performance and understand how they demonstrate Leadership Principles. As a manager, mastering this process is essential for fair, defensible evaluations."}</p>
 
@@ -467,7 +467,7 @@ export default function TeamManagementPage() {
 
             {/* ── Communication ── */}
             {tab === 'communication' && (
-              <div className="rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800">
+              <div className="surface-card p-6">
                 <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">Communication Frameworks</h2>
                 <p className="mb-6 text-gray-500 dark:text-gray-400">{"Effective management communication draws on Aristotle's rhetoric and modern leadership science. Combine technical credibility with persuasive storytelling to drive alignment and motivate your team."}</p>
 

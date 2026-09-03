@@ -1,6 +1,11 @@
 'use client'
 
-import { motion } from 'framer-motion'
+const LABELS = [
+  { key: 'situation', label: 'Situation' },
+  { key: 'task', label: 'Task' },
+  { key: 'action', label: 'Action' },
+  { key: 'result', label: 'Result' },
+] as const
 
 interface STARExampleProps {
   example: {
@@ -11,32 +16,28 @@ interface STARExampleProps {
   }
 }
 
+/**
+ * STAR is a sequence, so it reads as a numbered sequence: leading step index,
+ * one shared surface, no per-step color coding.
+ */
 export function STARExample({ example }: STARExampleProps) {
-  const sections = [
-    { label: 'Situation', content: example.situation, color: 'bg-blue-50 dark:bg-blue-900/20 border-blue-300' },
-    { label: 'Task', content: example.task, color: 'bg-green-50 dark:bg-green-900/20 border-green-300' },
-    { label: 'Action', content: example.action, color: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-300' },
-    { label: 'Result', content: example.result, color: 'bg-purple-50 dark:bg-purple-900/20 border-purple-300' },
-  ]
-  
   return (
-    <div className="space-y-3">
-      {sections.map((section, index) => (
-        <motion.div
-          key={section.label}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: index * 0.1 }}
-          className={`rounded-lg border-l-4 p-4 ${section.color}`}
-        >
-          <h4 className="mb-2 font-bold text-gray-900 dark:text-white">
-            {section.label}
-          </h4>
-          <p className="text-gray-700 dark:text-gray-300">
-            {section.content}
-          </p>
-        </motion.div>
+    <ol className="surface-card divide-y divide-ink-200 dark:divide-ink-800">
+      {LABELS.map(({ key, label }, i) => (
+        <li key={key} className="flex gap-4 p-5">
+          <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-ink-300 font-mono text-xs text-ink-600 dark:border-ink-700 dark:text-ink-300">
+            {i + 1}
+          </span>
+          <div className="min-w-0">
+            <h4 className="text-sm font-semibold uppercase tracking-wide text-ink-600 dark:text-ink-300">
+              {label}
+            </h4>
+            <p className="mt-1.5 max-w-prose leading-relaxed text-ink-800 dark:text-ink-100">
+              {example[key]}
+            </p>
+          </div>
+        </li>
       ))}
-    </div>
+    </ol>
   )
 }

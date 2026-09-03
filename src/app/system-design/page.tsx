@@ -298,21 +298,21 @@ export default function SystemDesignPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
+    <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
-          <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">System Design</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">4 deep-dive scenarios · Step-by-step breakdowns · Architecture patterns</p>
+        <motion.div initial={false} className="mb-8 border-b border-ink-200 pb-8 dark:border-ink-800">
+          <h1 className="text-4xl text-ink-900 dark:text-ink-50">System Design</h1>
+          <p className="mt-3 max-w-prose text-lg leading-relaxed text-ink-700 dark:text-ink-200">4 deep-dive scenarios · Step-by-step breakdowns · Architecture patterns</p>
         </motion.div>
 
         <QuizLauncher sectionId="system-design" title="System Design" questions={systemDesignQuestions} />
 
         {/* Tabs */}
-        <div className="mb-8 flex gap-2 rounded-xl bg-white p-1 shadow dark:bg-gray-800">
+        <div className="mb-8 flex gap-1 rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900">
           {([['scenarios', Server, 'Design Scenarios'], ['patterns', GitBranch, 'Architecture Patterns'], ['concepts', Database, 'Key Concepts']] as const).map(([t, Icon, label]) => (
             <button key={t} onClick={() => setMainTab(t)}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${mainTab === t ? 'bg-green-500 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}>
+              className={`flex min-h-[44px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium transition-colors duration-150 ease-out ${mainTab === t ? 'bg-green-500 text-white shadow' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
@@ -321,15 +321,14 @@ export default function SystemDesignPage() {
         <AnimatePresence mode="wait">
           {/* ── Design Scenarios ── */}
           {mainTab === 'scenarios' && (
-            <motion.div key="scenarios" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="scenarios" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               {/* Scenario selector */}
               <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {scenarios.map(s => {
                   const Icon = s.icon
                   return (
-                    <motion.button key={s.id} whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                      onClick={() => { setSelectedScenario(s); setExpandedStep('1') }}
-                      className={`rounded-xl p-4 text-left transition-all ${selectedScenario.id === s.id ? `${s.color} text-white shadow-lg` : 'bg-white shadow hover:shadow-md dark:bg-gray-800'}`}>
+                    <motion.button key={s.id} onClick={() => { setSelectedScenario(s); setExpandedStep('1') }}
+                      className={`rounded-xl p-4 text-left transition-colors duration-150 ease-out ${selectedScenario.id === s.id ? `${s.color} text-white shadow-lg` : 'bg-white card-hover dark:bg-gray-800'}`}>
                       <Icon className="mb-2 h-6 w-6" />
                       <p className="font-bold text-sm">{s.title}</p>
                       <p className={`mt-1 text-xs ${selectedScenario.id === s.id ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'}`}>{s.difficulty} · {s.timeEstimate}</p>
@@ -339,7 +338,7 @@ export default function SystemDesignPage() {
               </div>
 
               <AnimatePresence mode="wait">
-                <motion.div key={selectedScenario.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                <motion.div key={selectedScenario.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
                   id={`${selectedScenario.id}-scenario`}>
                   {/* Scenario header */}
                   <div className={`mb-6 rounded-2xl ${selectedScenario.color} p-6 text-white`}>
@@ -349,15 +348,15 @@ export default function SystemDesignPage() {
 
                   {/* Requirements + Scale */}
                   <div className="mb-6 grid gap-4 md:grid-cols-3">
-                    <div className="rounded-xl bg-white p-4 shadow dark:bg-gray-800">
+                    <div className="surface-card p-4">
                       <h3 className="mb-3 font-bold text-gray-900 dark:text-white text-sm">Functional Requirements</h3>
                       <ul className="space-y-1.5">{selectedScenario.functionalReqs.map((r, i) => <li key={i} className="flex items-start gap-1.5 text-xs text-gray-600 dark:text-gray-400"><span className="mt-0.5 text-green-500">✓</span>{r}</li>)}</ul>
                     </div>
-                    <div className="rounded-xl bg-white p-4 shadow dark:bg-gray-800">
+                    <div className="surface-card p-4">
                       <h3 className="mb-3 font-bold text-gray-900 dark:text-white text-sm">Non-Functional Requirements</h3>
                       <ul className="space-y-1.5">{selectedScenario.nonFunctionalReqs.map((r, i) => <li key={i} className="flex items-start gap-1.5 text-xs text-gray-600 dark:text-gray-400"><span className="mt-0.5 text-blue-500">→</span>{r}</li>)}</ul>
                     </div>
-                    <div className="rounded-xl bg-white p-4 shadow dark:bg-gray-800">
+                    <div className="surface-card p-4">
                       <h3 className="mb-3 font-bold text-gray-900 dark:text-white text-sm">Scale Estimates</h3>
                       <ul className="space-y-1.5">{selectedScenario.scaleTargets.map((r, i) => <li key={i} className="text-xs text-gray-600 dark:text-gray-400 font-mono">{r}</li>)}</ul>
                     </div>
@@ -366,7 +365,7 @@ export default function SystemDesignPage() {
                   {/* Step-by-step */}
                   <div className="mb-6 space-y-3">
                     {selectedScenario.steps.map((step, i) => (
-                      <div key={i} className="rounded-xl bg-white shadow dark:bg-gray-800 overflow-hidden">
+                      <div key={i} className="rounded-xl surface-card overflow-hidden">
                         <button onClick={() => setExpandedStep(expandedStep === String(i + 1) ? null : String(i + 1))}
                           className="flex w-full items-center justify-between p-4 text-left">
                           <span className="font-semibold text-gray-900 dark:text-white">{step.title}</span>
@@ -391,7 +390,7 @@ export default function SystemDesignPage() {
 
                   {/* Key Components + Tradeoffs */}
                   <div className="grid gap-4 md:grid-cols-2">
-                    <div className="rounded-xl bg-white p-5 shadow dark:bg-gray-800">
+                    <div className="surface-card p-5">
                       <h3 className="mb-4 font-bold text-gray-900 dark:text-white">Key Components</h3>
                       <div className="space-y-3">
                         {selectedScenario.keyComponents.map((c, i) => (
@@ -423,14 +422,14 @@ export default function SystemDesignPage() {
 
           {/* ── Architecture Patterns ── */}
           {mainTab === 'patterns' && (
-            <motion.div key="patterns" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="patterns" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               <div className="grid gap-6 lg:grid-cols-3">
                 <div className="space-y-2">
                   {architecturePatterns.map(p => {
                     const Icon = p.icon
                     return (
                       <button key={p.name} onClick={() => setSelectedPattern(p)}
-                        className={`flex w-full items-center gap-3 rounded-xl p-4 text-left transition-all ${selectedPattern.name === p.name ? 'bg-green-500 text-white shadow-lg' : 'bg-white shadow hover:shadow-md dark:bg-gray-800 text-gray-700 dark:text-gray-300'}`}
+                        className={`flex w-full items-center gap-3 rounded-xl p-4 text-left transition-colors duration-150 ease-out ${selectedPattern.name === p.name ? 'bg-green-500 text-white shadow-lg' : 'bg-white card-hover dark:bg-gray-800 text-gray-700 dark:text-gray-300'}`}
                         id={getArchitecturePatternSearchId(p.name)}>
                         <Icon className="h-5 w-5 shrink-0" />
                         <div>
@@ -443,7 +442,7 @@ export default function SystemDesignPage() {
                 </div>
                 <AnimatePresence mode="wait">
                   <motion.div key={selectedPattern.name} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
-                    className="lg:col-span-2 rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-800"
+                    className="lg:col-span-2 surface-card p-6"
                     id={getArchitecturePatternSearchId(selectedPattern.name)}>
                     <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">{selectedPattern.name}</h2>
                     <p className="mb-5 text-gray-500 dark:text-gray-400">{selectedPattern.description}</p>
@@ -469,13 +468,13 @@ export default function SystemDesignPage() {
 
           {/* ── Key Concepts ── */}
           {mainTab === 'concepts' && (
-            <motion.div key="concepts" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="concepts" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               <div className="space-y-6">
                 {/* CAP Theorem */}
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  className="rounded-2xl border-l-4 border-blue-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  className="surface-card p-6"
                   id="cap-theorem"
                 >
                   <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">CAP Theorem</h3>
@@ -652,7 +651,7 @@ export default function SystemDesignPage() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  className="rounded-2xl border-l-4 border-green-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  className="surface-card p-6"
                   id="sql-vs-nosql"
                 >
                   <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">SQL vs NoSQL</h3>
@@ -727,7 +726,7 @@ export default function SystemDesignPage() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  className="rounded-2xl border-l-4 border-yellow-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  className="surface-card p-6"
                   id="caching-strategies"
                 >
                   <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Caching Strategies</h3>
@@ -816,7 +815,7 @@ export default function SystemDesignPage() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  className="rounded-2xl border-l-4 border-pink-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  className="surface-card p-6"
                   id="acid-transactions"
                 >
                   <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">ACID Transactions</h3>
@@ -910,7 +909,7 @@ export default function SystemDesignPage() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  className="rounded-2xl border-l-4 border-red-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  className="surface-card p-6"
                   id="database-sharding"
                 >
                   <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Database Sharding</h3>
@@ -959,7 +958,7 @@ export default function SystemDesignPage() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  className="rounded-2xl border-l-4 border-indigo-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  className="surface-card p-6"
                   id="load-balancing"
                 >
                   <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Load Balancing Algorithms</h3>
@@ -1011,7 +1010,7 @@ export default function SystemDesignPage() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  className="rounded-2xl border-l-4 border-orange-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  className="surface-card p-6"
                   id="message-queues"
                 >
                   <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Message Queues vs Event Streaming</h3>
@@ -1082,7 +1081,7 @@ export default function SystemDesignPage() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  className="rounded-2xl border-l-4 border-teal-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  className="surface-card p-6"
                   id="database-indexes"
                 >
                   <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Database Indexes</h3>
@@ -1137,7 +1136,7 @@ export default function SystemDesignPage() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  className="rounded-2xl border-l-4 border-purple-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  className="surface-card p-6"
                   id="consistent-hashing"
                 >
                   <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Consistent Hashing</h3>
@@ -1205,7 +1204,7 @@ export default function SystemDesignPage() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="rounded-2xl border-l-4 border-rose-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  className="surface-card p-6"
                   id="deep-dive-videos"
                 >
                   <div className="mb-5 flex flex-wrap items-start justify-between gap-3">
@@ -1285,7 +1284,7 @@ export default function SystemDesignPage() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }} 
                   animate={{ opacity: 1, y: 0 }} 
-                  className="rounded-2xl border-l-4 border-cyan-400 bg-white p-6 shadow-xl dark:bg-gray-800"
+                  className="surface-card p-6"
                   id="database-internals"
                 >
                   <h3 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Database Internals</h3>

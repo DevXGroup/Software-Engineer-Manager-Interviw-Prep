@@ -24,10 +24,10 @@ export function PriorityFilter({
         <button
           key={val}
           onClick={() => onChange(val)}
-          className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+          className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-150 ease-out ${
             value === val
-              ? 'bg-purple-600 text-white shadow'
-              : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-400'
+              ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950'
+              : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'
           }`}
         >
           <Icon className="h-3 w-3" />

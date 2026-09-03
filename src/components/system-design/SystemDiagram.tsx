@@ -78,7 +78,7 @@ export function SystemDiagram() {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800"
+      className="surface-card p-6"
     >
       <canvas
         ref={canvasRef}

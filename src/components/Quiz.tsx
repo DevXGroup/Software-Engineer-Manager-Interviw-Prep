@@ -78,7 +78,7 @@ export function Quiz({
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{title} Quiz</h2>
+          <h2 className="text-2xl text-ink-900 dark:text-ink-50">{title} Quiz</h2>
           <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             {questions.length} questions &middot; 80% to pass
           </p>
@@ -89,10 +89,10 @@ export function Quiz({
             <button
               key={f}
               onClick={() => setPriorityFilter(f)}
-              className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-150 ease-out ${
                 priorityFilter === f
-                  ? 'bg-purple-600 text-white'
-                  : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400'
+                  ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950'
+                  : 'border border-ink-200 text-ink-600 hover:bg-ink-100 dark:border-ink-700 dark:text-ink-300 dark:hover:bg-ink-800'
               }`}
             >
               {f === 'must-know' && <Star className="h-3 w-3" />}
@@ -104,7 +104,7 @@ export function Quiz({
 
         <button
           onClick={() => setState('in-progress')}
-          className="w-full rounded-xl bg-purple-600 py-3 font-semibold text-white shadow-lg hover:opacity-90"
+          className="btn-primary w-full"
         >
           Start Quiz ({filtered.length} questions)
         </button>
@@ -133,28 +133,28 @@ export function Quiz({
           />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            {finalPassed ? 'PASSED!' : 'Keep Practicing'}
+          <h2 className="text-2xl text-ink-900 dark:text-ink-50">
+            {finalPassed ? 'Passed' : 'Not there yet'}
           </h2>
           <p className="mt-1 text-lg text-gray-600 dark:text-gray-400">
             {finalScore} / {filtered.length} correct ({Math.round((finalScore / filtered.length) * 100)}%)
           </p>
           {!finalPassed && (
             <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-              You need 80% to pass. Review the material and try again!
+              80% passes. Re-read the topics you missed, then run it again.
             </p>
           )}
         </div>
         <div className="flex gap-3">
           <button
             onClick={restart}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gray-100 py-3 font-medium text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300"
+            className="btn-secondary flex-1"
           >
             <RotateCcw className="h-4 w-4" /> Retry
           </button>
           <button
             onClick={onClose}
-            className="flex-1 rounded-xl bg-purple-600 py-3 font-medium text-white hover:opacity-90"
+            className="btn-primary flex-1"
           >
             Done
           </button>
@@ -176,7 +176,7 @@ export function Quiz({
         </div>
         <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
           <motion.div
-            className="h-full rounded-full bg-purple-600"
+            className="h-full rounded-full bg-clay-600 dark:bg-clay-500"
             animate={{ width: `${((currentIndex + 1) / filtered.length) * 100}%` }}
           />
         </div>
@@ -186,9 +186,10 @@ export function Quiz({
       <AnimatePresence mode="wait">
         <motion.div
           key={currentQ.id}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="mb-1 flex items-center gap-2">
             {currentQ.priority === 'must-know' ? (
@@ -201,7 +202,7 @@ export function Quiz({
               </span>
             )}
           </div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+          <h3 className="text-lg font-semibold leading-snug text-ink-900 dark:text-ink-50">
             {currentQ.question}
           </h3>
 
@@ -209,13 +210,13 @@ export function Quiz({
             {currentQ.options.map((opt, i) => {
               const isSelected = selected === i
               const isCorrect = i === currentQ.correctIndex
-              let style = 'border-gray-200 dark:border-gray-700 hover:border-purple-300'
+              let style = 'border-ink-200 hover:border-clay-400 dark:border-ink-700 dark:hover:border-clay-500'
               if (confirmed) {
-                if (isCorrect) style = 'border-green-500 bg-green-50 dark:bg-green-900/20'
+                if (isCorrect) style = 'border-moss-600 bg-moss-50 dark:border-moss-500 dark:bg-moss-900/25'
                 else if (isSelected && !isCorrect)
-                  style = 'border-red-500 bg-red-50 dark:bg-red-900/20'
+                  style = 'border-rust-600 bg-rust-50 dark:border-rust-500 dark:bg-rust-900/25'
               } else if (isSelected) {
-                style = 'border-purple-500 bg-purple-50 dark:bg-purple-900/20'
+                style = 'border-clay-600 bg-clay-50 dark:border-clay-500 dark:bg-clay-950/40'
               }
 
               return (
@@ -223,7 +224,7 @@ export function Quiz({
                   key={i}
                   onClick={() => !confirmed && setSelected(i)}
                   disabled={confirmed}
-                  className={`flex w-full items-center gap-3 rounded-xl border-2 p-4 text-left text-sm transition-all ${style}`}
+                  className={`flex min-h-[44px] w-full items-center gap-3 rounded-lg border p-4 text-left text-sm transition-colors duration-150 ease-out ${style}`}
                 >
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-current text-xs font-bold">
                     {String.fromCharCode(65 + i)}
@@ -246,9 +247,10 @@ export function Quiz({
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
-                className="mt-4 overflow-hidden rounded-xl bg-blue-50 p-4 dark:bg-blue-900/20"
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="mt-4 overflow-hidden rounded-lg border border-teal-200 bg-teal-50 p-4 dark:border-teal-900 dark:bg-teal-950/40"
               >
-                <p className="text-sm text-blue-800 dark:text-blue-300">
+                <p className="text-sm leading-relaxed text-teal-900 dark:text-teal-100">
                   {currentQ.explanation}
                 </p>
               </motion.div>
@@ -263,14 +265,14 @@ export function Quiz({
           <button
             onClick={handleConfirm}
             disabled={selected === null}
-            className="w-full rounded-xl bg-purple-600 py-3 font-medium text-white shadow disabled:opacity-50"
+            className="btn-primary w-full"
           >
             Confirm Answer
           </button>
         ) : (
           <button
             onClick={handleNext}
-            className="w-full rounded-xl bg-purple-600 py-3 font-medium text-white shadow"
+            className="btn-primary w-full"
           >
             {currentIndex < filtered.length - 1 ? 'Next Question' : 'See Results'}
           </button>

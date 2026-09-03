@@ -13,7 +13,7 @@ interface CompanyFrameworkProps {
 
 export function CompanyFramework({ company }: CompanyFrameworkProps) {
   return (
-    <div className="rounded-xl bg-white p-6 shadow-lg dark:bg-gray-800">
+    <div className="surface-card p-6">
       <h3 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
         {company.name} Leadership Principles
       </h3>
@@ -24,7 +24,6 @@ export function CompanyFramework({ company }: CompanyFrameworkProps) {
             key={principle}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
             className="flex items-start gap-3 rounded-lg border border-gray-200 p-4 dark:border-gray-700"
           >
             <CheckCircle className={`h-5 w-5 flex-shrink-0 text-${company.color.split('-')[1]}-500`} />

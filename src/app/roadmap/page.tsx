@@ -196,16 +196,16 @@ export default function RoadmapPage() {
   const overallPct = Math.round((totalDone / totalTasks) * 100)
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
+    <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
+        <motion.div initial={false} className="mb-8 border-b border-ink-200 pb-8 dark:border-ink-800">
           <div className="mb-4 flex justify-center">
             <span className="rounded-2xl bg-blue-500 p-3 shadow-lg">
               <Calendar className="h-8 w-8 text-white" />
             </span>
           </div>
-          <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">8-Week MAANG Interview Roadmap</h1>
+          <h1 className="text-4xl text-ink-900 dark:text-ink-50">8-Week MAANG Interview Roadmap</h1>
           <p className="mx-auto max-w-xl text-lg text-gray-600 dark:text-gray-300">
             A structured week-by-week plan to go from zero to MAANG-ready for SDM/EM interviews
           </p>
@@ -238,8 +238,7 @@ export default function RoadmapPage() {
                 key={week.week}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.05 }}
-                className="overflow-hidden rounded-2xl bg-white shadow-lg dark:bg-gray-800"
+                className="overflow-hidden rounded-2xl surface-card"
               >
                 <button
                   className="w-full p-5 text-left"
@@ -265,7 +264,7 @@ export default function RoadmapPage() {
                       <p className="text-sm font-bold text-gray-700 dark:text-gray-300">{done}/{total}</p>
                       <div className="mt-1 h-1.5 w-20 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
                         <div
-                          className={`h-1.5 rounded-full ${week.color} transition-all duration-500`}
+                          className={`h-1.5 rounded-full ${week.color} transition-colors duration-150 ease-out duration-500`}
                           style={{ width: `${pct}%` }}
                         />
                       </div>

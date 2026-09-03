@@ -327,7 +327,7 @@ export default function CompanyPage({ params }: { params: { company: string } })
   if (!data) notFound()
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
+    <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-5xl">
         {/* Back */}
         <Link href="/" className="mb-6 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400">
@@ -352,7 +352,7 @@ export default function CompanyPage({ params }: { params: { company: string } })
         <div className="space-y-6">
           {/* Interview Process */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            className="rounded-2xl bg-white p-6 shadow-lg dark:bg-gray-800">
+            className="surface-card p-6">
             <h2 className="mb-1 flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white">
               <Clock className="h-5 w-5 text-blue-500" /> Interview Process
             </h2>
@@ -377,7 +377,7 @@ export default function CompanyPage({ params }: { params: { company: string } })
 
           {/* Top Questions */}
           <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
-            className="rounded-2xl bg-white p-6 shadow-lg dark:bg-gray-800">
+            className="surface-card p-6">
             <h2 className="mb-4 flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white">
               <Star className="h-5 w-5 text-yellow-500" /> Most Asked Questions
             </h2>
@@ -433,7 +433,7 @@ export default function CompanyPage({ params }: { params: { company: string } })
           {/* Culture Signals + Red Flags */}
           <div className="grid gap-6 md:grid-cols-2">
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-              className="rounded-2xl bg-white p-6 shadow-lg dark:bg-gray-800">
+              className="surface-card p-6">
               <h2 className="mb-4 flex items-center gap-2 text-xl font-bold text-gray-900 dark:text-white">
                 <Users className="h-5 w-5 text-blue-500" /> What They Really Evaluate
               </h2>

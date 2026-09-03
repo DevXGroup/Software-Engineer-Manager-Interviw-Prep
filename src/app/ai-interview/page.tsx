@@ -425,24 +425,24 @@ export default function AIInterviewPage() {
   }, [search, categoryFilter, levelFilter])
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 px-4 py-20">
+    <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <SearchParamSync onChange={syncSearchParams} />
       <div className="mx-auto max-w-7xl">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10 text-center">
+        <motion.div initial={false} className="mb-8 border-b border-ink-200 pb-8 dark:border-ink-800">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-violet-600 px-4 py-1.5 text-sm font-medium text-white">
             <Brain className="h-4 w-4" /> New: AI Interview Prep
           </div>
-          <h1 className="mb-3 text-4xl font-bold text-gray-900 dark:text-white">AI & Machine Learning Interview Prep</h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300">12 deep-dive Q&As · Key AI concepts · Practice mode · For SDMs and AI PMs</p>
+          <h1 className="text-4xl text-ink-900 dark:text-ink-50">AI & Machine Learning Interview Prep</h1>
+          <p className="mt-3 max-w-prose text-lg leading-relaxed text-ink-700 dark:text-ink-200">12 deep-dive Q&As · Key AI concepts · Practice mode · For SDMs and AI PMs</p>
         </motion.div>
 
         <QuizLauncher sectionId="ai-interview" title="AI Interview" questions={aiInterviewQuestions} />
 
         {/* Tabs */}
-        <div className="mb-8 flex gap-2 rounded-xl bg-white p-1 shadow dark:bg-gray-800">
+        <div className="mb-8 flex gap-1 rounded-xl border border-ink-200 bg-white p-1 dark:border-ink-800 dark:bg-ink-900">
           {([['qa', Brain, 'AI Q&A Bank'], ['practice', Eye, 'Practice Mode'], ['concepts', Cpu, 'Key Concepts']] as const).map(([t, Icon, label]) => (
             <button key={t} onClick={() => setTab(t)}
-              className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium transition-all ${tab === t ? 'bg-violet-600 text-white shadow' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100'}`}>
+              className={`flex min-h-[44px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-sm font-medium transition-colors duration-150 ease-out ${tab === t ? 'bg-violet-600 text-white shadow' : 'text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50'}`}>
               <Icon className="h-4 w-4" />{label}
             </button>
           ))}
@@ -451,7 +451,7 @@ export default function AIInterviewPage() {
         <AnimatePresence mode="wait">
           {/* ── Q&A Tab ── */}
           {tab === 'qa' && (
-            <motion.div key="qa" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="qa" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               <div className="mb-6 space-y-3">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
@@ -462,14 +462,14 @@ export default function AIInterviewPage() {
                 <div className="flex flex-wrap gap-2">
                   {levels.map(l => (
                     <button key={l} onClick={() => setLevelFilter(l)}
-                      className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${levelFilter === l ? 'bg-violet-600 text-white' : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-400'}`}>
+                      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 ease-out ${levelFilter === l ? 'bg-violet-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
                       {l}
                     </button>
                   ))}
                   <span className="h-4 w-px bg-gray-200 dark:bg-gray-700 mt-1" />
                   {categories.slice(1).map(c => (
                     <button key={c} onClick={() => setCategoryFilter(prev => prev === c ? 'All' : c)}
-                      className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${categoryFilter === c ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 shadow hover:shadow-md dark:bg-gray-800 dark:text-gray-400'}`}>
+                      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors duration-150 ease-out ${categoryFilter === c ? 'bg-indigo-600 text-white' : 'bg-white text-gray-600 card-hover dark:bg-gray-800 dark:text-gray-400'}`}>
                       {c}
                     </button>
                   ))}
@@ -482,8 +482,8 @@ export default function AIInterviewPage() {
                 {filtered.map((q, i) => {
                   const Icon = categoryIcons[q.category] ?? Brain
                   return (
-                    <motion.div key={q.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
-                      className="rounded-2xl bg-white shadow-lg dark:bg-gray-800">
+                    <motion.div key={q.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+                      className="rounded-2xl surface-card">
                       <div className="cursor-pointer p-6" onClick={() => setExpandedQ(expandedQ === q.id ? null : q.id)}>
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex-1">
@@ -526,7 +526,7 @@ export default function AIInterviewPage() {
 
           {/* ── Practice Tab ── */}
           {tab === 'practice' && (
-            <motion.div key="practice" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="practice" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               <div className="mb-6 rounded-2xl bg-violet-600 p-6 text-white">
                 <h2 className="text-xl font-bold">Practice Mode</h2>
                 <p className="mt-1 text-violet-100">Formulate your answer before revealing. AI interviewers probe depth — practice speaking for 2-3 minutes per question.</p>
@@ -535,8 +535,8 @@ export default function AIInterviewPage() {
                 {aiQuestions.map((q, i) => {
                   const Icon = categoryIcons[q.category] ?? Brain
                   return (
-                    <motion.div key={q.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
-                      className="rounded-2xl bg-white shadow-lg dark:bg-gray-800 p-6">
+                    <motion.div key={q.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
+                      className="rounded-2xl surface-card p-6">
                       <div className="mb-2 flex items-center gap-2">
                         <Icon className="h-4 w-4 text-violet-500" />
                         <span className="text-xs font-medium text-violet-600 dark:text-violet-400">{q.category}</span>
@@ -545,8 +545,7 @@ export default function AIInterviewPage() {
                       <p className="text-lg font-semibold text-gray-900 dark:text-white">{q.question}</p>
                       <div className="mt-4">
                         {!practiceVisible[q.id] ? (
-                          <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                            onClick={() => setPracticeVisible(prev => ({ ...prev, [q.id]: true }))}
+                          <motion.button onClick={() => setPracticeVisible(prev => ({ ...prev, [q.id]: true }))}
                             className="flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white">
                             <Eye className="h-4 w-4" /> Reveal Answer
                           </motion.button>
@@ -569,10 +568,10 @@ export default function AIInterviewPage() {
 
           {/* ── Key Concepts Tab ── */}
           {tab === 'concepts' && (
-            <motion.div key="concepts" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+            <motion.div key="concepts" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}>
               <div className="grid gap-4 sm:grid-cols-2">
                 {keyConcepts.map((c, i) => (
-                  <motion.div key={c.term} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
+                  <motion.div key={c.term} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
                     className="rounded-2xl bg-white p-5 shadow-lg dark:bg-gray-800"
                     id={c.id}>
                     <h3 className="mb-2 font-bold text-gray-900 dark:text-white">{c.term}</h3>
