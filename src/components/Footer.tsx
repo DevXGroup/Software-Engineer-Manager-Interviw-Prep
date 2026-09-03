@@ -7,12 +7,7 @@ export function Footer() {
   return (
     <footer className="relative">
       {/* Developer Attribution Section - Premium Banner */}
-      <div className="relative overflow-hidden bg-blue-600 dark:bg-blue-900">
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute -top-24 -right-24 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-          <div className="absolute -bottom-24 -left-24 h-96 w-96 rounded-full bg-white blur-3xl"></div>
-        </div>
+      <div className="relative overflow-hidden bg-ink-900 dark:bg-ink-950">
 
         <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center gap-6 lg:items-start lg:flex-row lg:justify-between">
@@ -24,7 +19,7 @@ export function Footer() {
               className="group flex flex-col items-center text-center lg:items-start lg:text-left"
             >
               {/* DevX Group LLC Logo */}
-              <div className="relative h-16 w-40 shrink-0 overflow-hidden rounded-2xl bg-white/10 p-2 shadow-xl backdrop-blur-md ring-2 ring-white/20 transition-all group-hover:scale-105 group-hover:shadow-2xl group-hover:bg-white/20">
+              <div className="relative h-16 w-40 shrink-0 overflow-hidden rounded-2xl bg-white/5 p-2 ring-1 ring-white/15 transition-colors duration-150 ease-out group-hover:bg-white/10">
                 <Image
                   src="/devx-logo.png"
                   alt="DevX Group LLC"
@@ -33,7 +28,7 @@ export function Footer() {
                 />
               </div>
               {/* Builder Attribution */}
-              <p className="mt-3 flex items-center justify-center gap-1.5 text-sm font-medium text-blue-100 lg:justify-start">
+              <p className="mt-3 flex items-center justify-center gap-1.5 text-sm font-medium text-ink-300 lg:justify-start">
                 Built by Max Sheikhizadeh
                 <ExternalLink className="h-3.5 w-3.5" />
               </p>
@@ -44,7 +39,7 @@ export function Footer() {
               <p className="text-base font-semibold text-white">
                 Free & Open Source
               </p>
-              <p className="text-sm text-blue-100">
+              <p className="text-sm text-ink-300">
                 Built for the MAANG interview community
               </p>
             </div>
@@ -54,7 +49,7 @@ export function Footer() {
               href="https://devxgroup.io"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden rounded-xl bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm ring-2 ring-white/20 transition-all hover:bg-white/20 hover:scale-105 lg:block"
+              className="hidden min-h-[44px] items-center rounded-lg px-6 text-sm font-semibold text-white ring-1 ring-white/25 transition-colors duration-150 ease-out hover:bg-white/10 lg:inline-flex"
             >
               Visit DevX Group
             </a>
@@ -63,7 +58,7 @@ export function Footer() {
       </div>
 
       {/* Donation & Links Section */}
-      <div className="border-t border-gray-200 bg-white/80 backdrop-blur dark:border-gray-800 dark:bg-gray-900/80">
+      <div className="border-t border-gray-200 bg-ink-50 dark:border-ink-800 dark:bg-ink-900">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center gap-4 sm:justify-between sm:flex-row">
             {/* Community Message */}

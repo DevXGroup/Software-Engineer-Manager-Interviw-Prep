@@ -38,7 +38,7 @@ export function Navigation() {
   }
 
   return (
-    <nav className="fixed top-0 z-50 w-full bg-white/95 dark:bg-ink-900/95 border-b border-gray-200 dark:border-gray-700">
+    <nav className="fixed top-0 z-50 w-full border-b border-ink-200 bg-ink-50/95 backdrop-blur-[2px] dark:border-ink-800 dark:bg-ink-900/95">
       <div className="mx-auto max-w-[1800px] px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo Section */}
@@ -47,9 +47,9 @@ export function Navigation() {
               <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
                 <defs>
                   <linearGradient id="logoBg" x1="0" y1="0" x2="34" y2="34" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stopColor="#c026d3"/>
-                    <stop offset="50%" stopColor="#7c3aed"/>
-                    <stop offset="100%" stopColor="#1d4ed8"/>
+                    <stop offset="0%" stopColor="#a5592e"/>
+                    <stop offset="50%" stopColor="#874622"/>
+                    <stop offset="100%" stopColor="#33363a"/>
                   </linearGradient>
                   <linearGradient id="logoShine" x1="0" y1="0" x2="0" y2="15" gradientUnits="userSpaceOnUse">
                     <stop offset="0%" stopColor="white" stopOpacity="0.22"/>
@@ -78,8 +78,8 @@ export function Navigation() {
                 <polyline points="8,28 13,25 19,26.5 26,21.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.7"/>
                 <circle cx="26" cy="21.5" r="1.8" fill="white" fillOpacity="0.9"/>
               </svg>
-              <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-                EM <span className="bg-purple-600 bg-clip-text text-transparent">Mastery</span>
+              <span className="text-lg font-semibold tracking-tight text-ink-900 dark:text-ink-50">
+                EM <span className="font-display font-semibold italic text-clay-700 dark:text-clay-400">Mastery</span>
               </span>
             </Link>
 
@@ -95,10 +95,10 @@ export function Navigation() {
                       key={item.name}
                       href={item.href}
                       className={`
-                        flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium whitespace-nowrap transition-all
+                        flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out
                         ${isActive
-                          ? 'bg-purple-600 text-white shadow-md'
-                          : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                          ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950'
+                          : 'text-ink-700 hover:bg-ink-100 dark:text-ink-200 dark:hover:bg-ink-800'
                         }
                       `}
                     >
@@ -117,7 +117,7 @@ export function Navigation() {
             {/* Search Button */}
             <button
               onClick={openSearch}
-              className="hidden sm:flex items-center gap-2 rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-all"
+              className="hidden min-h-[44px] items-center gap-2 rounded-lg border border-ink-200 bg-white px-4 text-sm font-medium text-ink-600 transition-colors duration-150 ease-out hover:border-ink-300 hover:text-ink-800 dark:border-ink-800 dark:bg-ink-950/50 dark:text-ink-300 dark:hover:text-ink-100 sm:flex"
             >
               <Search className="h-4 w-4" />
               <span className="hidden md:inline">Search</span>
@@ -129,7 +129,8 @@ export function Navigation() {
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
-              className="rounded-xl p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 transition-all"
+              aria-label="Toggle color theme"
+              className="flex h-11 w-11 items-center justify-center rounded-lg text-ink-700 transition-colors duration-150 ease-out hover:bg-ink-100 dark:text-ink-200 dark:hover:bg-ink-800"
             >
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
@@ -141,7 +142,8 @@ export function Navigation() {
             <button
               type="button"
               onClick={handleMenuToggle}
-              className="rounded-xl p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 lg:hidden transition-all"
+              aria-label="Toggle navigation menu"
+              className="flex h-11 w-11 items-center justify-center rounded-lg text-ink-700 transition-colors duration-150 ease-out hover:bg-ink-100 dark:text-ink-200 dark:hover:bg-ink-800 lg:hidden"
               style={{ touchAction: 'manipulation' }}
             >
               {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -167,7 +169,7 @@ export function Navigation() {
               initial={{ opacity: 0, x: '100%' }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="fixed inset-0 z-40 md:hidden"
               style={{ overscrollBehavior: 'contain' }}
             >
@@ -214,7 +216,7 @@ export function Navigation() {
                         className={`
                           flex items-center gap-3 rounded-xl px-4 py-3 text-base font-medium transition-colors
                           ${isActive
-                            ? 'bg-gray-900 text-white dark:bg-gray-700'
+                            ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950'
                             : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
                           }
                         `}

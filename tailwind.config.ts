@@ -124,6 +124,8 @@ const config: Config = {
       colors: {
         ink,
         clay,
+        moss,
+        rust,
         // Legacy hue names, re-pointed.
         gray: ink,
         slate: ink,
