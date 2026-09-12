@@ -1,64 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import {
-  Brain,
-  Code,
-  Users,
-  Layers,
-  Target,
-  TrendingUp,
-  ArrowRight,
-} from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { ProgressTracker } from '@/components/ProgressTracker'
 import { TrackRow } from '@/components/TrackRow'
-
-const leadTrack = {
-  title: 'Behavioral Interview',
-  description:
-    'The round most EM candidates lose. Twelve worked STAR answers, plus the leadership principles each company actually scores against.',
-  icon: Brain,
-  href: '/behavioral',
-  topics: ['Leadership principles', 'STAR format', 'Conflict resolution', 'Team building'],
-}
-
-const tracks = [
-  {
-    title: 'System Design',
-    description: 'Architecture walkthroughs pitched at the manager level, not the L4 level.',
-    icon: Layers,
-    href: '/system-design',
-    topics: ['Scalability', 'Microservices', 'Databases', 'Load balancing'],
-  },
-  {
-    title: 'Coding Practice',
-    description: 'Ten DSA patterns, a Big-O reference, and an algorithm visualizer.',
-    icon: Code,
-    href: '/coding',
-    topics: ['Data structures', 'Algorithms', 'Big-O', '10 patterns'],
-  },
-  {
-    title: 'Technical Leadership',
-    description: 'Tech debt, architecture decisions, make versus buy, on-call.',
-    icon: Target,
-    href: '/technical-leadership',
-    topics: ['Tech debt', 'ADR templates', 'Make vs buy', 'On-call'],
-  },
-  {
-    title: 'Team Management',
-    description: 'Hiring rubrics, performance conversations, 1:1s, career ladders.',
-    icon: Users,
-    href: '/team-management',
-    topics: ['Hiring rubrics', 'Reviews', '1:1 framework', 'Ladders'],
-  },
-  {
-    title: 'AI Interview Prep',
-    description: 'LLM systems, evaluation, responsible AI, and AI product strategy.',
-    icon: TrendingUp,
-    href: '/ai-interview',
-    topics: ['RAG', 'Responsible AI', 'AI metrics', 'LLM architecture'],
-  },
-]
+import { tracks } from '@/data/tracks'
+import { Timer, Handshake, ClipboardList, FileCode2 } from 'lucide-react'
 
 const companies = [
   { name: 'Meta', slug: 'meta', rounds: '4 to 5 rounds' },
@@ -67,6 +14,13 @@ const companies = [
   { name: 'Netflix', slug: 'netflix', rounds: '5 rounds' },
   { name: 'Google', slug: 'google', rounds: '6 to 7 rounds' },
   { name: 'Microsoft', slug: 'microsoft', rounds: '5 to 6 rounds' },
+]
+
+const loopPages = [
+  { href: '/mock-loop', icon: Timer, title: 'Mock loop day', description: 'Six timed rounds, a break schedule, and a self-score sheet that names your weakest round.' },
+  { href: '/coding/sdm-guide', icon: FileCode2, title: 'SDM coding guide', description: 'What the coding round actually scores for a manager, from the interviewer side of the table.' },
+  { href: '/negotiation', icon: Handshake, title: 'Offer and negotiation', description: 'How levelling is decided, what is negotiable where, and the scripts for the call.' },
+  { href: '/debrief', icon: ClipboardList, title: 'After the loop', description: 'A debrief template that turns a rejection or a mock into a concrete study list.' },
 ]
 
 export default function HomePage() {
@@ -119,12 +73,12 @@ export default function HomePage() {
           <p className="text-sm text-ink-600 dark:text-ink-300">Ordered by how often it decides the loop</p>
         </div>
 
-        <TrackRow {...leadTrack} lead />
+        <TrackRow {...tracks[0]} title={tracks[0].name} lead />
 
         <ul className="mt-3 space-y-3">
-          {tracks.map((track) => (
+          {tracks.slice(1).map((track) => (
             <li key={track.href}>
-              <TrackRow {...track} />
+              <TrackRow {...track} title={track.name} />
             </li>
           ))}
         </ul>
@@ -133,6 +87,29 @@ export default function HomePage() {
       <div className="page-shell">
         <div className="rule" />
       </div>
+
+      <div className="page-shell">
+        <div className="rule" />
+      </div>
+
+      {/* Around the loop */}
+      <section className="page-shell py-14">
+        <h2 className="text-2xl">Around the loop</h2>
+        <p className="mt-2 max-w-prose text-ink-700 dark:text-ink-200">
+          The tracks cover the rounds. These cover the week before, the day itself, and the call after.
+        </p>
+        <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {loopPages.map((page) => (
+            <li key={page.href}>
+              <Link href={page.href} className="surface-card card-hover flex h-full min-h-[44px] flex-col gap-2 p-5">
+                <page.icon className="h-5 w-5 text-ink-600 dark:text-ink-300" aria-hidden="true" />
+                <span className="font-semibold text-ink-900 dark:text-ink-50">{page.title}</span>
+                <span className="text-sm text-ink-700 dark:text-ink-200">{page.description}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       {/* Company specifics */}
       <section className="page-shell py-14">
@@ -153,7 +130,7 @@ export default function HomePage() {
                   src={`/logos/${company.slug}.svg`}
                   alt=""
                   aria-hidden="true"
-                  className="h-8 w-8 object-contain"
+                  className={`h-8 w-8 object-contain ${company.slug === 'apple' ? 'dark:invert' : ''}`}
                 />
                 <span className="text-sm font-semibold text-ink-900 dark:text-ink-50">{company.name}</span>
                 <span className="text-xs text-ink-600 dark:text-ink-300">{company.rounds}</span>
