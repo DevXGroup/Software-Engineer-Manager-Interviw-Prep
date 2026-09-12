@@ -1,17 +1,13 @@
 {
   "name": "EM Interview Mastery",
   "short_name": "EM Mastery",
-  "description": "Free FAANG Engineering Manager interview prep — behavioral, system design, coding, leadership.",
+  "description": "Free Engineering Manager interview prep: behavioral, system design, coding, leadership, and per-company loops.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#7c3aed",
+  "background_color": "#f7f9fb",
+  "theme_color": "#a5592e",
   "icons": [
-    {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/apple-icon", "sizes": "180x180", "type": "image/png", "purpose": "maskable" }
   ]
 }

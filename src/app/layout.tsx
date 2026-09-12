@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { IBM_Plex_Sans, IBM_Plex_Mono, Source_Serif_4 } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import { SITE_URL } from '@/lib/site'
 import { Navigation } from '@/components/Navigation'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { Footer } from '@/components/Footer'
@@ -30,12 +31,12 @@ const mono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://softwareprep.devxgroup.io'),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: 'EM Interview Mastery — Free FAANG Engineering Manager Prep',
+    default: 'EM Interview Mastery: Free FAANG Engineering Manager Prep',
     template: '%s | EM Interview Mastery',
   },
-  description: 'Free, open-source interview prep for Engineering Manager roles at Meta, Amazon, Apple, Netflix, Google & Microsoft. Covers behavioral, system design, coding, technical leadership, team management, and AI interview topics.',
+  description: 'Free, open-source interview prep for Engineering Manager roles at Meta, Amazon, Apple, Netflix, Google & Microsoft. Behavioral, system design, coding, technical leadership, team management, and AI interview tracks, plus an eight-week plan.',
   keywords: [
     'engineering manager interview',
     'FAANG interview prep',
@@ -63,29 +64,26 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, 'max-snippet': -1, 'max-image-preview': 'large' },
   },
   alternates: {
-    canonical: 'https://softwareprep.devxgroup.io',
+    canonical: SITE_URL,
   },
   openGraph: {
-    title: 'EM Interview Mastery — Free FAANG Engineering Manager Prep',
+    title: 'EM Interview Mastery: Free FAANG Engineering Manager Prep',
     description: 'Free, open-source interview prep for EM roles at Meta, Amazon, Apple, Netflix, Google & Microsoft. Behavioral, system design, coding, leadership, and AI topics.',
-    url: 'https://softwareprep.devxgroup.io',
+    url: SITE_URL,
     siteName: 'EM Interview Mastery',
     type: 'website',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'EM Interview Mastery — Free FAANG Engineering Manager Prep',
+    title: 'EM Interview Mastery: Free FAANG Engineering Manager Prep',
     description: 'Free, open-source interview prep for EM roles at Meta, Amazon, Apple, Netflix, Google & Microsoft.',
     creator: '@devxgroup',
     site: '@devxgroup',
   },
   icons: {
-    icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-    ],
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
     shortcut: '/favicon.svg',
-    apple: '/apple-touch-icon.png',
   },
   manifest: '/site.webmanifest',
 }
