@@ -6,7 +6,7 @@ export const teamManagementQuestions: QuizQuestion[] = [
     question: 'In a structured interview process, when should each interviewer submit their scorecard?',
     options: ['After the group debrief', 'Before the debrief, before hearing others\' opinions', 'During the debrief', 'The next day'],
     correctIndex: 1,
-    explanation: 'Submitting scorecards BEFORE the debrief prevents anchoring bias — the loudest voice cannot dominate when everyone has already committed their assessment.',
+    explanation: 'Submitting scorecards BEFORE the debrief prevents anchoring bias: the loudest voice cannot dominate when everyone has already committed their assessment.',
     priority: 'must-know',
   },
   {
@@ -22,7 +22,7 @@ export const teamManagementQuestions: QuizQuestion[] = [
     question: 'What is the best cadence for 1:1 meetings with a typical mid-level engineer?',
     options: ['Weekly 15 minutes', 'Bi-weekly 45 minutes', 'Monthly 30 minutes', 'Quarterly 60 minutes'],
     correctIndex: 1,
-    explanation: 'Bi-weekly 45 minutes is the sweet spot for most engineers — enough depth for meaningful conversation without becoming routine noise. Adjust based on individual needs.',
+    explanation: 'Bi-weekly 45 minutes is the sweet spot for most engineers: enough depth for meaningful conversation without becoming routine noise. Adjust based on individual needs.',
     priority: 'must-know',
   },
   {
@@ -38,7 +38,7 @@ export const teamManagementQuestions: QuizQuestion[] = [
     question: 'What is the #1 factor in high-performing teams according to Google\'s Project Aristotle?',
     options: ['Technical skill', 'Psychological safety', 'Individual intelligence', 'Team size'],
     correctIndex: 1,
-    explanation: 'Psychological safety — the belief that one will not be punished for speaking up — is the #1 factor. Build it by modeling vulnerability, thanking people who raise problems, and never shooting the messenger.',
+    explanation: 'Psychological safety (the belief that one will not be punished for speaking up) is the #1 factor. Build it by modeling vulnerability, thanking people who raise problems, and never shooting the messenger.',
     priority: 'must-know',
   },
   {
@@ -46,7 +46,7 @@ export const teamManagementQuestions: QuizQuestion[] = [
     question: 'In the SBI feedback model, what does the "B" stand for?',
     options: ['Business', 'Behavior', 'Baseline', 'Benefit'],
     correctIndex: 1,
-    explanation: 'SBI = Situation, Behavior, Impact. The "B" is observable Behavior — "You interrupted the PM three times" not "You were disrespectful." Describe actions, not character.',
+    explanation: 'SBI = Situation, Behavior, Impact. The "B" is observable Behavior: "You interrupted the PM three times" not "You were disrespectful." Describe actions, not character.',
     priority: 'must-know',
   },
   {
@@ -54,7 +54,7 @@ export const teamManagementQuestions: QuizQuestion[] = [
     question: 'What is "Ruinous Empathy" in the Radical Candor framework?',
     options: ['Being too direct with feedback', 'Caring personally without challenging directly', 'Not caring about the person at all', 'Challenging without context'],
     correctIndex: 1,
-    explanation: 'Ruinous Empathy means being nice to their face but not giving them the feedback they need to improve. It is the most common manager mistake — being kind in the moment but harmful long-term.',
+    explanation: 'Ruinous Empathy means being nice to their face but not giving them the feedback they need to improve. It is the most common manager mistake: being kind in the moment but harmful long-term.',
     priority: 'good-to-know',
   },
   {
@@ -67,10 +67,10 @@ export const teamManagementQuestions: QuizQuestion[] = [
   },
   {
     id: 'tm-9',
-    question: 'In Amazon\'s Forte talent review, what is the "Highly Effective" rating?',
-    options: ['Far below the bar', 'Meeting the bar', 'Above the bar, consistent contributor', 'The highest possible rating'],
-    correctIndex: 2,
-    explanation: '"Highly Effective" means above the bar for the role and level — a consistent contributor who exceeds expectations in most dimensions. "Role Model" is the highest tier.',
+    question: 'What is a performance calibration meeting for?',
+    options: ['Telling employees their rating', 'Managers agreeing ratings against each other so one manager cannot inflate a whole team', 'Setting next quarter\'s roadmap', 'Deciding who gets laid off'],
+    correctIndex: 1,
+    explanation: 'Calibration is where managers present their people to peer managers and the group agrees ratings together. It exists so a generous manager and a harsh manager do not produce ratings that mean different things.',
     priority: 'good-to-know',
   },
   {
@@ -78,7 +78,7 @@ export const teamManagementQuestions: QuizQuestion[] = [
     question: 'What is the key sign that your 1:1 meetings are not working?',
     options: ['They run over time', 'They always turn into status meetings', 'The engineer shares too many concerns', 'You disagree on technical approaches'],
     correctIndex: 1,
-    explanation: '1:1s that become status meetings fail their purpose. The 1:1 is THEIR meeting for career development, blockers, and concerns — not a project status update for you.',
+    explanation: '1:1s that become status meetings fail their purpose. The 1:1 is THEIR meeting for career development, blockers, and concerns: not a project status update for you.',
     priority: 'must-know',
   },
   {

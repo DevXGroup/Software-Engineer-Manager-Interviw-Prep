@@ -78,7 +78,7 @@ export const behavioralQuestions: QuizQuestion[] = [
     question: 'Netflix\'s culture specifically warns against which type of person?',
     options: ['Introverts', 'Brilliant Jerks', 'Remote workers', 'Generalists'],
     correctIndex: 1,
-    explanation: 'Netflix explicitly avoids "Brilliant Jerks" — high performers who damage team culture. They value high EQ alongside high performance.',
+    explanation: 'Netflix explicitly avoids "Brilliant Jerks": high performers who damage team culture. They value high EQ alongside high performance.',
     priority: 'good-to-know',
   },
   {

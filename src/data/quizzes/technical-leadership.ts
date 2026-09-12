@@ -44,7 +44,7 @@ export const technicalLeadershipQuestions: QuizQuestion[] = [
   {
     id: 'tl-6',
     question: 'In Trunk-Based Development, what separates deployment from release?',
-    options: ['Nothing, they are the same thing', 'Feature flags — code is deployed but activated only when ready', 'Manual QA between stages', 'Separate repositories'],
+    options: ['Nothing, they are the same thing', 'Feature flags: code is deployed but activated only when ready', 'Manual QA between stages', 'Separate repositories'],
     correctIndex: 1,
     explanation: 'Feature flags allow incomplete features to be deployed to trunk without being released to users. This enables continuous deployment while controlling feature visibility.',
     priority: 'must-know',

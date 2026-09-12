@@ -2,8 +2,8 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Command, FileText, BookOpen, Building, ChevronRight, Zap, Grid, List, Award } from 'lucide-react'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { Search, X, Command, FileText, BookOpen, Building, ChevronRight, Zap, Grid, List, Trophy, CalendarDays } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { searchIndex, type SearchItem, type SearchItemType } from '@/data/searchIndex'
 import { buildSearchTarget, hasSearchNavigationState } from '@/lib/searchNavigation'
@@ -20,18 +20,11 @@ const typeIcons: Record<SearchItemType, React.ElementType> = {
   concept: Grid,
   pattern: List,
   company: Building,
-  principle: Award,
+  challenge: Trophy,
+  week: CalendarDays,
 }
 
-const typeColors: Record<SearchItemType, string> = {
-  page: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-  section: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
-  question: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-  concept: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-  pattern: 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400',
-  company: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400',
-  principle: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-}
+const typeIconStyle = 'bg-teal-50 text-teal-700 dark:bg-teal-950/40 dark:text-teal-300'
 
 function highlightMatch(text: string, query: string): React.ReactNode {
   if (!query) return text
@@ -39,9 +32,9 @@ function highlightMatch(text: string, query: string): React.ReactNode {
   const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
   const parts = text.split(regex)
   
-  return parts.map((part, i) => 
+  return parts.map((part, i) =>
     regex.test(part) ? (
-      <mark key={i} className="bg-yellow-200 dark:bg-yellow-800 text-inherit px-0.5 rounded">
+      <mark key={i} className="rounded bg-amber-200 px-0.5 text-inherit dark:bg-amber-800">
         {part}
       </mark>
     ) : (
@@ -103,6 +96,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const pathname = usePathname()
   const inputRef = useRef<HTMLInputElement>(null)
   const resultsRef = useRef<HTMLDivElement>(null)
+  const reduceMotion = useReducedMotion()
 
   useEffect(() => {
     setMounted(true)
@@ -170,9 +164,9 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     if (!element) return false
 
     element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    element.classList.add('ring-2', 'ring-purple-500', 'ring-offset-2', 'dark:ring-offset-gray-900')
+    element.classList.add('outline', 'outline-2', 'outline-clay-500')
     setTimeout(() => {
-      element.classList.remove('ring-2', 'ring-purple-500', 'ring-offset-2', 'dark:ring-offset-gray-900')
+      element.classList.remove('outline', 'outline-2', 'outline-clay-500')
     }, 2000)
     return true
   }, [])
@@ -219,6 +213,8 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
     { value: 'pattern', label: 'Patterns', count: searchIndex.filter(i => i.type === 'pattern').length },
     { value: 'concept', label: 'Concepts', count: searchIndex.filter(i => i.type === 'concept').length },
     { value: 'company', label: 'Companies', count: searchIndex.filter(i => i.type === 'company').length },
+    { value: 'challenge', label: 'Challenges', count: searchIndex.filter(i => i.type === 'challenge').length },
+    { value: 'week', label: 'Weeks', count: searchIndex.filter(i => i.type === 'week').length },
   ]
 
   if (!mounted) return null
@@ -229,65 +225,72 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
         <>
           {/* Backdrop */}
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={reduceMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-[50] bg-ink-950/60"
           />
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pb-4 pt-20 sm:px-6 sm:pt-24"
+            transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-x-0 top-0 z-[60] flex justify-center px-4 pb-4 pt-20 sm:px-6 sm:pt-24"
           >
-            <div className="flex max-h-[calc(100dvh-6rem)] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800 sm:max-h-[calc(100dvh-8rem)]">
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Search the site"
+              className="surface-card flex max-h-[calc(100dvh-6rem)] w-full max-w-3xl flex-col overflow-hidden sm:max-h-[calc(100dvh-8rem)]"
+            >
               {/* Search Input */}
-              <div className="flex items-center gap-3 border-b border-gray-200 p-4 dark:border-gray-700">
-                <Search className="h-5 w-5 shrink-0 text-gray-500" />
+              <div className="flex items-center gap-3 border-b border-ink-200 p-4 dark:border-ink-800">
+                <Search className="h-5 w-5 shrink-0 text-ink-500 dark:text-ink-400" />
                 <input
                   ref={inputRef}
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Search topics, concepts, questions, patterns..."
-                  className="min-w-0 flex-1 bg-transparent text-base text-gray-900 placeholder-gray-400 focus:outline-none dark:text-white sm:text-lg"
+                  className="min-w-0 flex-1 bg-transparent text-base text-ink-900 placeholder-ink-400 focus:outline-none dark:text-ink-50 dark:placeholder-ink-500 sm:text-lg"
                 />
-                <div className="hidden items-center gap-1 rounded-lg bg-gray-100 px-2 py-1 dark:bg-gray-700 sm:flex">
-                  <Command className="h-3.5 w-3.5 text-gray-500" />
-                  <span className="text-xs text-gray-500">K</span>
+                <div className="chip hidden sm:flex">
+                  <Command className="h-3.5 w-3.5" />
+                  <span>K</span>
                 </div>
                 <button
                   onClick={onClose}
-                  className="shrink-0 rounded-lg p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-700"
+                  aria-label="Close search"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-ink-600 transition-colors duration-150 ease-out hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-ink-800"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
 
               {/* Type Filters */}
-              <div className="scrollbar-hide flex gap-2 overflow-x-auto border-b border-gray-200 px-4 py-2 dark:border-gray-700">
+              <div className="scrollbar-hide flex gap-2 overflow-x-auto border-b border-ink-200 px-4 py-2 dark:border-ink-800" role="tablist">
                 {types.map((type) => (
                   <button
                     key={type.value}
+                    role="tab"
+                    aria-selected={selectedType === type.value}
                     onClick={() => setSelectedType(type.value)}
-                    className={`
-                      flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium whitespace-nowrap transition-colors
-                      ${selectedType === type.value
-                        ? 'bg-purple-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600'
-                      }
-                    `}
+                    className={`flex min-h-[44px] items-center gap-1.5 whitespace-nowrap rounded-lg px-3 text-sm font-medium transition-colors duration-150 ease-out ${
+                      selectedType === type.value
+                        ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950'
+                        : 'text-ink-700 hover:bg-ink-100 dark:text-ink-200 dark:hover:bg-ink-800'
+                    }`}
                   >
                     {type.value !== 'all' && getTypeIcon(type.value)}
                     {type.label}
-                    <span className={`rounded-full px-1.5 py-0.5 text-xs ${
-                      selectedType === type.value 
-                        ? 'bg-white/20' 
-                        : 'bg-gray-200 dark:bg-gray-600'
-                    }`}>
+                    <span
+                      className={`rounded-md px-1.5 py-0.5 text-xs ${
+                        selectedType === type.value ? 'bg-white/20' : 'bg-ink-100 dark:bg-ink-800'
+                      }`}
+                    >
                       {type.count}
                     </span>
                   </button>
@@ -302,21 +305,21 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 {filteredResults.length === 0 ? (
                   query.trim() ? (
                     <div className="py-12 text-center">
-                      <Search className="mx-auto h-12 w-12 text-gray-500 dark:text-gray-600" />
-                      <p className="mt-4 text-gray-500 dark:text-gray-400">
+                      <Search className="mx-auto h-12 w-12 text-ink-400 dark:text-ink-600" />
+                      <p className="mt-4 text-muted">
                         No results found for &quot;{query}&quot;
                       </p>
-                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-500">
+                      <p className="mt-2 text-sm text-muted">
                         Try different keywords or browse all topics
                       </p>
                     </div>
                   ) : (
                     <div className="py-12 text-center">
-                      <BookOpen className="mx-auto h-12 w-12 text-gray-500 dark:text-gray-600" />
-                      <p className="mt-4 text-gray-500 dark:text-gray-400">
+                      <BookOpen className="mx-auto h-12 w-12 text-ink-400 dark:text-ink-600" />
+                      <p className="mt-4 text-muted">
                         Start typing to search
                       </p>
-                      <p className="mt-2 text-sm text-gray-500 dark:text-gray-500">
+                      <p className="mt-2 text-sm text-muted">
                         Find topics, patterns, questions, and more
                       </p>
                     </div>
@@ -332,29 +335,25 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           key={item.id}
                           onClick={() => handleSelect(item)}
                           onMouseEnter={() => setSelectedIndex(index)}
-                          className={`
-                            flex w-full items-start gap-3 rounded-xl p-3 text-left transition-colors
-                            ${isSelected 
-                              ? 'bg-purple-50 dark:bg-purple-900/20' 
-                              : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
-                            }
-                          `}
+                          className={`flex min-h-[44px] w-full items-start gap-3 rounded-lg p-3 text-left transition-colors duration-150 ease-out ${
+                            isSelected ? 'bg-clay-50 dark:bg-clay-950/30' : 'hover:bg-ink-100 dark:hover:bg-ink-800/50'
+                          }`}
                         >
-                          <div className={`rounded-lg p-2 ${typeColors[item.type]}`}>
+                          <div className={`rounded-lg p-2 ${typeIconStyle}`}>
                             <Icon className="h-4 w-4" />
                           </div>
-                          <div className="flex-1 min-w-0">
+                          <div className="min-w-0 flex-1">
                             <div className="flex min-w-0 items-center gap-2">
-                              <h3 className="min-w-0 truncate font-semibold text-gray-900 dark:text-white">
+                              <h3 className="min-w-0 truncate font-semibold text-ink-900 dark:text-ink-50">
                                 {highlightMatch(item.title, query)}
                               </h3>
                               {item.category && (
-                                <span className="shrink-0 rounded-md bg-gray-100 px-2 py-0.5 text-xs text-gray-500 dark:bg-gray-700 dark:text-gray-400">
+                                <span className="shrink-0 rounded-md bg-ink-100 px-2 py-0.5 text-xs text-muted dark:bg-ink-800">
                                   {item.category}
                                 </span>
                               )}
                             </div>
-                            <p className="mt-0.5 text-sm text-gray-600 dark:text-gray-400 line-clamp-1">
+                            <p className="mt-0.5 line-clamp-1 text-sm text-muted">
                               {highlightMatch(item.description, query)}
                             </p>
                             {item.keywords && item.keywords.length > 0 && (
@@ -362,7 +361,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                 {item.keywords.slice(0, 4).map((keyword, i) => (
                                   <span
                                     key={i}
-                                    className="rounded-md bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 text-xs text-gray-500 dark:text-gray-400"
+                                    className="rounded-md bg-ink-100 px-1.5 py-0.5 text-xs text-muted dark:bg-ink-800"
                                   >
                                     {highlightMatch(keyword, query)}
                                   </span>
@@ -370,7 +369,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               </div>
                             )}
                           </div>
-                          <ChevronRight className="mt-0.5 h-4 w-4 text-gray-500" />
+                          <ChevronRight className="mt-0.5 h-4 w-4 text-ink-400 dark:text-ink-500" />
                         </button>
                       )
                     })}
@@ -380,18 +379,18 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
               {/* Footer */}
               {filteredResults.length > 0 && (
-                <div className="flex flex-col gap-2 border-t border-gray-200 px-4 py-2 text-xs text-gray-500 dark:border-gray-700 dark:text-gray-400 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-2 border-t border-ink-200 px-4 py-2 text-xs text-muted dark:border-ink-800 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex flex-wrap items-center gap-3">
                     <span className="flex items-center gap-1">
-                      <kbd className="rounded bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5">↑↓</kbd>
+                      <kbd className="chip px-1.5 py-0.5">↑↓</kbd>
                       Navigate
                     </span>
                     <span className="flex items-center gap-1">
-                      <kbd className="rounded bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5">↵</kbd>
+                      <kbd className="chip px-1.5 py-0.5">↵</kbd>
                       Select
                     </span>
                     <span className="flex items-center gap-1">
-                      <kbd className="rounded bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5">esc</kbd>
+                      <kbd className="chip px-1.5 py-0.5">esc</kbd>
                       Close
                     </span>
                   </div>

@@ -3,10 +3,11 @@
 import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Moon, Sun, Home, BookOpen, Code, Users, Layers, Target, Brain, Search } from 'lucide-react'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { Menu, X, Moon, Sun, Home, BookOpen, Code, Users, Layers, Target, Brain, Search, CalendarDays } from 'lucide-react'
 import { useTheme } from '@/hooks/useTheme'
 import { DonateButton } from '@/components/DonateButton'
+import { Mark } from '@/components/brand/Mark'
 import { SearchModal } from '@/components/SearchModal'
 import { useSearch } from '@/hooks/useSearch'
 
@@ -18,6 +19,7 @@ const navItems = [
   { name: 'Leadership', href: '/technical-leadership', icon: Target },
   { name: 'Team', href: '/team-management', icon: Users },
   { name: 'AI Prep', href: '/ai-interview', icon: Brain },
+  { name: 'Plan', href: '/roadmap', icon: CalendarDays },
 ]
 
 export function Navigation() {
@@ -26,6 +28,7 @@ export function Navigation() {
   const pathname = usePathname()
   const { theme, toggleTheme } = useTheme()
   const { isSearchOpen, openSearch, closeSearch } = useSearch()
+  const reduceMotion = useReducedMotion()
 
   const handleMenuToggle = () => {
     if (!isOpen) openedAt.current = Date.now()
@@ -44,40 +47,7 @@ export function Navigation() {
           {/* Logo Section */}
           <div className="flex items-center gap-8">
             <Link href="/" className="flex min-h-[44px] items-center gap-2.5">
-              <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
-                <defs>
-                  <linearGradient id="logoBg" x1="0" y1="0" x2="34" y2="34" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stopColor="#a5592e"/>
-                    <stop offset="50%" stopColor="#874622"/>
-                    <stop offset="100%" stopColor="#33363a"/>
-                  </linearGradient>
-                  <linearGradient id="logoShine" x1="0" y1="0" x2="0" y2="15" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stopColor="white" stopOpacity="0.22"/>
-                    <stop offset="100%" stopColor="white" stopOpacity="0"/>
-                  </linearGradient>
-                </defs>
-                {/* Background */}
-                <rect width="34" height="34" rx="9" fill="url(#logoBg)"/>
-                {/* Shine */}
-                <rect width="34" height="15" rx="9" fill="url(#logoShine)"/>
-                {/* Subtle border */}
-                <rect x="0.5" y="0.5" width="33" height="33" rx="8.5" stroke="white" strokeOpacity="0.15" strokeWidth="1"/>
-                {/* EM text */}
-                <text
-                  x="17"
-                  y="19"
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fontFamily="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"
-                  fontWeight="800"
-                  fontSize="13"
-                  letterSpacing="-0.5"
-                  fill="white"
-                >EM</text>
-                {/* Growth chart accent */}
-                <polyline points="8,28 13,25 19,26.5 26,21.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.7"/>
-                <circle cx="26" cy="21.5" r="1.8" fill="white" fillOpacity="0.9"/>
-              </svg>
+              <Mark size={30} className="shrink-0" />
               <span className="text-lg font-semibold tracking-tight text-ink-900 dark:text-ink-50">
                 EM <span className="font-display font-semibold italic text-clay-700 dark:text-clay-400">Mastery</span>
               </span>
@@ -121,8 +91,8 @@ export function Navigation() {
             >
               <Search className="h-4 w-4" />
               <span className="hidden md:inline">Search</span>
-              <kbd className="hidden lg:flex items-center gap-1 rounded-lg bg-gray-200 dark:bg-gray-700 px-2 py-0.5 text-xs font-mono">
-                <span className="text-xs">⌘</span>K
+              <kbd className="chip hidden font-mono lg:flex">
+                <span>⌘</span>K
               </kbd>
             </button>
 
@@ -158,15 +128,15 @@ export function Navigation() {
           <>
             {/* Backdrop */}
             <motion.div
-              initial={{ opacity: 0 }}
+              initial={reduceMotion ? false : { opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={handleBackdropClose}
-              className="fixed inset-0 z-30 bg-black/20 md:hidden touch-none"
+              className="fixed inset-0 z-30 touch-none bg-ink-950/20 md:hidden"
             />
             {/* Menu */}
             <motion.div
-              initial={{ opacity: 0, x: '100%' }}
+              initial={reduceMotion ? false : { opacity: 0, x: '100%' }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: '100%' }}
               transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -174,16 +144,17 @@ export function Navigation() {
               style={{ overscrollBehavior: 'contain' }}
             >
               <div
-                className="flex w-full flex-col bg-white dark:bg-gray-800 pt-16 overflow-y-auto"
+                className="flex w-full flex-col overflow-y-auto bg-white pt-16 dark:bg-ink-900"
                 style={{ minHeight: '100dvh', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
               >
               {/* Mobile menu header */}
-              <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 px-4 py-4">
-                <span className="text-lg font-bold text-gray-900 dark:text-white">Menu</span>
+              <div className="flex items-center justify-between border-b border-ink-200 px-4 py-4 dark:border-ink-800">
+                <span className="text-lg font-semibold text-ink-900 dark:text-ink-50">Menu</span>
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="rounded-lg p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
+                  aria-label="Close menu"
+                  className="flex h-11 w-11 items-center justify-center rounded-lg text-ink-700 transition-colors duration-150 ease-out hover:bg-ink-100 dark:text-ink-200 dark:hover:bg-ink-800"
                   style={{ touchAction: 'manipulation' }}
                 >
                   <X className="h-6 w-6" />
@@ -191,13 +162,13 @@ export function Navigation() {
               </div>
 
               {/* Search button in mobile menu */}
-              <div className="border-b border-gray-200 dark:border-gray-700 px-4 py-3">
+              <div className="border-b border-ink-200 px-4 py-3 dark:border-ink-800">
                 <button
                   onClick={() => { setIsOpen(false); openSearch(); }}
-                  className="flex w-full items-center gap-3 rounded-xl bg-gray-100 px-4 py-3 text-left text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  className="flex min-h-[44px] w-full items-center gap-3 rounded-lg bg-ink-100 px-4 py-3 text-left text-ink-600 transition-colors duration-150 ease-out hover:bg-ink-200 dark:bg-ink-800 dark:text-ink-300 dark:hover:bg-ink-700"
                 >
                   <Search className="h-5 w-5" />
-                  <span className="text-base font-medium">Search...</span>
+                  <span className="text-base font-medium">Search</span>
                 </button>
               </div>
 
@@ -213,13 +184,11 @@ export function Navigation() {
                         key={item.name}
                         href={item.href}
                         onClick={() => setIsOpen(false)}
-                        className={`
-                          flex items-center gap-3 rounded-xl px-4 py-3 text-base font-medium transition-colors
-                          ${isActive
+                        className={`flex min-h-[44px] items-center gap-3 rounded-lg px-4 py-3 text-base font-medium transition-colors duration-150 ease-out ${
+                          isActive
                             ? 'bg-clay-600 text-white dark:bg-clay-500 dark:text-ink-950'
-                            : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
-                          }
-                        `}
+                            : 'text-ink-700 hover:bg-ink-100 dark:text-ink-200 dark:hover:bg-ink-800'
+                        }`}
                       >
                         <Icon className="h-5 w-5" />
                         {item.name}
@@ -230,7 +199,7 @@ export function Navigation() {
               </div>
 
               {/* Footer actions */}
-              <div className="border-t border-gray-200 dark:border-gray-700 px-4 py-4">
+              <div className="border-t border-ink-200 px-4 py-4 dark:border-ink-800">
                 <DonateButton className="w-full justify-center" />
               </div>
             </div>

@@ -1,10 +1,11 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import { CheckCircle, XCircle, RotateCcw, Trophy, Star, BookOpen } from 'lucide-react'
 import type { QuizQuestion, Priority } from '@/data/quizzes/types'
 import { useProgressStore } from '@/store/progressStore'
+import { PriorityBadge } from '@/components/PriorityBadge'
 
 type QuizState = 'idle' | 'in-progress' | 'review'
 
@@ -26,6 +27,7 @@ export function Quiz({
   const [answers, setAnswers] = useState<Record<string, number>>({})
   const [priorityFilter, setPriorityFilter] = useState<'all' | Priority>('all')
   const { submitQuizResult } = useProgressStore()
+  const reduceMotion = useReducedMotion()
 
   const filtered = useMemo(() => {
     if (priorityFilter === 'all') return questions
@@ -78,9 +80,9 @@ export function Quiz({
     return (
       <div className="space-y-6">
         <div>
-          <h2 className="text-2xl text-ink-900 dark:text-ink-50">{title} Quiz</h2>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {questions.length} questions &middot; 80% to pass
+          <h2 className="text-2xl text-ink-900 dark:text-ink-50">{title} quiz</h2>
+          <p className="mt-1 text-sm text-muted">
+            {questions.length} questions, 80% to pass
           </p>
         </div>
 
@@ -97,7 +99,7 @@ export function Quiz({
             >
               {f === 'must-know' && <Star className="h-3 w-3" />}
               {f === 'good-to-know' && <BookOpen className="h-3 w-3" />}
-              {f === 'all' ? `All (${questions.length})` : f === 'must-know' ? `Must Know (${questions.filter((q) => q.priority === 'must-know').length})` : `Good to Know (${questions.filter((q) => q.priority === 'good-to-know').length})`}
+              {f === 'all' ? `All (${questions.length})` : f === 'must-know' ? `Must know (${questions.filter((q) => q.priority === 'must-know').length})` : `Good to know (${questions.filter((q) => q.priority === 'good-to-know').length})`}
             </button>
           ))}
         </div>
@@ -106,7 +108,7 @@ export function Quiz({
           onClick={() => setState('in-progress')}
           className="btn-primary w-full"
         >
-          Start Quiz ({filtered.length} questions)
+          Start quiz ({filtered.length} questions)
         </button>
       </div>
     )
@@ -120,43 +122,79 @@ export function Quiz({
     const finalPassed = finalScore / filtered.length >= 0.8
 
     return (
-      <div className="space-y-6 text-center">
-        <div
-          className={`mx-auto flex h-20 w-20 items-center justify-center rounded-full ${
-            finalPassed ? 'bg-green-100 dark:bg-green-900/30' : 'bg-amber-100 dark:bg-amber-900/30'
-          }`}
-        >
-          <Trophy
-            className={`h-10 w-10 ${
-              finalPassed ? 'text-green-600 dark:text-green-400' : 'text-amber-600 dark:text-amber-400'
+      <div className="space-y-6">
+        <div className="text-center">
+          <div
+            className={`mx-auto flex h-20 w-20 items-center justify-center rounded-full ${
+              finalPassed ? 'bg-moss-100 dark:bg-moss-900/30' : 'bg-amber-100 dark:bg-amber-900/30'
             }`}
-          />
-        </div>
-        <div>
-          <h2 className="text-2xl text-ink-900 dark:text-ink-50">
+          >
+            <Trophy
+              className={`h-10 w-10 ${
+                finalPassed ? 'text-moss-600 dark:text-moss-400' : 'text-amber-600 dark:text-amber-400'
+              }`}
+            />
+          </div>
+          <h2 className="mt-4 text-2xl text-ink-900 dark:text-ink-50">
             {finalPassed ? 'Passed' : 'Not there yet'}
           </h2>
-          <p className="mt-1 text-lg text-gray-600 dark:text-gray-400">
+          <p className="mt-1 text-lg text-muted">
             {finalScore} / {filtered.length} correct ({Math.round((finalScore / filtered.length) * 100)}%)
           </p>
           {!finalPassed && (
-            <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+            <p className="mt-2 text-sm text-muted">
               80% passes. Re-read the topics you missed, then run it again.
             </p>
           )}
         </div>
+
+        <div className="rule" />
+
+        <div className="space-y-3">
+          <h3 className="text-sm font-semibold text-ink-600 dark:text-ink-300">Question review</h3>
+          <div className="divide-y divide-ink-200 dark:divide-ink-800">
+            {filtered.map((q) => {
+              const answerIndex = answers[q.id]
+              const wasCorrect = answerIndex === q.correctIndex
+              return (
+                <div key={q.id} className="space-y-1.5 py-3">
+                  <div className="flex items-start gap-2">
+                    {wasCorrect ? (
+                      <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-moss-600 dark:text-moss-400" />
+                    ) : (
+                      <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-rust-600 dark:text-rust-400" />
+                    )}
+                    <p className="text-sm font-medium text-ink-900 dark:text-ink-50">{q.question}</p>
+                  </div>
+                  <p className="pl-6 text-sm text-muted">
+                    Your answer: {answerIndex != null ? q.options[answerIndex] : 'No answer'}
+                  </p>
+                  {!wasCorrect && (
+                    <p className="pl-6 text-sm text-moss-700 dark:text-moss-400">
+                      Correct answer: {q.options[q.correctIndex]}
+                    </p>
+                  )}
+                  <p className="pl-6 text-sm leading-relaxed text-teal-900 dark:text-teal-100">
+                    {q.explanation}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
         <div className="flex gap-3">
           <button
             onClick={restart}
             className="btn-secondary flex-1"
           >
-            <RotateCcw className="h-4 w-4" /> Retry
+            <RotateCcw className="h-4 w-4" /> Retake quiz
           </button>
           <button
             onClick={onClose}
             className="btn-primary flex-1"
           >
-            Done
+            Close
           </button>
         </div>
       </div>
@@ -168,13 +206,13 @@ export function Quiz({
     <div className="space-y-6">
       {/* Progress */}
       <div>
-        <div className="mb-2 flex justify-between text-sm text-gray-500 dark:text-gray-400">
+        <div className="mb-2 flex justify-between text-sm text-muted">
           <span>
             Question {currentIndex + 1} of {filtered.length}
           </span>
           <span>{Math.round(((currentIndex + 1) / filtered.length) * 100)}%</span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+        <div className="h-2 overflow-hidden rounded-full bg-ink-200 dark:bg-ink-800">
           <motion.div
             className="h-full rounded-full bg-clay-600 dark:bg-clay-500"
             animate={{ width: `${((currentIndex + 1) / filtered.length) * 100}%` }}
@@ -186,21 +224,13 @@ export function Quiz({
       <AnimatePresence mode="wait">
         <motion.div
           key={currentQ.id}
-          initial={{ opacity: 0 }}
+          initial={reduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="mb-1 flex items-center gap-2">
-            {currentQ.priority === 'must-know' ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
-                <Star className="h-3 w-3" /> Must Know
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1 rounded-full bg-sky-100 px-2 py-0.5 text-xs text-sky-700 dark:bg-sky-900/30 dark:text-sky-400">
-                <BookOpen className="h-3 w-3" /> Good to Know
-              </span>
-            )}
+            <PriorityBadge priority={currentQ.priority} />
           </div>
           <h3 className="text-lg font-semibold leading-snug text-ink-900 dark:text-ink-50">
             {currentQ.question}
@@ -229,12 +259,12 @@ export function Quiz({
                   <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-current text-xs font-bold">
                     {String.fromCharCode(65 + i)}
                   </span>
-                  <span className="flex-1 text-gray-900 dark:text-white">{opt}</span>
+                  <span className="flex-1 text-ink-900 dark:text-ink-50">{opt}</span>
                   {confirmed && isCorrect && (
-                    <CheckCircle className="h-5 w-5 shrink-0 text-green-500" />
+                    <CheckCircle className="h-5 w-5 shrink-0 text-moss-600 dark:text-moss-400" />
                   )}
                   {confirmed && isSelected && !isCorrect && (
-                    <XCircle className="h-5 w-5 shrink-0 text-red-500" />
+                    <XCircle className="h-5 w-5 shrink-0 text-rust-600 dark:text-rust-400" />
                   )}
                 </button>
               )
@@ -245,7 +275,7 @@ export function Quiz({
           <AnimatePresence>
             {confirmed && (
               <motion.div
-                initial={{ opacity: 0, height: 0 }}
+                initial={reduceMotion ? false : { opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 className="mt-4 overflow-hidden rounded-lg border border-teal-200 bg-teal-50 p-4 dark:border-teal-900 dark:bg-teal-950/40"
@@ -267,14 +297,14 @@ export function Quiz({
             disabled={selected === null}
             className="btn-primary w-full"
           >
-            Confirm Answer
+            Confirm answer
           </button>
         ) : (
           <button
             onClick={handleNext}
             className="btn-primary w-full"
           >
-            {currentIndex < filtered.length - 1 ? 'Next Question' : 'See Results'}
+            {currentIndex < filtered.length - 1 ? 'Next question' : 'See results'}
           </button>
         )}
       </div>

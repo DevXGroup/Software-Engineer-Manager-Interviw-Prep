@@ -1,174 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { CheckCircle, Circle, Clock, Brain, Code, Layers, Target, Users, TrendingUp, ArrowRight, Calendar } from 'lucide-react'
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
+import { Check, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-
-type Task = { label: string; link?: string }
-type WeekPlan = {
-  week: number
-  title: string
-  theme: string
-  icon: React.ElementType
-  color: string
-  bgColor: string
-  goal: string
-  dailyTasks: Task[]
-  resources: string[]
-  milestone: string
-}
-
-const weeks: WeekPlan[] = [
-  {
-    week: 1,
-    title: 'Behavioral Foundations',
-    theme: 'STAR Method + Company Principles',
-    icon: Brain,
-    color: 'bg-purple-700',
-    bgColor: 'bg-purple-50 dark:bg-purple-900/20',
-    goal: 'Master the STAR format and understand Amazon\'s 16 LPs inside out',
-    dailyTasks: [
-      { label: 'Study STAR format — write your 3 strongest stories', link: '/behavioral' },
-      { label: 'Learn all 16 Amazon Leadership Principles with examples', link: '/behavioral' },
-      { label: 'Map each LP to a story from your career' },
-      { label: 'Record yourself answering 2 questions — review pacing and fillers' },
-      { label: 'Practice: "Tell me about a time you failed"' },
-    ],
-    resources: ['Amazon LP page', 'STAR format guide', 'Behavioral page in this app'],
-    milestone: 'Deliver 3 polished STAR answers without reading from notes',
-  },
-  {
-    week: 2,
-    title: 'Company Deep-Dives',
-    theme: 'Meta, Google, Netflix, Apple, Microsoft',
-    icon: Target,
-    color: 'bg-blue-700',
-    bgColor: 'bg-blue-50 dark:bg-blue-900/20',
-    goal: 'Know each company\'s unique values, interview style, and top questions',
-    dailyTasks: [
-      { label: 'Study Meta: Move Fast, Long-term Impact, Be Direct', link: '/companies/meta' },
-      { label: 'Study Google: Data-driven, Think 10x, Psychological safety', link: '/companies/google' },
-      { label: 'Study Netflix: Freedom & Responsibility, Courage, Context', link: '/companies/netflix' },
-      { label: 'Study Apple: Taste, Craft, Deep Collaboration', link: '/companies/apple' },
-      { label: 'Study Microsoft: Growth Mindset, One Microsoft', link: '/companies/microsoft' },
-    ],
-    resources: ['Company pages in this app', 'Glassdoor interview reviews', 'LinkedIn jobs for target roles'],
-    milestone: 'Company-specific story for each of your 3 target companies',
-  },
-  {
-    week: 3,
-    title: 'System Design Basics',
-    theme: 'Scalability Fundamentals',
-    icon: Layers,
-    color: 'bg-green-700',
-    bgColor: 'bg-green-50 dark:bg-green-900/20',
-    goal: 'Understand horizontal scaling, databases, caching, and load balancing',
-    dailyTasks: [
-      { label: 'Study CAP Theorem + SQL vs NoSQL decision framework', link: '/system-design' },
-      { label: 'Study caching strategies: Cache-aside, Write-through, TTL', link: '/system-design' },
-      { label: 'Study consistent hashing and database sharding', link: '/system-design' },
-      { label: 'Design URL Shortener end-to-end (35 min timed)', link: '/system-design' },
-      { label: 'Study Kafka vs SQS — when to use each', link: '/system-design' },
-    ],
-    resources: ['System Design page in this app', 'Designing Data-Intensive Applications (Kleppmann)', 'ByteByteGo System Design Newsletter'],
-    milestone: 'Whiteboard URL Shortener design from memory in 35 minutes',
-  },
-  {
-    week: 4,
-    title: 'System Design Advanced',
-    theme: 'Distributed Systems at FAANG Scale',
-    icon: Layers,
-    color: 'bg-teal-700',
-    bgColor: 'bg-teal-50 dark:bg-teal-900/20',
-    goal: 'Design complex systems: Twitter feed, notification system, rate limiter',
-    dailyTasks: [
-      { label: 'Design Twitter Feed — fan-out on write vs read hybrid', link: '/system-design' },
-      { label: 'Design Rate Limiter — token bucket + Redis + fail-open', link: '/system-design' },
-      { label: 'Design Notification System — Kafka + channel workers', link: '/system-design' },
-      { label: 'Study Microservices, CQRS, Saga, Circuit Breaker patterns', link: '/system-design' },
-      { label: 'Mock: design a system you haven\'t seen before (30 min)' },
-    ],
-    resources: ['System Design Primer (GitHub)', 'Netflix Tech Blog', 'AWS Architecture Center'],
-    milestone: 'Complete any system design in 45 min with requirements → architecture → tradeoffs',
-  },
-  {
-    week: 5,
-    title: 'Coding Patterns',
-    theme: 'TypeScript DSA Core Patterns',
-    icon: Code,
-    color: 'bg-orange-700',
-    bgColor: 'bg-orange-50 dark:bg-orange-900/20',
-    goal: 'Internalize Sliding Window, Two Pointers, Binary Search, BFS/DFS',
-    dailyTasks: [
-      { label: 'Sliding Window: solve 3 problems (LC #3, #76, #239)', link: '/coding/challenges' },
-      { label: 'Two Pointers: solve 3 problems (LC #11, #15, #42)', link: '/coding/challenges' },
-      { label: 'Binary Search: solve 2 problems (LC #33, #153)', link: '/coding' },
-      { label: 'BFS/DFS: solve 2 problems (LC #200, #127)', link: '/coding/challenges' },
-      { label: 'Review Big O for each pattern solved', link: '/coding' },
-    ],
-    resources: ['LeetCode (Easy/Medium)', 'Coding Challenges page in this app', 'NeetCode.io roadmap'],
-    milestone: 'Solve any Easy/Medium pattern problem in under 20 minutes with explanation',
-  },
-  {
-    week: 6,
-    title: 'Coding — Hard Problems',
-    theme: 'DP, Heaps, Advanced Graph',
-    icon: Code,
-    color: 'bg-red-700',
-    bgColor: 'bg-red-50 dark:bg-red-900/20',
-    goal: 'Tackle Medium-Hard problems and practice explaining complexity trade-offs',
-    dailyTasks: [
-      { label: 'Dynamic Programming: LC #322, #300, #1143', link: '/coding/challenges' },
-      { label: 'Heap/Priority Queue: LC #23, #347, #373', link: '/coding/challenges' },
-      { label: 'LRU Cache design + implementation', link: '/coding/challenges' },
-      { label: 'Union Find: LC #684, #323', link: '/coding' },
-      { label: 'Practice explaining solutions out loud — record yourself' },
-    ],
-    resources: ['LeetCode Medium/Hard', 'Coding Challenges page in this app', 'AlgoExpert'],
-    milestone: 'Solve 2 Hard problems independently with clear complexity analysis',
-  },
-  {
-    week: 7,
-    title: 'Technical Leadership',
-    theme: 'Architecture, Tech Debt, On-Call',
-    icon: Target,
-    color: 'bg-purple-700',
-    bgColor: 'bg-purple-50 dark:bg-purple-900/20',
-    goal: 'Articulate make vs buy decisions, tech debt frameworks, and incident management',
-    dailyTasks: [
-      { label: 'Study ADR format and write 2 sample ADRs', link: '/technical-leadership' },
-      { label: 'Study Tech Debt Ledger — quantify debt in business terms', link: '/technical-leadership' },
-      { label: 'Study On-Call frameworks — blameless RCA process', link: '/technical-leadership' },
-      { label: 'Practice: "Tell me about a technical decision you made"' },
-      { label: 'Study Team Management: 1:1 frameworks, career ladders', link: '/team-management' },
-    ],
-    resources: ['Technical Leadership page in this app', 'Staff Engineer book (Larson)', 'Will Larson blog'],
-    milestone: 'Deliver a 5-minute verbal walkthrough of a complex technical decision you made',
-  },
-  {
-    week: 8,
-    title: 'Mock Interviews & Polish',
-    theme: 'Full Simulation Week',
-    icon: TrendingUp,
-    color: 'bg-violet-700',
-    bgColor: 'bg-violet-50 dark:bg-violet-900/20',
-    goal: 'Run full-length mock interviews across all categories and sharpen weak spots',
-    dailyTasks: [
-      { label: 'Mock behavioral interview — 45 min, 4 questions (record)' },
-      { label: 'Mock system design — 45 min timed with whiteboard' },
-      { label: 'Mock coding — 45 min, 1 medium + 1 easy' },
-      { label: 'Review all weak spots identified in mocks' },
-      { label: 'Prepare your 3 questions to ask interviewers for each company' },
-    ],
-    resources: ['Pramp.com (free mock interviews)', 'Interviewing.io', 'Practice with a peer'],
-    milestone: 'Complete a full-day mock loop (behavioral + system design + coding) without major gaps',
-  },
-]
+import { weeks, roadmapIcon as RoadmapIcon } from '@/data/roadmap'
 
 export default function RoadmapPage() {
   const [checked, setChecked] = useState<Record<string, boolean>>({})
   const [activeWeek, setActiveWeek] = useState<number | null>(null)
+  const reduceMotion = useReducedMotion()
 
   useEffect(() => {
     try {
@@ -178,16 +19,18 @@ export default function RoadmapPage() {
   }, [])
 
   const toggleTask = (key: string) => {
-    setChecked(prev => {
+    setChecked((prev) => {
       const next = { ...prev, [key]: !prev[key] }
-      try { localStorage.setItem('roadmap-progress', JSON.stringify(next)) } catch {}
+      try {
+        localStorage.setItem('roadmap-progress', JSON.stringify(next))
+      } catch {}
       return next
     })
   }
 
-  const weekProgress = (week: WeekPlan) => {
+  const weekProgress = (week: (typeof weeks)[number]) => {
     const total = week.dailyTasks.length
-    const done = week.dailyTasks.filter((_, i) => checked[`${week.week}-${i}`]).length
+    const done = week.dailyTasks.filter((t) => checked[`${week.week}-${t.id}`]).length
     return { total, done, pct: Math.round((done / total) * 100) }
   }
 
@@ -199,158 +42,171 @@ export default function RoadmapPage() {
     <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
         {/* Header */}
-        <motion.div initial={false} className="mb-8 border-b border-ink-200 pb-8 dark:border-ink-800">
+        <div className="mb-8 border-b border-ink-200 pb-8 dark:border-ink-800">
           <div className="mb-4 flex justify-center">
-            <span className="rounded-2xl bg-blue-500 p-3 shadow-lg">
-              <Calendar className="h-8 w-8 text-white" />
+            <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-clay-600 dark:bg-clay-500">
+              <RoadmapIcon className="h-6 w-6 text-white dark:text-ink-950" />
             </span>
           </div>
-          <h1 className="text-4xl text-ink-900 dark:text-ink-50">8-Week MAANG Interview Roadmap</h1>
-          <p className="mx-auto max-w-xl text-lg text-gray-600 dark:text-gray-300">
-            A structured week-by-week plan to go from zero to MAANG-ready for SDM/EM interviews
+          <h1 className="text-center text-4xl text-ink-900 dark:text-ink-50">The 8-week plan</h1>
+          <p className="mx-auto mt-3 max-w-xl text-center text-lg text-ink-700 dark:text-ink-200">
+            Week by week, from a blank page to a full EM or SDM loop. Tick tasks as you go; the plan remembers them in this browser.
           </p>
 
           {/* Overall progress */}
           <div className="mx-auto mt-8 max-w-md">
-            <div className="mb-2 flex justify-between text-sm text-gray-600 dark:text-gray-400">
-              <span>{totalDone} / {totalTasks} tasks complete</span>
-              <span className="font-bold text-blue-600 dark:text-blue-400">{overallPct}%</span>
+            <div className="mb-2 flex justify-between text-sm text-ink-600 dark:text-ink-300">
+              <span>
+                <span className="font-mono tabular-nums">
+                  {totalDone}/{totalTasks}
+                </span>{' '}
+                tasks complete
+              </span>
+              <span className="font-mono tabular-nums font-semibold text-clay-700 dark:text-clay-400">{overallPct}%</span>
             </div>
-            <div className="h-3 w-full overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
+            <div className="h-2 w-full overflow-hidden rounded-lg bg-ink-200 dark:bg-ink-800">
               <motion.div
                 animate={{ width: `${overallPct}%` }}
                 transition={{ duration: 0.6 }}
-                className="h-3 rounded-full bg-blue-500"
+                className="h-2 rounded-lg bg-clay-600 dark:bg-clay-500"
               />
             </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Weeks */}
         <div className="space-y-4">
-          {weeks.map((week, idx) => {
+          {weeks.map((week) => {
             const { total, done, pct } = weekProgress(week)
             const Icon = week.icon
             const isOpen = activeWeek === week.week
 
             return (
-              <motion.div
-                key={week.week}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="overflow-hidden rounded-2xl surface-card"
-              >
+              <div key={week.id} id={week.id} className="overflow-hidden rounded-xl surface-card">
                 <button
-                  className="w-full p-5 text-left"
+                  type="button"
+                  className="flex min-h-[44px] w-full items-center gap-4 p-5 text-left transition-colors duration-150 ease-out hover:bg-ink-100 dark:hover:bg-ink-800"
+                  aria-expanded={isOpen}
                   onClick={() => setActiveWeek(isOpen ? null : week.week)}
                 >
-                  <div className="flex items-center gap-4">
-                    <div className={`rounded-xl ${week.color} p-3 text-white shadow`}>
-                      <Icon className="h-5 w-5" />
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-ink-100 dark:bg-ink-800">
+                    <Icon className="h-5 w-5 text-ink-700 dark:text-ink-200" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-xs text-ink-600 dark:text-ink-300">Week {week.week}</span>
+                      {done === total && (
+                        <span className="chip inline-flex items-center gap-1 bg-moss-100 text-moss-800 dark:bg-moss-900/30 dark:text-moss-300">
+                          <Check className="h-3 w-3" /> Complete
+                        </span>
+                      )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs font-bold text-gray-500">WEEK {week.week}</span>
-                        {done === total && (
-                          <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-bold text-green-700 dark:bg-green-900/30 dark:text-green-400">
-                            Complete ✓
-                          </span>
-                        )}
-                      </div>
-                      <p className="font-bold text-gray-900 dark:text-white">{week.title}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">{week.theme}</p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <p className="text-sm font-bold text-gray-700 dark:text-gray-300">{done}/{total}</p>
-                      <div className="mt-1 h-1.5 w-20 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
-                        <div
-                          className={`h-1.5 rounded-full ${week.color} transition-colors duration-150 ease-out duration-500`}
-                          style={{ width: `${pct}%` }}
-                        />
-                      </div>
+                    <p className="font-semibold text-ink-900 dark:text-ink-50">{week.title}</p>
+                    <p className="text-xs text-ink-600 dark:text-ink-300">{week.theme}</p>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <p className="font-mono tabular-nums text-sm font-semibold text-ink-700 dark:text-ink-200">
+                      {done}/{total}
+                    </p>
+                    <div className="mt-1 h-1.5 w-20 overflow-hidden rounded-lg bg-ink-200 dark:bg-ink-800">
+                      <div
+                        className="h-1.5 rounded-lg bg-clay-600 transition-colors duration-150 ease-out dark:bg-clay-500"
+                        style={{ width: `${pct}%` }}
+                      />
                     </div>
                   </div>
                 </button>
 
-                {isOpen && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    className={`border-t border-gray-100 dark:border-gray-700 ${week.bgColor} p-5 space-y-4`}
-                  >
-                    {/* Goal */}
-                    <div className="rounded-xl bg-white p-4 shadow-sm dark:bg-gray-800">
-                      <p className="mb-1 text-xs font-bold uppercase tracking-wider text-gray-500">Week Goal</p>
-                      <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{week.goal}</p>
-                    </div>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={reduceMotion ? false : { height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                      className="border-t border-ink-200 dark:border-ink-800"
+                    >
+                      <div className="space-y-4 p-5">
+                        {/* Goal */}
+                        <div className="surface-sunken p-4">
+                          <h3 className="mb-1 text-sm font-semibold text-ink-600 dark:text-ink-300">Week goal</h3>
+                          <p className="text-sm text-ink-800 dark:text-ink-200">{week.goal}</p>
+                        </div>
 
-                    {/* Daily Tasks */}
-                    <div>
-                      <p className="mb-3 text-xs font-bold uppercase tracking-wider text-gray-500">Tasks</p>
-                      <div className="space-y-2">
-                        {week.dailyTasks.map((task, i) => {
-                          const key = `${week.week}-${i}`
-                          return (
-                            <div
-                              key={key}
-                              className="flex items-center gap-3 rounded-lg bg-white px-4 py-3 shadow-sm dark:bg-gray-800 cursor-pointer group"
-                              onClick={() => toggleTask(key)}
-                            >
-                              {checked[key]
-                                ? <CheckCircle className="h-5 w-5 shrink-0 text-green-500" />
-                                : <Circle className="h-5 w-5 shrink-0 text-gray-500 group-hover:text-gray-500" />
-                              }
-                              <span className={`flex-1 text-sm ${checked[key] ? 'line-through text-gray-500' : 'text-gray-700 dark:text-gray-300'}`}>
-                                {task.label}
-                              </span>
-                              {task.link && (
-                                <Link
-                                  href={task.link}
-                                  onClick={e => e.stopPropagation()}
-                                  className="shrink-0 rounded-lg bg-gray-100 px-2 py-1 text-xs text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400"
-                                >
-                                  Go →
-                                </Link>
-                              )}
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
+                        {/* Daily Tasks */}
+                        <div>
+                          <h3 className="mb-3 text-sm font-semibold text-ink-600 dark:text-ink-300">Tasks</h3>
+                          <div className="divide-y divide-ink-200 dark:divide-ink-800">
+                            {week.dailyTasks.map((task) => {
+                              const key = `${week.week}-${task.id}`
+                              const isChecked = Boolean(checked[key])
+                              return (
+                                <div key={task.id} className="flex min-h-[44px] items-center gap-3 py-2">
+                                  <label className="flex min-h-[44px] flex-1 cursor-pointer items-center gap-3">
+                                    <input
+                                      type="checkbox"
+                                      checked={isChecked}
+                                      onChange={() => toggleTask(key)}
+                                      className="h-4 w-4 shrink-0 rounded-sm border-ink-400 text-clay-600 focus-visible:outline focus-visible:outline-2 dark:border-ink-500"
+                                    />
+                                    <span
+                                      className={
+                                        isChecked
+                                          ? 'flex-1 text-sm text-ink-500 line-through dark:text-ink-500'
+                                          : 'flex-1 text-sm text-ink-700 dark:text-ink-200'
+                                      }
+                                    >
+                                      {task.label}
+                                    </span>
+                                  </label>
+                                  {task.link && (
+                                    <Link
+                                      href={task.link}
+                                      className="chip shrink-0 text-ink-700 hover:bg-ink-200 dark:text-ink-200 dark:hover:bg-ink-700"
+                                    >
+                                      Go
+                                    </Link>
+                                  )}
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
 
-                    {/* Resources + Milestone */}
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <div className="rounded-xl bg-white p-4 shadow-sm dark:bg-gray-800">
-                        <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">Resources</p>
-                        <ul className="space-y-1">
-                          {week.resources.map((r, i) => (
-                            <li key={i} className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400">
-                              <ArrowRight className="h-3 w-3 mt-0.5 shrink-0 text-blue-400" />
-                              {r}
-                            </li>
-                          ))}
-                        </ul>
+                        {/* Resources + Milestone */}
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="surface-sunken p-4">
+                            <h3 className="mb-2 text-sm font-semibold text-ink-600 dark:text-ink-300">Resources</h3>
+                            <ul className="space-y-1">
+                              {week.resources.map((r) => (
+                                <li key={r} className="flex items-start gap-2 text-xs text-ink-600 dark:text-ink-300">
+                                  <ArrowRight className="mt-0.5 h-3 w-3 shrink-0 text-teal-600 dark:text-teal-400" />
+                                  {r}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="surface-sunken p-4">
+                            <h3 className="mb-2 text-sm font-semibold text-ink-600 dark:text-ink-300">Week milestone</h3>
+                            <p className="text-xs leading-relaxed text-ink-700 dark:text-ink-200">{week.milestone}</p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="rounded-xl bg-white p-4 shadow-sm dark:bg-gray-800">
-                        <p className="mb-2 text-xs font-bold uppercase tracking-wider text-gray-500">Week Milestone</p>
-                        <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">{week.milestone}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             )
           })}
         </div>
 
-        {/* Footer CTA */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
-          className="mt-10 rounded-2xl bg-blue-500 p-6 text-center text-white shadow-xl">
-          <Clock className="mx-auto mb-3 h-8 w-8 opacity-80" />
-          <h2 className="mb-2 text-xl font-bold">Pro Tip: Consistency beats intensity</h2>
-          <p className="text-blue-100">45 minutes of focused practice daily beats 4-hour sessions twice a week. Track your progress above and complete each milestone before moving to the next week.</p>
-        </motion.div>
+        {/* Footer note */}
+        <div className="surface-sunken mt-10 p-6">
+          <h2 className="mb-2 text-lg font-semibold text-ink-900 dark:text-ink-50">Consistency beats intensity</h2>
+          <p className="text-sm text-ink-700 dark:text-ink-200">
+            Forty-five minutes of focused practice daily beats four-hour sessions twice a week. Track your progress above and complete each milestone before moving to the next week.
+          </p>
+        </div>
       </div>
     </div>
   )

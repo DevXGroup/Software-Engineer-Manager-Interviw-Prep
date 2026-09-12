@@ -1,6 +1,6 @@
 'use client'
 
-import { Heart, Github, Coffee, ExternalLink } from 'lucide-react'
+import { Github, Coffee, ExternalLink } from 'lucide-react'
 import Image from 'next/image'
 
 export function Footer() {
@@ -19,12 +19,13 @@ export function Footer() {
               className="group flex flex-col items-center text-center lg:items-start lg:text-left"
             >
               {/* DevX Group LLC Logo */}
-              <div className="relative h-16 w-40 shrink-0 overflow-hidden rounded-2xl bg-white/5 p-2 ring-1 ring-white/15 transition-colors duration-150 ease-out group-hover:bg-white/10">
+              <div className="relative h-16 w-40 shrink-0 overflow-hidden rounded-xl bg-white/5 p-2 ring-1 ring-white/15 transition-colors duration-150 ease-out group-hover:bg-white/10">
                 <Image
                   src="/devx-logo.png"
                   alt="DevX Group LLC"
                   fill
-                  className="rounded-xl object-contain"
+                  sizes="160px"
+                  className="rounded-lg object-contain"
                 />
               </div>
               {/* Builder Attribution */}
@@ -40,7 +41,7 @@ export function Footer() {
                 Free & Open Source
               </p>
               <p className="text-sm text-ink-300">
-                Built for the MAANG interview community
+                Built for engineers walking into the EM loop
               </p>
             </div>
 
@@ -58,16 +59,12 @@ export function Footer() {
       </div>
 
       {/* Donation & Links Section */}
-      <div className="border-t border-gray-200 bg-ink-50 dark:border-ink-800 dark:bg-ink-900">
+      <div className="border-t border-ink-200 bg-ink-50 dark:border-ink-800 dark:bg-ink-900">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-center gap-4 sm:justify-between sm:flex-row">
             {/* Community Message */}
-            <div className="flex flex-col items-center text-center text-sm text-gray-600 dark:text-gray-400 sm:flex-row sm:items-center sm:text-left">
-              <span className="flex items-center justify-center gap-1.5">
-                Made with <Heart className="h-4 w-4 fill-red-500 text-red-500" /> for engineers
-              </span>
-              <span className="hidden text-gray-500 dark:text-gray-700 sm:block">•</span>
-              <span className="hidden sm:inline">Free forever, open source</span>
+            <div className="text-center text-sm text-muted sm:text-left">
+              Free, open source, built by Max Sheikhizadeh at DevX Group
             </div>
 
             {/* Action Buttons */}

@@ -1,94 +1,88 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { ArrowLeft, Code, Target, Clock, AlertTriangle, CheckCircle, MessageSquare, BarChart3 } from 'lucide-react'
 import Link from 'next/link'
 
 const sections = [
   {
     icon: Target,
-    title: 'Why FAANG Asks SDMs to Code',
-    color: 'bg-purple-700',
+    title: 'Why FAANG asks SDMs to code',
     content: [
       {
         heading: 'Technical credibility, not IC replication',
-        body: 'FAANG doesn\'t expect you to code like a senior SWE. They want to see that you can think algorithmically, understand trade-offs, and communicate technical decisions — skills that are directly correlated with being a great engineering manager.',
+        body: 'FAANG does not expect you to code like a senior SWE. They want to see that you can think algorithmically, understand trade-offs, and communicate technical decisions: skills directly correlated with being a great engineering manager.',
       },
       {
-        heading: 'What they\'re actually testing',
-        body: 'Problem decomposition (can you break it down clearly?), pattern recognition (do you know the right data structure?), communication under pressure (can you think out loud?), and intellectual honesty (do you know when you\'re stuck and how to recover?).',
+        heading: 'What they are actually testing',
+        body: 'Problem decomposition (can you break it down clearly?), pattern recognition (do you know the right data structure?), communication under pressure (can you think out loud?), and intellectual honesty (do you know when you are stuck and how to recover?).',
       },
     ],
   },
   {
     icon: BarChart3,
-    title: 'What Level of Coding Is Expected',
-    color: 'bg-green-700',
+    title: 'What level of coding is expected',
     content: [
       {
         heading: 'The realistic bar',
-        body: 'Most FAANG companies expect SDMs at L5-L6 to solve LeetCode Easy problems cleanly and LeetCode Medium problems with some guidance. L7+ (Senior EM, Director) may face fewer coding rounds or skip them at some companies like Netflix and Apple.',
+        body: 'Manager coding rounds generally sit below the bar for an individual-contributor engineer at the same level: clean solutions to easier problems, and a reasonable attempt at a medium one with some hinting. The more senior the manager role, the fewer coding rounds you tend to see, and some senior manager and director loops have none at all. No company publishes its rubric, so confirm your own loop with your recruiter.',
       },
       {
         heading: 'By company',
-        body: 'Amazon: 1 coding round, LC Easy-Medium in any language. Google: 1-2 rounds, similar to SWE but at a lower bar. Meta: typically 1 round, problem-solving and clarity valued. Netflix: often no coding round (culture and people management focused). Apple: varies by team, usually 1 round.',
+        body: 'The number of coding rounds in a manager loop varies by company, by org and by team, and none of these companies publishes it. Assume you will have at least one unless your recruiter tells you otherwise, ask them directly how many rounds and what language is allowed, and prepare as though the answer is one round of problem solving where your clarity matters as much as the solution.',
       },
     ],
   },
   {
     icon: Clock,
-    title: 'Interview Format (45 Minutes)',
-    color: 'bg-orange-700',
+    title: 'Interview format (45 minutes)',
     content: [
       {
         heading: 'The typical 45-minute breakdown',
-        body: '~5 min: Clarify the problem. Ask about constraints, edge cases, expected input size, data types. ~5 min: Talk through your approach before writing code. ~25 min: Implement the solution, narrating your thinking. ~5 min: Test with examples and edge cases. ~5 min: Discuss time/space complexity and potential optimizations.',
+        body: 'About 5 minutes: clarify the problem, constraints, edge cases, expected input size, data types. About 5 minutes: talk through your approach before writing code. About 25 minutes: implement the solution, narrating your thinking. About 5 minutes: test with examples and edge cases. About 5 minutes: discuss time and space complexity and potential optimizations.',
       },
       {
-        heading: 'What to say when you don\'t know',
-        body: '"Let me think through this out loud. I know I want to avoid a brute force O(n²) approach. The first thing I\'d consider is whether a hash map can give me O(1) lookups here..." — articulating your reasoning IS the answer.',
+        heading: 'What to say when you do not know',
+        body: '"Let me think through this out loud. I know I want to avoid a brute force O(n²) approach. The first thing I would consider is whether a hash map can give me O(1) lookups here." Articulating your reasoning is the answer.',
       },
     ],
   },
   {
     icon: Code,
-    title: 'Top 5 SDM-Specific Patterns',
-    color: 'bg-blue-700',
+    title: 'Top 5 SDM-specific patterns',
     content: [
       {
-        heading: '1. HashMap/Set — O(1) lookup everywhere',
-        body: 'Two Sum, Longest Consecutive Sequence, Group Anagrams. Rule: whenever you find yourself scanning an array looking for something, ask "could a HashMap give me O(1) here?"',
+        heading: 'HashMap / Set: O(1) lookup everywhere',
+        body: 'Two Sum, Longest Consecutive Sequence, Group Anagrams. Rule: whenever you find yourself scanning an array looking for something, ask whether a hash map could give you O(1) here.',
       },
       {
-        heading: '2. Sliding Window — contiguous subarrays',
-        body: 'Longest Substring Without Repeating Characters, Min Window Substring. Two pointers expanding and contracting over a window of data.',
+        heading: 'Sliding Window: contiguous subarrays',
+        body: 'Longest Substring Without Repeating Characters, Minimum Window Substring. Two pointers expanding and contracting over a window of data.',
       },
       {
-        heading: '3. BFS — shortest path, level-by-level',
+        heading: 'BFS: shortest path, level by level',
         body: 'Number of Islands, Word Ladder, Rotting Oranges. Any "spread from a source" or "find shortest path" problem.',
       },
       {
-        heading: '4. Two Pointers — sorted arrays, pairs',
-        body: '3Sum, Container With Most Water, Trapping Rain Water. Sort first, then use left/right pointers moving toward each other.',
+        heading: 'Two Pointers: sorted arrays, pairs',
+        body: '3Sum, Container With Most Water, Trapping Rain Water. Sort first, then use left and right pointers moving toward each other.',
       },
       {
-        heading: '5. DP — count ways, min/max, with repeated subproblems',
+        heading: 'DP: count ways, min/max, with repeated subproblems',
         body: 'Climbing Stairs, Coin Change, House Robber. Recognize when a problem has overlapping subproblems and optimal substructure.',
       },
     ],
   },
   {
     icon: MessageSquare,
-    title: 'Language to Use When Stuck',
-    color: 'bg-pink-700',
+    title: 'Language to use when stuck',
     content: [
       {
-        heading: 'Recovering when you\'re stuck',
-        body: '"I\'m going to step back. Let me think about what I know works... I know I can solve this in O(n²) brute force. Let me think about what structure would eliminate the nested loop... Is this a case where I\'d benefit from sorting first?" — show your reasoning process even when the answer isn\'t clear.',
+        heading: 'Recovering when you are stuck',
+        body: '"I am going to step back. Let me think about what I know works. I know I can solve this in O(n²) brute force. What structure would eliminate the nested loop? Is this a case where I would benefit from sorting first?" Show your reasoning process even when the answer is not clear.',
       },
       {
         heading: 'Asking for a hint without looking bad',
-        body: '"I want to make sure I\'m on the right track — I\'m thinking about using a heap/sliding window/BFS here. Does that seem like the right direction to you?" — interviewers WANT to give hints. Asking shows collaboration, not weakness.',
+        body: '"I want to make sure I am on the right track. I am thinking about using a heap, sliding window, or BFS here. Does that seem like the right direction to you?" Interviewers want to give hints. Asking shows collaboration, not weakness.',
       },
       {
         heading: 'Before writing any code',
@@ -98,24 +92,23 @@ const sections = [
   },
   {
     icon: CheckCircle,
-    title: 'SDM Evaluation Rubric',
-    color: 'bg-emerald-700',
+    title: 'SDM evaluation rubric',
     content: [
       {
-        heading: 'Problem Understanding (20%)',
-        body: 'Did you clarify ambiguities? Did you ask about edge cases? Did you confirm the input/output contract before coding? Interviewers value candidates who don\'t assume.',
+        heading: 'Problem understanding (20%)',
+        body: 'Did you clarify ambiguities? Did you ask about edge cases? Did you confirm the input and output contract before coding? Interviewers value candidates who do not assume.',
       },
       {
-        heading: 'Approach & Communication (30%)',
-        body: 'Did you articulate your approach before coding? Did you explain trade-offs (why this data structure, not that one)? Could the interviewer follow your reasoning? Communication is weighted MORE for SDMs than for SWEs.',
+        heading: 'Approach and communication (30%)',
+        body: 'Did you articulate your approach before coding? Did you explain trade-offs, why this data structure and not that one? Could the interviewer follow your reasoning? Communication is weighted more for SDMs than for SWEs.',
       },
       {
         heading: 'Correctness (30%)',
-        body: 'Does the solution handle the basic case? The edge cases? Is it syntactically correct (or close)? For SDMs, pseudocode-level correctness is often acceptable — it\'s not a typing test.',
+        body: 'Does the solution handle the basic case? The edge cases? Is it syntactically correct, or close? For SDMs, pseudocode-level correctness is often acceptable: it is not a typing test.',
       },
       {
-        heading: 'Complexity Analysis (20%)',
-        body: 'Can you state the time and space complexity of your solution? Can you explain WHY? Can you identify if there\'s an optimization available? This is a basic bar — you must be able to do this.',
+        heading: 'Complexity analysis (20%)',
+        body: 'Can you state the time and space complexity of your solution? Can you explain why? Can you identify an available optimization? This is a basic bar you must be able to clear.',
       },
     ],
   },
@@ -126,76 +119,71 @@ export default function SDMGuidePage() {
     <div className="min-h-screen px-4 pb-24 pt-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl">
         {/* Header */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
+        <div className="mb-10">
           <Link href="/coding" className="mb-6 -ml-2 inline-flex min-h-[44px] items-center gap-2 rounded-lg px-2 text-sm text-ink-600 transition-colors duration-150 ease-out hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-ink-50">
-            <ArrowLeft className="h-4 w-4" /> Back to Coding Practice
+            <ArrowLeft className="h-4 w-4" /> Back to coding practice
           </Link>
           <div className="text-center">
-            <h1 className="text-4xl text-ink-900 dark:text-ink-50">SDM Coding Interview Guide</h1>
-            <p className="mx-auto max-w-xl text-lg text-gray-600 dark:text-gray-300">
-              What to expect, how to prepare, and exactly what to say when you get stuck
+            <h1 className="text-4xl text-ink-900 dark:text-ink-50">SDM coding interview guide</h1>
+            <p className="mx-auto max-w-xl text-lg text-ink-700 dark:text-ink-200">
+              What to expect, how to prepare, and exactly what to say when you get stuck.
             </p>
           </div>
-        </motion.div>
+        </div>
 
         {/* Quick stat banner */}
-        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          className="mb-8 grid gap-4 sm:grid-cols-3">
+        <div className="mb-8 grid gap-4 sm:grid-cols-3">
           {[
-            { label: 'Typical Rounds', value: '1-2', note: 'vs 4-6 for SWEs' },
-            { label: 'Difficulty Bar', value: 'Easy-Med', note: 'Not Hard LeetCode' },
-            { label: 'Time per Round', value: '45 min', note: 'Clarify, design, code, test' },
+            { label: 'Typical rounds', value: '1-2', note: 'vs 4-6 for SWEs' },
+            { label: 'Difficulty bar', value: 'Easy-Med', note: 'Not hard LeetCode' },
+            { label: 'Time per round', value: '45 min', note: 'Clarify, design, code, test' },
           ].map(s => (
-            <div key={s.label} className="rounded-2xl bg-white p-5 text-center shadow dark:bg-gray-800">
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{s.value}</p>
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{s.label}</p>
-              <p className="text-xs text-gray-500">{s.note}</p>
+            <div key={s.label} className="surface-card p-5 text-center">
+              <p className="text-2xl font-semibold text-ink-900 dark:text-ink-50">{s.value}</p>
+              <p className="text-sm font-medium text-ink-700 dark:text-ink-200">{s.label}</p>
+              <p className="text-xs text-ink-600 dark:text-ink-300">{s.note}</p>
             </div>
           ))}
-        </motion.div>
+        </div>
 
         {/* Sections */}
         <div className="space-y-6">
-          {sections.map((section, idx) => {
+          {sections.map((section) => {
             const Icon = section.icon
             return (
-              <motion.div key={section.title} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
-                className="overflow-hidden rounded-2xl surface-card">
-                <div className={`flex items-center gap-3 ${section.color} p-5 text-white`}>
-                  <Icon className="h-6 w-6" />
-                  <h2 className="text-lg font-bold">{section.title}</h2>
+              <div key={section.title} className="surface-card overflow-hidden">
+                <div className="flex items-center gap-3 border-b border-ink-200 p-5 dark:border-ink-800">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-ink-100 text-ink-700 dark:bg-ink-800 dark:text-ink-200">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <h2 className="text-lg font-semibold text-ink-900 dark:text-ink-50">{section.title}</h2>
                 </div>
-                <div className="divide-y divide-gray-100 dark:divide-gray-700">
+                <div className="divide-y divide-ink-100 dark:divide-ink-800">
                   {section.content.map((item, i) => (
                     <div key={i} className="p-5">
-                      <p className="mb-2 font-semibold text-gray-900 dark:text-white">{item.heading}</p>
-                      <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">{item.body}</p>
+                      <p className="mb-2 font-semibold text-ink-900 dark:text-ink-50">{item.heading}</p>
+                      <p className="text-sm leading-relaxed text-ink-700 dark:text-ink-200">{item.body}</p>
                     </div>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             )
           })}
         </div>
 
         {/* CTA */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-          className="mt-10 grid gap-4 sm:grid-cols-2">
-          <Link href="/coding/challenges">
-            <div className="cursor-pointer rounded-2xl bg-orange-500 p-6 text-white shadow-xl hover:opacity-90">
-              <Code className="mb-3 h-8 w-8" />
-              <h3 className="text-lg font-bold">Practice Coding Challenges</h3>
-              <p className="mt-1 text-orange-100 text-sm">16 curated problems with full TypeScript solutions</p>
-            </div>
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          <Link href="/coding/challenges" className="surface-card card-hover flex flex-col p-6">
+            <Code className="mb-3 h-8 w-8 text-clay-700 dark:text-clay-400" />
+            <h3 className="text-lg font-semibold text-ink-900 dark:text-ink-50">Practice coding challenges</h3>
+            <p className="mt-1 text-sm text-ink-700 dark:text-ink-200">16 curated problems with full TypeScript solutions.</p>
           </Link>
-          <Link href="/coding">
-            <div className="cursor-pointer rounded-2xl bg-blue-500 p-6 text-white shadow-xl hover:opacity-90">
-              <AlertTriangle className="mb-3 h-8 w-8" />
-              <h3 className="text-lg font-bold">DSA Patterns Library</h3>
-              <p className="mt-1 text-blue-100 text-sm">10 essential patterns with code templates</p>
-            </div>
+          <Link href="/coding" className="surface-card card-hover flex flex-col p-6">
+            <AlertTriangle className="mb-3 h-8 w-8 text-clay-700 dark:text-clay-400" />
+            <h3 className="text-lg font-semibold text-ink-900 dark:text-ink-50">DSA patterns library</h3>
+            <p className="mt-1 text-sm text-ink-700 dark:text-ink-200">10 essential patterns with code templates.</p>
           </Link>
-        </motion.div>
+        </div>
       </div>
     </div>
   )
